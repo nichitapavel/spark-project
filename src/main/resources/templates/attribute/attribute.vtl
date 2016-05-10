@@ -1,0 +1,20 @@
+<div class="col-sm-10 blog-main kbd">
+  <div class="blog-post">
+    <h1>List of attributes!</h1>
+    <p class="alert alert-success">Attributos: </p>
+    <ul class="list-group">
+      #foreach( $attr in $attributes )
+        <li class="list-group-item">$attr</li>
+      #end
+    </ul>
+
+    <h1>Add you attribute!</h1>
+    <form action="/attribute" method="POST">
+      <div class="form-group">
+        <label for="attribute">Your name</label>
+        <input id="attribute" name="attribute" class="form-control" type="text">
+      </div>
+      <button type="submit" class="btn">Go!</button>
+    </form>
+  </div>
+</div>
