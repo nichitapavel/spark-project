@@ -15,7 +15,7 @@
       <h2>Available FD Joints:</h2>
       <ul class="list-group">
         #foreach( $fdj in $fdjoints )
-        <li class="list-group-item"><label class="checkbox-inline"><input name="fdjoint-name-$fdj.name" type="checkbox" value="$fdj.name">$fdj</label></li>
+        <li class="list-group-item"><label class="radio-inline"><input name="fdjoint-name-$fdj.name" type="radio" value="$fdj.name">$fdj</label></li>
         #end
       </ul>
       <h2>Available Attributes:</h2>
