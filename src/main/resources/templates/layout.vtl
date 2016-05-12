@@ -7,22 +7,26 @@
   </head>
   <body>
   	<div class="container">
+      <!--Listado de links -->
+      <div role="navigation" class="navbar navbar-default col-sm-10">
+	    <!--<div class="col-sm-2 col-sm-offset-0 navbar-header kbd"> -->
+	  	<ul class="nav navbar-nav">
+	  	  <li class="active"><a href="/">Home</a></li>
+	  	  <li><a href="/attribute">Attributes</a></li>
+	  	  <li><a href="/fd">Functional Dependencies</a></li>
+	  	  <li><a href="/fdjoint">FD Joints</a></li>
+	  	  <li><a href="/relation">Relations</a></li>
+	  	  <li><a href="/ullman">Ullman</a></li>
+	  	</ul>
+	  	<!--Listado de links -->
+	  </div> <!-- navbar -->
+
 	  <div class="row">
-	    <!--Listado de links -->
-	    <div class="col-sm-2 col-sm-offset-0 blog-sidebar kbd">
-	  	  <ul class="sidebar-module">
-	  	  	<li class="nav"><a href="/">Home</a></li>
-	  	    <li class="nav"><a href="/attribute">Attributes</a></li>
-	  	    <li class="nav"><a href="/fd">Functional Dependencies</a></li>
-	  	    <li class="nav"><a href="/fdjoint">FD Joints</a></li>
-	  	    <li class="nav"><a href="/relation">Relations</a></li>
-	  	  </ul>
-	  	</div>
-  		<!--Listado de links -->
 
 #parse( $template )
 
-	  </div>
-    </div>
+	  </div> <!-- row -->
+    </div> <!-- container -->
   </body>
+  <script type='javascript'  src='/js/bootstrap.js'>
 </html>

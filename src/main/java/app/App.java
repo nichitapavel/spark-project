@@ -35,6 +35,7 @@ public class App {
         enableDebugScreen();
         */
         get("/", (req, res) -> {
+            System.out.println(req.ip());
             Map<String, Object> model = new HashMap<>();
             model.put("template", "templates/hello.vtl");
             return new ModelAndView(model, layout);
@@ -146,5 +147,36 @@ public class App {
             model.put("template", "templates/relation/relation.vtl");
             return new ModelAndView(model, layout);
         }, new VelocityTemplateEngine());
+        
+        get("/ullman", (req, res) -> {
+            Map<String, Object> model = new HashMap<>();
+            model.put("relations", relationList);
+            model.put("attributes", attrList);
+            model.put("template", "templates/analyze/ullman.vtl");
+            return new ModelAndView(model, layout);
+        }, new VelocityTemplateEngine());
+        
+        post("/ullman", (req, res) -> {
+            AttributeJoint attrJoint = new AttributeJoint();
+            Relation relation = new Relation();
+            for (String item : req.queryParams()){
+                if (item.contains("attr-")){
+                    attrJoint.addAttributes(attrList.get(req.queryParams(item)));
+                }
+                else {
+                    relation = relationList.get(req.queryParams(item));
+                }
+            }
+            attrJoint = normalization.Normalization.simpleUllman(attrJoint, relation.getDFJoint());
+            
+            Map<String, Object> model = new HashMap<>();
+            model.put("ullman", attrJoint);
+            model.put("relations", relationList);
+            model.put("attributes", attrList);
+            model.put("template", "templates/analyze/ullman.vtl");
+            model.put("result", "templates/analyze/ullman-result.vtl");
+            return new ModelAndView(model, layout);
+        }, new VelocityTemplateEngine());
+        
     }
 }
