@@ -16,6 +16,9 @@ import spark.template.velocity.VelocityTemplateEngine;
 
 import static spark.Spark.*;
 
+import constants.TemplateConstants;
+import constants.AppConstants;
+
 /**
  * @author Pavel Nichita
  *
@@ -27,12 +30,11 @@ public class App {
         staticFileLocation("/public");
         String layoutVtl = "templates/layout.vtl";
         String helloVtl = "templates/hello.vtl";
-        String attributeVtl = "templates/attribute/attribute.vtl";
 
         get("/", (req, res) -> {
             System.out.println(req.ip());
             Map<String, Object> model = new HashMap<>();
-            model.put("template", helloVtl);
+            model.put(AppConstants.TEMPLATE, helloVtl);
             return new ModelAndView(model, layoutVtl);
         }, new VelocityTemplateEngine());
 
@@ -56,12 +58,12 @@ public class App {
 
         get("/attribute", (req, res) -> {
             checkSession(req.session().id());
-            System.out.println("Cookie: " + req.cookie("JSESSIONID"));
-            System.out.println("Session ID: " + req.session().id());
             Map<String, Object> model = new HashMap<>();
             Map<String, Attribute> attrList = req.session().attribute("attrList");
-            model.put("attributes", attrList.values());
-            model.put("template", attributeVtl);
+            model.put(AppConstants.ATTRIBUTES, attrList.values());
+            model.put(AppConstants.TEMPLATE, TemplateConstants.ATTRIBUTE);
+            model.put(AppConstants.ATTRIBUTES_LIST, TemplateConstants.ATTRIBUTES_LIST);
+            model.put(AppConstants.ATTRIBUTES_ADD_FORM, TemplateConstants.ATTRIBUTES_ADD_FORM);
             return new ModelAndView(model, layoutVtl);
         }, new VelocityTemplateEngine());
 
@@ -72,8 +74,10 @@ public class App {
             attrList.put(attr.getAttribute(), attr);
 
             Map<String, Object> model = new HashMap<>();
-            model.put("attributes", attrList);
-            model.put("template", "templates/attribute/attribute.vtl");
+            model.put(AppConstants.ATTRIBUTES, attrList.values());
+            model.put(AppConstants.TEMPLATE, TemplateConstants.ATTRIBUTE);
+            model.put(AppConstants.ATTRIBUTES_LIST, TemplateConstants.ATTRIBUTES_LIST);
+            model.put(AppConstants.ATTRIBUTES_ADD_FORM, TemplateConstants.ATTRIBUTES_ADD_FORM);
             return new ModelAndView(model, layoutVtl);
         }, new VelocityTemplateEngine());
 
@@ -81,10 +85,16 @@ public class App {
             checkSession(req.session().id());
             Map<String, Attribute> attrList = req.session().attribute("attrList");
             Map<String, FunctionalDependency> fdList = req.session().attribute("fdList");
+            
             Map<String, Object> model = new HashMap<>();
-            model.put("attributes", attrList.values());
+            model.put(AppConstants.ATTRIBUTES, attrList.values());
+            model.put(AppConstants.ATTRIBUTES_LIST_CHECKBOX_ANT, TemplateConstants.ATTRIBUTES_LIST_CHECKBOX_ANT);
+            model.put(AppConstants.ATTRIBUTES_LIST_CHECKBOX_CON, TemplateConstants.ATTRIBUTES_LIST_CHECKBOX_CON);
+            model.put("ant", AppConstants.ANTECEDENT);
+            model.put("con", AppConstants.CONSEQUENT);
             model.put("fds", fdList);
-            model.put("template", "templates/fd/fd.vtl");
+            model.put(AppConstants.TEMPLATE, TemplateConstants.FD);
+            model.put(AppConstants.FD_LIST, TemplateConstants.FD_LIST);
             return new ModelAndView(model, layoutVtl);
         }, new VelocityTemplateEngine());
 
@@ -95,7 +105,7 @@ public class App {
             AttributeJoint antecedent = new AttributeJoint();
             AttributeJoint consequent = new AttributeJoint();
             for (String attrr : req.queryParams()){
-                if (attrr.contains("ant-")){
+                if (attrr.contains(AppConstants.ANTECEDENT)){
                     antecedent.addAttributes(attrList.get(req.queryParams(attrr)));
                 }
                 else {
@@ -106,9 +116,14 @@ public class App {
             fdList.put(fd.toString(), fd);
 
             Map<String, Object> model = new HashMap<>();
-            model.put("attributes", attrList);
+            model.put(AppConstants.ATTRIBUTES, attrList.values());
+            model.put(AppConstants.ATTRIBUTES_LIST_CHECKBOX_ANT, TemplateConstants.ATTRIBUTES_LIST_CHECKBOX_ANT);
+            model.put(AppConstants.ATTRIBUTES_LIST_CHECKBOX_CON, TemplateConstants.ATTRIBUTES_LIST_CHECKBOX_CON);
+            model.put("ant", AppConstants.ANTECEDENT);
+            model.put("con", AppConstants.CONSEQUENT);
             model.put("fds", fdList);
-            model.put("template", "templates/fd/fd.vtl");
+            model.put(AppConstants.TEMPLATE, TemplateConstants.FD);
+            model.put(AppConstants.FD_LIST, TemplateConstants.FD_LIST);
             return new ModelAndView(model, layoutVtl);
         }, new VelocityTemplateEngine());
 
@@ -119,7 +134,7 @@ public class App {
             Map<String, Object> model = new HashMap<>();
             model.put("fdjoints", fdJointList);
             model.put("fds", fdList);
-            model.put("template", "templates/fdjoint/fdjoint.vtl");
+            model.put(AppConstants.TEMPLATE, "templates/fdjoint/fdjoint.vtl");
             return new ModelAndView(model, layoutVtl);
         }, new VelocityTemplateEngine());
 
@@ -139,7 +154,7 @@ public class App {
             Map<String, Object> model = new HashMap<>();
             model.put("fdjoints", fdJointList);
             model.put("fds", fdList);
-            model.put("template", "templates/fdjoint/fdjoint.vtl");
+            model.put(AppConstants.TEMPLATE, "templates/fdjoint/fdjoint.vtl");
             return new ModelAndView(model, layoutVtl);
         }, new VelocityTemplateEngine());
 
@@ -150,9 +165,9 @@ public class App {
             Map<String, Relation> relationList = req.session().attribute("relationList");
             Map<String, Object> model = new HashMap<>();
             model.put("relations", relationList);
-            model.put("attributes", attrList);
+            model.put(AppConstants.ATTRIBUTES, attrList);
             model.put("fdjoints", fdJointList);
-            model.put("template", "templates/relation/relation.vtl");
+            model.put(AppConstants.TEMPLATE, "templates/relation/relation.vtl");
             return new ModelAndView(model, layoutVtl);
         }, new VelocityTemplateEngine());
 
@@ -182,8 +197,8 @@ public class App {
             Map<String, Object> model = new HashMap<>();
             model.put("relations", relationList);
             model.put("fdjoints", fdJointList);
-            model.put("attributes", attrList);
-            model.put("template", "templates/relation/relation.vtl");
+            model.put(AppConstants.ATTRIBUTES, attrList);
+            model.put(AppConstants.TEMPLATE, "templates/relation/relation.vtl");
             return new ModelAndView(model, layoutVtl);
         }, new VelocityTemplateEngine());
 
@@ -193,8 +208,9 @@ public class App {
             Map<String, Relation> relationList = req.session().attribute("relationList");
             Map<String, Object> model = new HashMap<>();
             model.put("relations", relationList);
-            model.put("attributes", attrList);
-            model.put("template", "templates/analyze/ullman.vtl");
+            model.put(AppConstants.ATTRIBUTES, attrList);
+            model.put(AppConstants.ATTRIBUTES_LIST_CHECKBOX, TemplateConstants.ATTRIBUTES_LIST_CHECKBOX);
+            model.put(AppConstants.TEMPLATE, "templates/analyze/ullman.vtl");
             return new ModelAndView(model, layoutVtl);
         }, new VelocityTemplateEngine());
 
@@ -217,8 +233,9 @@ public class App {
             Map<String, Object> model = new HashMap<>();
             model.put("ullman", attrJoint);
             model.put("relations", relationList);
-            model.put("attributes", attrList);
-            model.put("template", "templates/analyze/ullman.vtl");
+            model.put(AppConstants.ATTRIBUTES, attrList);
+            model.put(TemplateConstants.ATTRIBUTES_LIST_CHECKBOX, TemplateConstants.ATTRIBUTES_LIST_CHECKBOX);
+            model.put(AppConstants.TEMPLATE, "templates/analyze/ullman.vtl");
             model.put("result", "templates/analyze/ullman-result.vtl");
             return new ModelAndView(model, layoutVtl);
         }, new VelocityTemplateEngine());
