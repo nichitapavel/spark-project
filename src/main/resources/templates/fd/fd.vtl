@@ -1,31 +1,23 @@
 <div class="col-sm-10 blog-main kbd">
   <div class="blog-post">
     <h1>List of Functional Dependencies!</h1>
-    <p class="alert alert-success">Functional Dependencies: </p>
-    <ul class="list-group">
-      #foreach( $fd in $fds )
-        <li class="list-group-item">$fd</li>
-      #end
-    </ul>
+
+#parse( $fd-list )
 
     <h1>Add you Functional Dependency!</h1>
     <form action="/fd" method="POST" >
       <div class="col-xs-6">
         <h2>Antecedent:</h2>
-        <ul class="list-group">
-          #foreach( $attr in $attributes )
-            <li class="list-group-item"><label class="checkbox-inline"><input name="ant-$attr" type="checkbox" value="$attr">$attr</label></li>
-          #end
-        </ul>
+        
+#parse( $attributes-list-checkbox-ant )
+
       </div>
         
       <div class="col-xs-6">
         <h2>Consequent:</h2>
-        <ul class="list-group checked-list-box">
-          #foreach( $attr in $attributes )
-            <li class="list-group-item"><label class="checkbox-inline"><input name="con-$attr" type="checkbox" value="$attr">$attr</label></li>
-          #end
-        </ul>
+
+#parse( $attributes-list-checkbox-con )
+
       </div>
       <button type="submit" class="btn">Go!</button>
     </form>

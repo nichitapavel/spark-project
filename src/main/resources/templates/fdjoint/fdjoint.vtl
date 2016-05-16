@@ -13,11 +13,9 @@
       <label for="fdjoint-name">FD Joint Name: </label>
       <input id="fdjoint-name" name="fdjoint-name" class="form-control" type="text">
       <h2>Available FD:</h2>
-      <ul class="list-group">
-        #foreach( $fd in $fds )
-        <li class="list-group-item"><label class="checkbox-inline"><input name="$fd" type="checkbox" value="$fd">$fd</label></li>
-        #end
-      </ul>
+
+#parse( $fd-list-checkbox )
+
       <button type="submit" class="btn">Go!</button>
     </form>
   </div>

@@ -3,12 +3,8 @@
     <h1>Calculate Ullman!</h1>
 #parse( $result )
     <form action="/ullman" method="POST" >
-	  <p class="alert alert-success">Attributos: </p>
-	  <ul class="list-group">
-	  #foreach( $attr in $attributes )
-	    <li class="list-group-item"><label class="checkbox-inline"><input name="attr-$attr" type="checkbox" value="$attr">$attr</label></li>
-	  #end
-	  </ul>
+
+#parse( $attributes-list-checkbox)
 	  
 	  <p class="alert alert-success">Relations: </p>
 	    <ul class="list-group">

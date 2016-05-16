@@ -1,0 +1,5 @@
+<ul class="list-group">
+#foreach( $attr in $attributes )
+  <li class="list-group-item"><label class="checkbox-inline"><input name="$con$attr" type="checkbox" value="$attr">$attr</label></li>
+#end
+</ul>
