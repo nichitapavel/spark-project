@@ -1,0 +1,21 @@
+/**
+ * 
+ */
+package constants;
+
+/**
+ * @author Pavel Nichita
+ *
+ */
+public class FormConstants {
+    
+    public static final String ATTRIBUTE = "__attr__";
+    public static final String ANTECEDENT = "__ant__";
+    public static final String CONSEQUENT = "__con__";
+    public static final String FDJOINT = "__fdjoint-name__";
+    public static final String RELATION = "__relation-name__";
+
+    private FormConstants() {
+        // Private constructor to prevent instantiation.
+    }
+}

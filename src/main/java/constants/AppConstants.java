@@ -27,14 +27,7 @@ public class AppConstants {
     public static final String FDJOINTS_LIST = "fdjoints-list";
     public static final String FDJOINTS_LIST_RADIO = "fdjoints-list-radio";
     
-    public static final String ATTRIBUTE_FORM = "__attr__";
-    public static final String ANTECEDENT_FORM = "__ant__";
-    public static final String CONSEQUENT_FORM = "__con__";
-    public static final String FDJOINT_FORM = "__fdjoint-name__";
-    public static final String RELATION_FORM = "__relation-name__";
     public static final String ULLMAN_RESULT = "ullman-result";
-    
-    public static final String ATTRIBUTEJOINT = "attributejoint";
 
     private AppConstants() {
         // Private constructor to prevent instantiation.
