@@ -20,6 +20,7 @@ import constants.TemplateConstants;
 import constants.AppConstants;
 import constants.DataConstants;
 import constants.SessionConstants;
+import constants.FormConstants;
 
 /**
  * @author Pavel Nichita
@@ -94,8 +95,8 @@ public class App {
             model.put(DataConstants.ATTRIBUTES, attrList);
             model.put(AppConstants.ATTRIBUTES_LIST_CHECKBOX_ANT, TemplateConstants.ATTRIBUTES_LIST_CHECKBOX_ANT);
             model.put(AppConstants.ATTRIBUTES_LIST_CHECKBOX_CON, TemplateConstants.ATTRIBUTES_LIST_CHECKBOX_CON);
-            model.put(DataConstants.ANTECEDENT, AppConstants.ANTECEDENT_FORM);
-            model.put(DataConstants.CONSEQUENT, AppConstants.CONSEQUENT_FORM);
+            model.put(DataConstants.ANTECEDENT, FormConstants.ANTECEDENT);
+            model.put(DataConstants.CONSEQUENT, FormConstants.CONSEQUENT);
             model.put(DataConstants.FDS, fdList);
             model.put(AppConstants.TEMPLATE, TemplateConstants.FD);
             model.put(AppConstants.FDS_LIST, TemplateConstants.FDS_LIST);
@@ -109,7 +110,7 @@ public class App {
             AttributeJoint antecedent = new AttributeJoint();
             AttributeJoint consequent = new AttributeJoint();
             for (String attrr : req.queryParams()){
-                if (attrr.contains(AppConstants.ANTECEDENT_FORM)){
+                if (attrr.contains(FormConstants.ANTECEDENT)){
                     antecedent.addAttributes(attrList.get(req.queryParams(attrr)));
                 }
                 else {
@@ -123,8 +124,8 @@ public class App {
             model.put(DataConstants.ATTRIBUTES, attrList);
             model.put(AppConstants.ATTRIBUTES_LIST_CHECKBOX_ANT, TemplateConstants.ATTRIBUTES_LIST_CHECKBOX_ANT);
             model.put(AppConstants.ATTRIBUTES_LIST_CHECKBOX_CON, TemplateConstants.ATTRIBUTES_LIST_CHECKBOX_CON);
-            model.put(DataConstants.ANTECEDENT, AppConstants.ANTECEDENT_FORM);
-            model.put(DataConstants.CONSEQUENT, AppConstants.CONSEQUENT_FORM);
+            model.put(DataConstants.ANTECEDENT, FormConstants.ANTECEDENT);
+            model.put(DataConstants.CONSEQUENT, FormConstants.CONSEQUENT);
             model.put(DataConstants.FDS, fdList);
             model.put(AppConstants.TEMPLATE, TemplateConstants.FD);
             model.put(AppConstants.FDS_LIST, TemplateConstants.FDS_LIST);
@@ -149,14 +150,14 @@ public class App {
             Map<String, FunctionalDependency> fdList = req.session().attribute(SessionConstants.FD_LIST);
             Map<String, DFJoint> fdJointList = req.session().attribute(SessionConstants.FDJOINT_LIST);
             DFJoint fdJoint = new DFJoint();
-            fdJoint.setName(req.queryParams(AppConstants.FDJOINT_FORM));
+            fdJoint.setName(req.queryParams(FormConstants.FDJOINT));
 
             for (String fd : req.queryParams()){
-                if (!fd.equals(AppConstants.FDJOINT_FORM)){
+                if (!fd.equals(FormConstants.FDJOINT)){
                     fdJoint.addDependency(fdList.get(fd));;
                 }
             }
-            fdJointList.put(req.queryParams(AppConstants.FDJOINT_FORM), fdJoint);
+            fdJointList.put(req.queryParams(FormConstants.FDJOINT), fdJoint);
             Map<String, Object> model = new HashMap<>();
             model.put(DataConstants.FDJOINTS, fdJointList);
             model.put(DataConstants.FDS, fdList);
@@ -187,14 +188,14 @@ public class App {
             Map<String, DFJoint> fdJointList = req.session().attribute(SessionConstants.FDJOINT_LIST);
             Map<String, Relation> relationList = req.session().attribute(SessionConstants.RELATION_LIST);
             Relation relation = new Relation();
-            relation.setName(req.queryParams(AppConstants.RELATION_FORM));
+            relation.setName(req.queryParams(FormConstants.RELATION));
             AttributeJoint attrJoint = new AttributeJoint();
 
             for (String item : req.queryParams()){
-                if (item.contains(AppConstants.FDJOINT_FORM)){
+                if (item.contains(FormConstants.FDJOINT)){
                     relation.setDFJoint(fdJointList.get(req.queryParams(item)));
                 }
-                else if (item.contains(AppConstants.RELATION_FORM)) {}
+                else if (item.contains(FormConstants.RELATION)) {}
                 else {
                     attrJoint.addAttributes(attrList.get(req.queryParams(item)));
                 }
@@ -203,7 +204,7 @@ public class App {
                 relation.settAttrJoint(attrJoint);
             }
 
-            relationList.put(req.queryParams(AppConstants.RELATION_FORM), relation);
+            relationList.put(req.queryParams(FormConstants.RELATION), relation);
             Map<String, Object> model = new HashMap<>();
             model.put(DataConstants.RELATIONS, relationList);
             model.put(DataConstants.FDJOINTS, fdJointList);
@@ -233,7 +234,7 @@ public class App {
             AttributeJoint attrJoint = new AttributeJoint();
             Relation relation = new Relation();
             for (String item : req.queryParams()){
-                if (item.contains(AppConstants.ATTRIBUTE_FORM)){
+                if (item.contains(FormConstants.ATTRIBUTE)){
                     attrJoint.addAttributes(attrList.get(req.queryParams(item)));
                 }
                 else {
@@ -243,7 +244,7 @@ public class App {
             attrJoint = normalization.Normalization.simpleUllman(attrJoint, relation.getDFJoint());
 
             Map<String, Object> model = new HashMap<>();
-            model.put(AppConstants.ATTRIBUTEJOINT, attrJoint);
+            model.put(DataConstants.ATTRIBUTEJOINT, attrJoint);
             model.put(DataConstants.RELATIONS, relationList);
             model.put(DataConstants.ATTRIBUTES, attrList);
             model.put(AppConstants.ATTRIBUTES_LIST_CHECKBOX, TemplateConstants.ATTRIBUTES_LIST_CHECKBOX);
