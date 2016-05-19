@@ -1,6 +1,6 @@
 <p class="alert alert-success">Attributes: </p>
 <ul class="list-group">
 #foreach( $attr in $attributes )
-  <li class="list-group-item"><label class="checkbox-inline"><input name="$attr" type="checkbox" value="$attr">$attr</label></li>
+  <li class="list-group-item"><label class="checkbox-inline"><input name="__attr__$attr" type="checkbox" value="$attr">$attr</label></li>
 #end
 </ul>

@@ -1,6 +1,9 @@
+#if ( !$attributes.isEmpty() )
+<h1>List of attributes!</h1>
 <p class="alert alert-success">Attributes: </p>
 <ul class="list-group">
 #foreach( $attr in $attributes )
   <li class="list-group-item">$attr</li>
 #end
 </ul>
+#end

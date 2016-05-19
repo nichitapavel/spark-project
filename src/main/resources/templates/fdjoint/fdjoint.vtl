@@ -1,20 +1,15 @@
 <div class="col-sm-10 blog-main kbd">
   <div class="blog-post">
-    <h1>List of FD Joints!</h1>
-    <p class="alert alert-success">FD Joints: </p>
-    <ul class="list-group">
-      #foreach( $fdj in $fdjoints )
-        <li class="list-group-item">$fdj</li>
-      #end
-    </ul>
+
+#parse( $fdjoints-list )
 
     <h1>Add Your FD Joint!</h1>
     <form action="/fdjoint" method="POST" >
-      <label for="fdjoint-name">FD Joint Name: </label>
-      <input id="fdjoint-name" name="fdjoint-name" class="form-control" type="text">
+      <label for="__fdjoint-name__">FD Joint Name: </label>
+      <input id="__fdjoint-name__" name="__fdjoint-name__" class="form-control" type="text">
       <h2>Available FD:</h2>
 
-#parse( $fd-list-checkbox )
+#parse( $fds-list-checkbox )
 
       <button type="submit" class="btn">Go!</button>
     </form>

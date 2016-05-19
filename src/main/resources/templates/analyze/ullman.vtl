@@ -1,7 +1,7 @@
 <div class="col-sm-10 blog-main kbd">
   <div class="blog-post">
     <h1>Calculate Ullman!</h1>
-#parse( $result )
+#parse( $ullman-result )
     <form action="/ullman" method="POST" >
 
 #parse( $attributes-list-checkbox)
@@ -9,7 +9,7 @@
 	  <p class="alert alert-success">Relations: </p>
 	    <ul class="list-group">
 	    #foreach( $relation in $relations )
-	      <li class="list-group-item"><label class="radio-inline"><input name="rel-$relation.name" type="radio" value="$relation.name">$relation</label></li>
+	      <li class="list-group-item"><label class="radio-inline"><input name="__relation-name__$relation.name" type="radio" value="$relation.name">$relation</label></li>
 	    #end
 	  </ul>
 	  <button type="submit" class="btn">Go!</button>

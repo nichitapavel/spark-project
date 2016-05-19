@@ -1,29 +1,19 @@
 <div class="col-sm-10 blog-main kbd">
   <div class="blog-post">
-    <h1>List of FD Joints!</h1>
-    <p class="alert alert-success">FD Joints: </p>
-    <ul class="list-group">
-      #foreach( $relation in $relations )
-        <li class="list-group-item">$relation</li>
-      #end
-    </ul>
+
+#parse( $relations-list )
 
     <h1>Add Your Relation!</h1>
     <form action="/relation" method="POST" >
-      <label for="relation-name">Relation Name: </label>
-      <input id="relation-name" name="relation-name" class="form-control" type="text">
-      <h2>Available FD Joints:</h2>
-      <ul class="list-group">
-        #foreach( $fdj in $fdjoints )
-        <li class="list-group-item"><label class="radio-inline"><input name="fdjoint-name-$fdj.name" type="radio" value="$fdj.name">$fdj</label></li>
-        #end
-      </ul>
+      <label for="__relation-name__">Relation Name: </label>
+      <input id="__relation-name__" name="__relation-name__" class="form-control" type="text">
+
+#parse( $fdjoints-list-radio )
+
       <h2>Available Attributes:</h2>
-      <ul class="list-group">
-        #foreach( $attr in $attributes )
-        <li class="list-group-item"><label class="checkbox-inline"><input name="$attr" type="checkbox" value="$attr">$attr</label></li>
-        #end
-      </ul>
+
+#parse( $attributes-list-checkbox )
+
       <button type="submit" class="btn">Go!</button>
     </form>
   </div>
