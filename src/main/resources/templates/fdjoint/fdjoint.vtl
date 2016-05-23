@@ -1,17 +1,13 @@
-<div class="col-sm-10 blog-main kbd">
-  <div class="blog-post">
-
-#parse( $fdjoints-list )
-
-    <h1>Add Your FD Joint!</h1>
-    <form action="/fdjoint" method="POST" >
-      <label for="__fdjoint-name__">FD Joint Name: </label>
-      <input id="__fdjoint-name__" name="__fdjoint-name__" class="form-control" type="text">
-      <h2>Available FD:</h2>
-
+<h2 class="alert alert-info">Add a FD Joint!</h2>
+<form action="/fdjoint" method="POST" >
+  <h4>FD Joint Name</h4>
+  <div class="form-group">
+    <input id="__fdjoint-name__" name="__fdjoint-name__" class="form-control" type="text"></input>
+  </div>
+  
 #parse( $fds-list-checkbox )
 
-      <button type="submit" class="btn">Go!</button>
-    </form>
-  </div>
-</div>
+  <button type="submit" class="btn">Go!</button>
+</form>
+
+#parse( $fdjoints-list )
