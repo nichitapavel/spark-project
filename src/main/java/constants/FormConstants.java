@@ -14,6 +14,7 @@ public class FormConstants {
     public static final String CONSEQUENT = "__con__";
     public static final String FDJOINT = "__fdjoint-name__";
     public static final String RELATION = "__relation-name__";
+    public static final String USERNAME = "__username__";
 
     private FormConstants() {
         // Private constructor to prevent instantiation.
