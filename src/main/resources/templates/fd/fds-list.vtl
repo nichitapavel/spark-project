@@ -1,7 +1,8 @@
-<h1>List of Functional Dependencies!</h1>
-<p class="alert alert-success">Functional Dependencies: </p>
+#if( !$fds.isEmpty() )
+<h2 class="alert alert-warning">Functional Dependencies</h2>
 <ul class="list-group">
 #foreach( $fd in $fds )
   <li class="list-group-item">$fd</li>
 #end
 </ul>
+#end

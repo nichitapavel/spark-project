@@ -1,29 +1,24 @@
-<div class="col-sm-10 blog-main kbd">
-  <div class="blog-post">
-
-#parse( $fds-list )
-
-    <h1>Add you Functional Dependency!</h1>
-    <form action="/fd" method="POST" >
-      <!-- Antecedent Attributes -->
-      <div class="col-xs-6">
-        <h2>Antecedent:</h2>
+<h2 class="alert alert-info">Add a Functional Dependency!</h2>
+<form action="/fd" method="POST" >
+  <!-- Antecedent Attributes -->
+  <div class="col-sm-6 form-group">
+    <h3 class="alert alert-info">Antecedent</h3>
         
 #parse( $attributes-list-checkbox-ant )
 
-      </div>
-      <!-- Antecedent Attributes -->
+  </div>
+  <!-- Antecedent Attributes -->
         
-      <!-- Consequent Attributes -->
-      <div class="col-xs-6">
-        <h2>Consequent:</h2>
+  <!-- Consequent Attributes -->
+  <div class="col-sm-6 form-group">
+    <h3 class="alert alert-info">Consequent</h3>
 
 #parse( $attributes-list-checkbox-con )
 
-      </div>
-      <!-- Consequent Attributes -->
-      
-      <button type="submit" class="btn">Go!</button>
-    </form>
   </div>
-</div>
+  <!-- Consequent Attributes -->
+      
+  <button type="submit" class="btn">Go!</button>
+</form>
+    
+#parse( $fds-list )
