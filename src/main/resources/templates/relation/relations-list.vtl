@@ -1,7 +1,19 @@
-<h1>List of FD Joints!</h1>
-<p class="alert alert-success">Relations: </p>
+#if( !$relations.isEmpty() )
+<h2 class="alert alert-warning">Relations</h2>
 <ul class="list-group">
 #foreach( $relation in $relations )
-  <li class="list-group-item">$relation</li>
+  <li class="list-group-item">
+    <p>$relation.getName() - $relation.getAttrJoint()</p>
+    <p>
+    #foreach( $fd in $relation.getDFJoint() )
+      #if( $velocityCount != $relation.getDFJoint().getSize())
+      $fd || 
+      #else
+      $fd
+      #end
+    #end
+    </p>
+  </li>
 #end
 </ul>
+#end

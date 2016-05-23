@@ -1,20 +1,15 @@
-<div class="col-sm-10 blog-main kbd">
-  <div class="blog-post">
-
-#parse( $relations-list )
-
-    <h1>Add Your Relation!</h1>
-    <form action="/relation" method="POST" >
-      <label for="__relation-name__">Relation Name: </label>
-      <input id="__relation-name__" name="__relation-name__" class="form-control" type="text">
+<h2 class="alert alert-info">Add a Relation!</h2>
+<form action="/relation" method="POST" >
+  <h4>Relation Name</h4>
+  <div class="form-group">
+    <input id="__relation-name__" name="__relation-name__" class="form-control" type="text">
+  </div>
 
 #parse( $fdjoints-list-radio )
 
-      <h2>Available Attributes:</h2>
-
 #parse( $attributes-list-checkbox )
 
-      <button type="submit" class="btn">Go!</button>
-    </form>
-  </div>
-</div>
+  <button type="submit" class="btn">Go!</button>
+</form>
+    
+#parse( $relations-list )

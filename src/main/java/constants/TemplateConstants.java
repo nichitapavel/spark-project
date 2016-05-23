@@ -26,6 +26,8 @@ public class TemplateConstants {
     public static final String FDJOINTS_LIST_RADIO = "templates/fdjoint/fdjoints-list-radio.vtl";
     
     public static final String RELATION = "templates/relation/relation.vtl";
+    public static final String RELATIONS_LIST = "templates/relation/relations-list.vtl";
+    public static final String RELATIONS_LIST_RADIO = "templates/relation/relations-list-radio.vtl";
     
     public static final String ULLMAN = "templates/analyze/ullman.vtl";
     public static final String ULLMAN_RESULT = "templates/analyze/ullman-result.vtl";

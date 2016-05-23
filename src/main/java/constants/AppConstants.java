@@ -27,6 +27,10 @@ public class AppConstants {
     public static final String FDJOINTS_LIST = "fdjoints-list";
     public static final String FDJOINTS_LIST_RADIO = "fdjoints-list-radio";
     
+    public static final String RELATION = "relation";
+    public static final String RELATIONS_LIST = "relations-list";
+    public static final String RELATIONS_LIST_RADIO = "relations-list-radio";
+    
     public static final String ULLMAN_RESULT = "ullman-result";
 
     private AppConstants() {
