@@ -34,9 +34,12 @@ public class App {
         
         String helloVtl = "templates/hello.vtl";
 
+        before((req, res) -> {
+            Map<String, Object> model = new HashMap<>();
+            model.put(SessionConstants.USERNAME, session.get(req.session().id()));
+        });      
+        
         get("/", (req, res) -> {
-            System.out.println(req.ip());
-            
             Map<String, Object> model = new HashMap<>();
             model.put(AppConstants.TEMPLATE, helloVtl);
             model.put(SessionConstants.USERNAME, session.get(req.session().id()));
@@ -234,13 +237,19 @@ public class App {
             }
             AttributeJoint ullmanResult = normalization.Normalization.simpleUllman(ullmanAttrJoint, ullmanRelation.getDFJoint());
             
-            Map<String, Object> modelUllman = new HashMap<>();
-            modelUllman.put(DataConstants.ULLMAN_RELATION, ullmanRelation);
-            modelUllman.put(DataConstants.ULLMAN_ATTRJOINT, ullmanAttrJoint);
-            modelUllman.put(DataConstants.ULLMAN_ALG, ullmanResult);
-            res.redirect("/ullman");
-            return modelUllman;
-        });
+            Map<String, Object> model = new HashMap<>();
+            model.put(SessionConstants.USERNAME, session.get(req.session().id()));
+            model.put(DataConstants.ULLMAN_RELATION, ullmanRelation);
+            model.put(DataConstants.ULLMAN_ATTRJOINT, ullmanAttrJoint);
+            model.put(DataConstants.ULLMAN_ALG, ullmanResult);
+            model.put(DataConstants.RELATIONS, relationList);
+            model.put(DataConstants.ATTRIBUTES, attrList);
+            model.put(AppConstants.RELATIONS_LIST_RADIO, TemplateConstants.RELATIONS_LIST_RADIO);
+            model.put(AppConstants.ATTRIBUTES_LIST_CHECKBOX, TemplateConstants.ATTRIBUTES_LIST_CHECKBOX);
+            model.put(AppConstants.TEMPLATE, TemplateConstants.ULLMAN);
+            model.put(AppConstants.ULLMAN_RESULT, TemplateConstants.ULLMAN_RESULT);
+            return new ModelAndView(model, TemplateConstants.LAYOUT);
+        }, new VelocityTemplateEngine());
 
         get("/find-normal-form", (req, res) -> {
             checkSession(req.session().id());
