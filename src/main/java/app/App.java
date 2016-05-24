@@ -82,6 +82,7 @@ public class App {
         post("/attribute", (req, res) -> {
             checkSession(req.session().id());
             
+            addAttribute(req.session(), req.queryParams(AppConstants.ATTRIBUTE));
 
             res.redirect("/attribute");
             return null;
