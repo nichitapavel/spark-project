@@ -12,6 +12,7 @@ import datastructures.DFJoint;
 import datastructures.Relation;
 import dependency.FunctionalDependency;
 import spark.ModelAndView;
+import spark.Session;
 import spark.template.velocity.VelocityTemplateEngine;
 
 import static spark.Spark.*;
@@ -80,9 +81,7 @@ public class App {
 
         post("/attribute", (req, res) -> {
             checkSession(req.session().id());
-            Map<String, Attribute> attrList = req.session().attribute(SessionConstants.ATTRIBUTE_LIST);
-            Attribute attr = new Attribute(req.queryParams(AppConstants.ATTRIBUTE));
-            attrList.put(attr.getAttribute(), attr);
+            
 
             res.redirect("/attribute");
             return null;
@@ -262,5 +261,11 @@ public class App {
         // if (!session.containsKey(id)){
            // halt(401, "No known session");
         //}
+    }
+    
+    private static void addAttribute(Session reqSession, String reqAttr) {
+        Map<String, Attribute> attrList = reqSession.attribute(SessionConstants.ATTRIBUTE_LIST);
+        Attribute attr = new Attribute(reqAttr);
+        attrList.put(attr.getAttribute(), attr);
     }
 }
