@@ -12,7 +12,7 @@ import datastructures.DFJoint;
 import datastructures.Relation;
 import dependency.FunctionalDependency;
 import spark.ModelAndView;
-import spark.Session;
+import spark.Request;
 import spark.template.velocity.VelocityTemplateEngine;
 
 import static spark.Spark.*;
@@ -82,7 +82,7 @@ public class App {
         post("/attribute", (req, res) -> {
             checkSession(req.session().id());
             
-            addAttribute(req.session(), req.queryParams(AppConstants.ATTRIBUTE));
+            addAttribute(req);
 
             res.redirect("/attribute");
             return null;
@@ -108,20 +108,8 @@ public class App {
 
         post("/fd", (req, res) -> {
             checkSession(req.session().id());
-            Map<String, Attribute> attrList = req.session().attribute(SessionConstants.ATTRIBUTE_LIST);
-            Map<String, FunctionalDependency> fdList = req.session().attribute(SessionConstants.FD_LIST);
-            AttributeJoint antecedent = new AttributeJoint();
-            AttributeJoint consequent = new AttributeJoint();
-            for (String attrr : req.queryParams()){
-                if (attrr.contains(FormConstants.ANTECEDENT)){
-                    antecedent.addAttributes(attrList.get(req.queryParams(attrr)));
-                }
-                else {
-                    consequent.addAttributes(attrList.get(req.queryParams(attrr)));
-                }
-            }
-            FunctionalDependency fd = new FunctionalDependency(antecedent, consequent);
-            fdList.put(fd.toString(), fd);
+            
+            addFD(req);
 
             res.redirect("/fd");
             return null;
@@ -144,17 +132,8 @@ public class App {
 
         post("/fdjoint", (req, res) -> {
             checkSession(req.session().id());
-            Map<String, FunctionalDependency> fdList = req.session().attribute(SessionConstants.FD_LIST);
-            Map<String, DFJoint> fdJointList = req.session().attribute(SessionConstants.FDJOINT_LIST);
-            DFJoint fdJoint = new DFJoint();
-            fdJoint.setName(req.queryParams(FormConstants.FDJOINT));
-
-            for (String fd : req.queryParams()){
-                if (!fd.equals(FormConstants.FDJOINT)){
-                    fdJoint.addDependency(fdList.get(fd));;
-                }
-            }
-            fdJointList.put(req.queryParams(FormConstants.FDJOINT), fdJoint);
+            
+            addFDJoint(req);
 
             res.redirect("/fdjoint");
             return null;
@@ -180,27 +159,8 @@ public class App {
 
         post("/relation", (req, res) -> {
             checkSession(req.session().id());
-            Map<String, Attribute> attrList = req.session().attribute(SessionConstants.ATTRIBUTE_LIST);
-            Map<String, DFJoint> fdJointList = req.session().attribute(SessionConstants.FDJOINT_LIST);
-            Map<String, Relation> relationList = req.session().attribute(SessionConstants.RELATION_LIST);
-            Relation relation = new Relation();
-            relation.setName(req.queryParams(FormConstants.RELATION));
-            AttributeJoint attrJoint = new AttributeJoint();
-
-            for (String item : req.queryParams()){
-                if (item.contains(FormConstants.FDJOINT)){
-                    relation.setDFJoint(fdJointList.get(req.queryParams(item)));
-                }
-                else if (item.contains(FormConstants.RELATION)) {}
-                else {
-                    attrJoint.addAttributes(attrList.get(req.queryParams(item)));
-                }
-            }
-            if (!attrJoint.isNull()) {
-                relation.settAttrJoint(attrJoint);
-            }
-
-            relationList.put(req.queryParams(FormConstants.RELATION), relation);
+            
+            addRelation(req);
 
             res.redirect("/relation");
             return null;
@@ -264,9 +224,77 @@ public class App {
         //}
     }
     
-    private static void addAttribute(Session reqSession, String reqAttr) {
-        Map<String, Attribute> attrList = reqSession.attribute(SessionConstants.ATTRIBUTE_LIST);
-        Attribute attr = new Attribute(reqAttr);
+    /**
+     * @param req
+     */
+    private static void addAttribute(Request req) {
+        Map<String, Attribute> attrList = req.session().attribute(SessionConstants.ATTRIBUTE_LIST);
+        Attribute attr = new Attribute(req.queryParams(AppConstants.ATTRIBUTE));
         attrList.put(attr.getAttribute(), attr);
+    }
+    
+    /**
+     * @param req
+     */
+    private static void addFD(Request req) {
+        Map<String, Attribute> attrList = req.session().attribute(SessionConstants.ATTRIBUTE_LIST);
+        Map<String, FunctionalDependency> fdList = req.session().attribute(SessionConstants.FD_LIST);
+        AttributeJoint antecedent = new AttributeJoint();
+        AttributeJoint consequent = new AttributeJoint();
+        for (String attrr : req.queryParams()){
+            if (attrr.contains(FormConstants.ANTECEDENT)){
+                antecedent.addAttributes(attrList.get(req.queryParams(attrr)));
+            }
+            else {
+                consequent.addAttributes(attrList.get(req.queryParams(attrr)));
+            }
+        }
+        FunctionalDependency fd = new FunctionalDependency(antecedent, consequent);
+        fdList.put(fd.toString(), fd);
+    }
+
+    /**
+     * @param req
+     */
+    private static void addFDJoint(Request req) {
+        Map<String, FunctionalDependency> fdList = req.session().attribute(SessionConstants.FD_LIST);
+        Map<String, DFJoint> fdJointList = req.session().attribute(SessionConstants.FDJOINT_LIST);
+        DFJoint fdJoint = new DFJoint();
+        fdJoint.setName(req.queryParams(FormConstants.FDJOINT));
+
+        for (String fd : req.queryParams()){
+            if (!fd.equals(FormConstants.FDJOINT)){
+                fdJoint.addDependency(fdList.get(fd));;
+            }
+        }
+        fdJointList.put(req.queryParams(FormConstants.FDJOINT), fdJoint);
+    }
+    
+
+    /**
+     * @param req
+     */
+    private static void addRelation(Request req) {
+        Map<String, Attribute> attrList = req.session().attribute(SessionConstants.ATTRIBUTE_LIST);
+        Map<String, DFJoint> fdJointList = req.session().attribute(SessionConstants.FDJOINT_LIST);
+        Map<String, Relation> relationList = req.session().attribute(SessionConstants.RELATION_LIST);
+        Relation relation = new Relation();
+        relation.setName(req.queryParams(FormConstants.RELATION));
+        AttributeJoint attrJoint = new AttributeJoint();
+
+        for (String item : req.queryParams()){
+            if (item.contains(FormConstants.FDJOINT)){
+                relation.setDFJoint(fdJointList.get(req.queryParams(item)));
+            }
+            else if (item.contains(FormConstants.RELATION)) {}
+            else {
+                attrJoint.addAttributes(attrList.get(req.queryParams(item)));
+            }
+        }
+        if (!attrJoint.isNull()) {
+            relation.settAttrJoint(attrJoint);
+        }
+
+        relationList.put(req.queryParams(FormConstants.RELATION), relation);
     }
 }
