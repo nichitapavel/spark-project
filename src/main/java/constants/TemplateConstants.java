@@ -31,6 +31,9 @@ public class TemplateConstants {
     
     public static final String ULLMAN = "templates/analyze/ullman.vtl";
     public static final String ULLMAN_RESULT = "templates/analyze/ullman-result.vtl";
+    
+    public static final String CALCULATE_KEYS = "templates/analyze/calculate-keys.vtl";
+    public static final String CALCULATE_KEYS_RESULT = "templates/analyze/calculate-keys-result.vtl";
 
     private TemplateConstants() {
         // Private constructor to prevent instantiation.

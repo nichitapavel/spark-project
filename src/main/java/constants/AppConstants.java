@@ -32,6 +32,8 @@ public class AppConstants {
     public static final String RELATIONS_LIST_RADIO = "relations-list-radio";
     
     public static final String ULLMAN_RESULT = "ullman-result";
+    
+    public static final String CALCULATE_KEYS_RESULT = "calculate-keys-result";
 
     private AppConstants() {
         // Private constructor to prevent instantiation.

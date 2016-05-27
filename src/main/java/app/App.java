@@ -9,6 +9,7 @@ import java.util.Map;
 import datastructures.Attribute;
 import datastructures.AttributeJoint;
 import datastructures.DFJoint;
+import datastructures.KeyJoint;
 import datastructures.Relation;
 import dependency.FunctionalDependency;
 import spark.ModelAndView;
@@ -199,8 +200,8 @@ public class App {
             
             Map<String, Object> model = new HashMap<>();
             model.put(SessionConstants.USERNAME, session.get(req.session().id()));
-            model.put(DataConstants.ULLMAN_RELATION, ullmanRelation);
-            model.put(DataConstants.ULLMAN_ATTRJOINT, ullmanAttrJoint);
+            model.put(DataConstants.RELATION, ullmanRelation);
+            model.put(DataConstants.ATTRJOINT, ullmanAttrJoint);
             model.put(DataConstants.ULLMAN_ALG, ullmanResult);
             model.put(DataConstants.RELATIONS, relationList);
             model.put(DataConstants.ATTRIBUTES, attrList);
@@ -208,6 +209,36 @@ public class App {
             model.put(AppConstants.ATTRIBUTES_LIST_CHECKBOX, TemplateConstants.ATTRIBUTES_LIST_CHECKBOX);
             model.put(AppConstants.TEMPLATE, TemplateConstants.ULLMAN);
             model.put(AppConstants.ULLMAN_RESULT, TemplateConstants.ULLMAN_RESULT);
+            return new ModelAndView(model, TemplateConstants.LAYOUT);
+        }, new VelocityTemplateEngine());
+        
+        get("/calculate-keys", (req, res) -> {
+            checkSession(req.session().id());
+            Map<String, Relation> relationList = req.session().attribute(SessionConstants.RELATION_LIST);
+
+            Map<String, Object> model = new HashMap<>();
+            model.put(SessionConstants.USERNAME, session.get(req.session().id()));
+            model.put(DataConstants.RELATIONS, relationList);
+            model.put(AppConstants.RELATIONS_LIST_RADIO, TemplateConstants.RELATIONS_LIST_RADIO);
+            model.put(AppConstants.TEMPLATE, TemplateConstants.CALCULATE_KEYS);
+            return new ModelAndView(model, TemplateConstants.LAYOUT);
+        }, new VelocityTemplateEngine());
+
+        post("/calculate-keys", (req, res) -> {
+            checkSession(req.session().id());
+            Map<String, Relation> relationList = req.session().attribute(SessionConstants.RELATION_LIST);
+            
+            Relation relation = relationList.get(req.queryParams(FormConstants.RELATION));
+            KeyJoint keyJoint = relation.calculateKeyJoint();
+            
+            Map<String, Object> model = new HashMap<>();
+            model.put(SessionConstants.USERNAME, session.get(req.session().id()));
+            model.put(DataConstants.RELATION, relation);
+            model.put(DataConstants.KEY_JOINT, keyJoint);
+            model.put(DataConstants.RELATIONS, relationList);
+            model.put(AppConstants.RELATIONS_LIST_RADIO, TemplateConstants.RELATIONS_LIST_RADIO);
+            model.put(AppConstants.CALCULATE_KEYS_RESULT, TemplateConstants.CALCULATE_KEYS_RESULT);
+            model.put(AppConstants.TEMPLATE, TemplateConstants.CALCULATE_KEYS);
             return new ModelAndView(model, TemplateConstants.LAYOUT);
         }, new VelocityTemplateEngine());
 
