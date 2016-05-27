@@ -15,8 +15,10 @@ public class DataConstants {
     public static final String ANTECEDENT = "ant";
     public static final String CONSEQUENT = "con";
     public static final String ULLMAN_ALG = "ullman-alg";
-    public static final String ULLMAN_RELATION = "ullman-relation";
-    public static final String ULLMAN_ATTRJOINT = "ullman-attr-joint";
+
+    public static final String RELATION = "relation";
+    public static final String ATTRJOINT = "attr-joint";
+    public static final String KEY_JOINT = "keys";
     
     private DataConstants() {
         // Private constructor to prevent instantiation.
