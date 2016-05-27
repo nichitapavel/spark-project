@@ -34,6 +34,8 @@ public class AppConstants {
     public static final String ULLMAN_RESULT = "ullman-result";
     
     public static final String CALCULATE_KEYS_RESULT = "calculate-keys-result";
+    
+    public static final String CALCULATE_MINIMAL_COVER_RESULT = "calculate-minimal-cover-result";
 
     private AppConstants() {
         // Private constructor to prevent instantiation.

@@ -241,6 +241,36 @@ public class App {
             model.put(AppConstants.TEMPLATE, TemplateConstants.CALCULATE_KEYS);
             return new ModelAndView(model, TemplateConstants.LAYOUT);
         }, new VelocityTemplateEngine());
+        
+        get("/calculate-minimal-cover", (req, res) -> {
+            checkSession(req.session().id());
+            Map<String, DFJoint> fdJointList = req.session().attribute(SessionConstants.FDJOINT_LIST);
+
+            Map<String, Object> model = new HashMap<>();
+            model.put(SessionConstants.USERNAME, session.get(req.session().id()));
+            model.put(DataConstants.FDJOINTS, fdJointList);
+            model.put(AppConstants.FDJOINTS_LIST_RADIO, TemplateConstants.FDJOINTS_LIST_RADIO);
+            model.put(AppConstants.TEMPLATE, TemplateConstants.CALCULATE_MINIMAL_COVER);
+            return new ModelAndView(model, TemplateConstants.LAYOUT);
+        }, new VelocityTemplateEngine());
+        
+        post("/calculate-minimal-cover", (req, res) -> {
+            checkSession(req.session().id());
+            Map<String, DFJoint> fdJointList = req.session().attribute(SessionConstants.FDJOINT_LIST);
+
+            DFJoint fdJoint = fdJointList.get(req.queryParams(FormConstants.FDJOINT));
+            DFJoint fdJointMinimal = new DFJoint(fdJoint);
+            fdJointMinimal.removeRareAttributes(true);
+            
+            Map<String, Object> model = new HashMap<>();
+            model.put(SessionConstants.USERNAME, session.get(req.session().id()));
+            model.put(DataConstants.FDJOINTS, fdJointList);
+            model.put(DataConstants.FDJOINT, fdJointMinimal);
+            model.put(AppConstants.FDJOINTS_LIST_RADIO, TemplateConstants.FDJOINTS_LIST_RADIO);
+            model.put(AppConstants.CALCULATE_MINIMAL_COVER_RESULT, TemplateConstants.CALCULATE_MINIMAL_COVER_RESULT);
+            model.put(AppConstants.TEMPLATE, TemplateConstants.CALCULATE_MINIMAL_COVER);
+            return new ModelAndView(model, TemplateConstants.LAYOUT);
+        }, new VelocityTemplateEngine());
 
         get("/find-normal-form", (req, res) -> {
             checkSession(req.session().id());

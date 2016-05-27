@@ -34,6 +34,9 @@ public class TemplateConstants {
     
     public static final String CALCULATE_KEYS = "templates/analyze/calculate-keys.vtl";
     public static final String CALCULATE_KEYS_RESULT = "templates/analyze/calculate-keys-result.vtl";
+    
+    public static final String CALCULATE_MINIMAL_COVER = "templates/analyze/calculate-minimal-cover.vtl";
+    public static final String CALCULATE_MINIMAL_COVER_RESULT = "templates/analyze/calculate-minimal-cover-result.vtl";
 
     private TemplateConstants() {
         // Private constructor to prevent instantiation.
