@@ -1,0 +1,13 @@
+<div class="alert alert-success">
+<h4>Result</h4>
+<p>$fdjoint.name projected on $attr-joint:</p>
+<p>
+#foreach( $fd in $result.getDFJoint() )
+  #if( $velocityCount != $result.getDFJoint().size())
+  $fd || 
+  #else
+  $fd
+  #end
+#end
+</p>
+</div>

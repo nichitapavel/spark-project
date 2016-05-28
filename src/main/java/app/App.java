@@ -186,29 +186,23 @@ public class App {
             checkSession(req.session().id());
             Map<String, Attribute> attrList = req.session().attribute(SessionConstants.ATTRIBUTE_LIST);
             Map<String, Relation> relationList = req.session().attribute(SessionConstants.RELATION_LIST);
-            AttributeJoint ullmanAttrJoint = new AttributeJoint();
-            Relation ullmanRelation = new Relation();
-            for (String item : req.queryParams()){
-                if (item.contains(FormConstants.ATTRIBUTE)){
-                    ullmanAttrJoint.addAttributes(attrList.get(req.queryParams(item)));
-                }
-                else {
-                    ullmanRelation = relationList.get(req.queryParams(item));
-                }
-            }
+            
+            AttributeJoint ullmanAttrJoint = getAttrJoint(req);
+            Relation ullmanRelation = relationList.get(req.queryParams(FormConstants.RELATION));
             AttributeJoint ullmanResult = normalization.Normalization.simpleUllman(ullmanAttrJoint, ullmanRelation.getDFJoint());
             
             Map<String, Object> model = new HashMap<>();
-            model.put(SessionConstants.USERNAME, session.get(req.session().id()));
             model.put(DataConstants.RELATION, ullmanRelation);
             model.put(DataConstants.ATTRJOINT, ullmanAttrJoint);
             model.put(DataConstants.ULLMAN_ALG, ullmanResult);
+            model.put(AppConstants.ULLMAN_RESULT, TemplateConstants.ULLMAN_RESULT);
+            
+            model.put(SessionConstants.USERNAME, session.get(req.session().id()));
             model.put(DataConstants.RELATIONS, relationList);
             model.put(DataConstants.ATTRIBUTES, attrList);
             model.put(AppConstants.RELATIONS_LIST_RADIO, TemplateConstants.RELATIONS_LIST_RADIO);
             model.put(AppConstants.ATTRIBUTES_LIST_CHECKBOX, TemplateConstants.ATTRIBUTES_LIST_CHECKBOX);
             model.put(AppConstants.TEMPLATE, TemplateConstants.ULLMAN);
-            model.put(AppConstants.ULLMAN_RESULT, TemplateConstants.ULLMAN_RESULT);
             return new ModelAndView(model, TemplateConstants.LAYOUT);
         }, new VelocityTemplateEngine());
         
@@ -232,12 +226,13 @@ public class App {
             KeyJoint keyJoint = relation.calculateKeyJoint();
             
             Map<String, Object> model = new HashMap<>();
-            model.put(SessionConstants.USERNAME, session.get(req.session().id()));
             model.put(DataConstants.RELATION, relation);
             model.put(DataConstants.KEY_JOINT, keyJoint);
+            model.put(AppConstants.CALCULATE_KEYS_RESULT, TemplateConstants.CALCULATE_KEYS_RESULT);
+            
+            model.put(SessionConstants.USERNAME, session.get(req.session().id()));
             model.put(DataConstants.RELATIONS, relationList);
             model.put(AppConstants.RELATIONS_LIST_RADIO, TemplateConstants.RELATIONS_LIST_RADIO);
-            model.put(AppConstants.CALCULATE_KEYS_RESULT, TemplateConstants.CALCULATE_KEYS_RESULT);
             model.put(AppConstants.TEMPLATE, TemplateConstants.CALCULATE_KEYS);
             return new ModelAndView(model, TemplateConstants.LAYOUT);
         }, new VelocityTemplateEngine());
@@ -263,11 +258,12 @@ public class App {
             fdJointMinimal.removeRareAttributes(true);
             
             Map<String, Object> model = new HashMap<>();
+            model.put(DataConstants.FDJOINT, fdJointMinimal);
+            model.put(AppConstants.CALCULATE_MINIMAL_COVER_RESULT, TemplateConstants.CALCULATE_MINIMAL_COVER_RESULT);
+            
             model.put(SessionConstants.USERNAME, session.get(req.session().id()));
             model.put(DataConstants.FDJOINTS, fdJointList);
-            model.put(DataConstants.FDJOINT, fdJointMinimal);
             model.put(AppConstants.FDJOINTS_LIST_RADIO, TemplateConstants.FDJOINTS_LIST_RADIO);
-            model.put(AppConstants.CALCULATE_MINIMAL_COVER_RESULT, TemplateConstants.CALCULATE_MINIMAL_COVER_RESULT);
             model.put(AppConstants.TEMPLATE, TemplateConstants.CALCULATE_MINIMAL_COVER);
             return new ModelAndView(model, TemplateConstants.LAYOUT);
         }, new VelocityTemplateEngine());
@@ -275,14 +271,14 @@ public class App {
         get("/projection", (req, res) -> {
             checkSession(req.session().id());
             Map<String, DFJoint> fdJointList = req.session().attribute(SessionConstants.FDJOINT_LIST);
-            Map<String, DFJoint> fdList = req.session().attribute(SessionConstants.FD_LIST);
+            Map<String, Attribute> attrList = req.session().attribute(SessionConstants.ATTRIBUTE_LIST);
 
             Map<String, Object> model = new HashMap<>();
             model.put(SessionConstants.USERNAME, session.get(req.session().id()));
             model.put(DataConstants.FDJOINTS, fdJointList);
-            model.put(DataConstants.FDS, fdList);
+            model.put(DataConstants.ATTRIBUTES, attrList);
             model.put(AppConstants.FDJOINTS_LIST_RADIO, TemplateConstants.FDJOINTS_LIST_RADIO);
-            model.put(AppConstants.FDS_LIST_RADIO, TemplateConstants.FDS_LIST_RADIO);
+            model.put(AppConstants.ATTRIBUTES_LIST_CHECKBOX, TemplateConstants.ATTRIBUTES_LIST_CHECKBOX);
             model.put(AppConstants.TEMPLATE, TemplateConstants.PROJECTION);
             return new ModelAndView(model, TemplateConstants.LAYOUT);
         }, new VelocityTemplateEngine());
@@ -290,14 +286,23 @@ public class App {
         post("/projection", (req, res) -> {
             checkSession(req.session().id());
             Map<String, DFJoint> fdJointList = req.session().attribute(SessionConstants.FDJOINT_LIST);
-            Map<String, DFJoint> fdList = req.session().attribute(SessionConstants.FD_LIST);
+            Map<String, Attribute> attrList = req.session().attribute(SessionConstants.ATTRIBUTE_LIST);
 
+            DFJoint fdJoint = fdJointList.get(req.queryParams(FormConstants.FDJOINT));
+            AttributeJoint attrJoint = getAttrJoint(req);
+            DFJoint result = fdJoint.projectionOnAttributeJoint(attrJoint);
+            
             Map<String, Object> model = new HashMap<>();
+            model.put(DataConstants.FDJOINT, fdJoint);
+            model.put(DataConstants.ATTRJOINT, attrJoint);
+            model.put(DataConstants.RESULT, result);
+            model.put(AppConstants.PROJECTION_RESULT, TemplateConstants.PROJECTION_RESULT);
+            
             model.put(SessionConstants.USERNAME, session.get(req.session().id()));
             model.put(DataConstants.FDJOINTS, fdJointList);
-            model.put(DataConstants.FDS, fdList);
+            model.put(DataConstants.ATTRIBUTES, attrList);
             model.put(AppConstants.FDJOINTS_LIST_RADIO, TemplateConstants.FDJOINTS_LIST_RADIO);
-            model.put(AppConstants.FDS_LIST_RADIO, TemplateConstants.FDS_LIST_RADIO);
+            model.put(AppConstants.ATTRIBUTES_LIST_CHECKBOX, TemplateConstants.ATTRIBUTES_LIST_CHECKBOX);
             model.put(AppConstants.TEMPLATE, TemplateConstants.PROJECTION);
             return new ModelAndView(model, TemplateConstants.LAYOUT);
         }, new VelocityTemplateEngine());
@@ -324,19 +329,19 @@ public class App {
             
             FunctionalDependency fd = fdList.get(req.queryParams(FormConstants.FD));
             DFJoint fdJoint = fdJointList.get(req.queryParams(FormConstants.FDJOINT));
-            
             Boolean result = fd.belongsTo(fdJoint, null);
 
             Map<String, Object> model = new HashMap<>();
-            model.put(SessionConstants.USERNAME, session.get(req.session().id()));
             model.put(DataConstants.BOOLEAN, result);
             model.put(DataConstants.FD, fd);
             model.put(DataConstants.FDJOINT, fdJoint);
+            model.put(AppConstants.FD_PARTOF_FDJOINT_RESULT, TemplateConstants.FD_PARTOF_FDJOINT_RESULT);
+            
+            model.put(SessionConstants.USERNAME, session.get(req.session().id()));
             model.put(DataConstants.FDJOINTS, fdJointList);
             model.put(DataConstants.FDS, fdList);
             model.put(AppConstants.FDJOINTS_LIST_RADIO, TemplateConstants.FDJOINTS_LIST_RADIO);
             model.put(AppConstants.FDS_LIST_RADIO, TemplateConstants.FDS_LIST_RADIO);
-            model.put(AppConstants.FD_PARTOF_FDJOINT_RESULT, TemplateConstants.FD_PARTOF_FDJOINT_RESULT);
             model.put(AppConstants.TEMPLATE, TemplateConstants.FD_PARTOF_FDJOINT);
             return new ModelAndView(model, TemplateConstants.LAYOUT);
         }, new VelocityTemplateEngine());
@@ -426,5 +431,18 @@ public class App {
         }
 
         relationList.put(req.queryParams(FormConstants.RELATION), relation);
+    }
+    
+    private static AttributeJoint getAttrJoint(Request req) {
+        Map<String, Attribute> attrList = req.session().attribute(SessionConstants.ATTRIBUTE_LIST);
+        AttributeJoint attrJoint = new AttributeJoint();
+        
+        for (String item : req.queryParams()){
+            if (item.contains(FormConstants.ATTRIBUTE)){
+                attrJoint.addAttributes(attrList.get(req.queryParams(item)));
+            }
+        }
+        
+        return attrJoint;
     }
 }
