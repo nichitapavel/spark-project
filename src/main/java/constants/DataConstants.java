@@ -20,6 +20,8 @@ public class DataConstants {
     public static final String ATTRJOINT = "attr-joint";
     public static final String KEY_JOINT = "keys";
     public static final String FDJOINT = "fdjoint";
+    public static final String FDJOINT_A = "fdjoint-a";
+    public static final String FDJOINT_B = "fdjoint-b";
     public static final String FD = "fd";
     public static final String BOOLEAN = "boolean";
     

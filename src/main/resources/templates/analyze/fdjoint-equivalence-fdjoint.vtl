@@ -1,0 +1,25 @@
+<h2 class="alert alert-info">FD Joint A is Equivalent to FD Joint B?</h2>
+
+#parse( $fdjoint-equivalence-fdjoint-result )
+
+<form action="/equivalence" method="POST" >
+  <!-- FD Joint A -->
+  <div class="col-sm-6 form-group">
+    <h4>FD Joint A</h4>
+        
+#parse( $fdjoints-list-radio-a )
+
+  </div>
+  <!-- FD Joint A -->
+        
+  <!-- FD Joint B -->
+  <div class="col-sm-6 form-group">
+    <h4>FD Joint B</h4>
+
+#parse( $fdjoints-list-radio-b )
+
+  </div>
+  <!-- FD Joint B -->
+      
+  <button type="submit" class="btn">Go!</button>
+</form>

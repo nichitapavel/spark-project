@@ -1,0 +1,12 @@
+#if( $boolean )
+<div class="alert alert-success">
+#else
+<div class="alert alert-danger">
+#end
+<h4>Result</h4>
+<p>$fdjoint-a.name is 
+#if( !$boolean ) 
+not 
+#end
+equivalent to $fdjoint-b.name</p>
+</div>

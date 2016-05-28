@@ -25,6 +25,8 @@ public class TemplateConstants {
     public static final String FDJOINT = "templates/fdjoint/fdjoint.vtl";
     public static final String FDJOINTS_LIST = "templates/fdjoint/fdjoints-list.vtl";
     public static final String FDJOINTS_LIST_RADIO = "templates/fdjoint/fdjoints-list-radio.vtl";
+    public static final String FDJOINTS_LIST_RADIO_A = "templates/fdjoint/fdjoints-list-radio-a.vtl";
+    public static final String FDJOINTS_LIST_RADIO_B = "templates/fdjoint/fdjoints-list-radio-b.vtl";
     
     public static final String RELATION = "templates/relation/relation.vtl";
     public static final String RELATIONS_LIST = "templates/relation/relations-list.vtl";
@@ -44,6 +46,12 @@ public class TemplateConstants {
     
     public static final String FD_PARTOF_FDJOINT = "templates/analyze/fd-partof-fdjoint.vtl";
     public static final String FD_PARTOF_FDJOINT_RESULT = "templates/analyze/fd-partof-fdjoint-result.vtl";
+    
+    public static final String FDJOINT_IMPLIES = "templates/analyze/fdjoint-implies-fdjoint.vtl";
+    public static final String FDJOINT_IMPLIES_RESULT = "templates/analyze/fdjoint-implies-fdjoint-result.vtl";
+    
+    public static final String FDJOINT_EQUIVALENCE = "templates/analyze/fdjoint-equivalence-fdjoint.vtl";
+    public static final String FDJOINT_EQUIVALENCE_RESULT = "templates/analyze/fdjoint-equivalence-fdjoint-result.vtl";
 
     private TemplateConstants() {
         // Private constructor to prevent instantiation.

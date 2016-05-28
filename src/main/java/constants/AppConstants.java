@@ -26,6 +26,8 @@ public class AppConstants {
     
     public static final String FDJOINT = "fdjoint";
     public static final String FDJOINTS_LIST = "fdjoints-list";
+    public static final String FDJOINTS_LIST_RADIO_A = "fdjoints-list-radio-a";
+    public static final String FDJOINTS_LIST_RADIO_B = "fdjoints-list-radio-b";
     public static final String FDJOINTS_LIST_RADIO = "fdjoints-list-radio";
     
     public static final String RELATION = "relation";
@@ -41,6 +43,10 @@ public class AppConstants {
     public static final String PROJECTION_RESULT = "projection-result";
     
     public static final String FD_PARTOF_FDJOINT_RESULT = "fd-partof-fdjoint-result";
+
+    public static final String FDJOINT_IMPLIES_RESULT = "fdjoint-implies-fdjoint-result";
+    
+    public static final String FDJOINT_EQUIVALENCE_RESULT = "fdjoint-equivalence-fdjoint-result";
 
     private AppConstants() {
         // Private constructor to prevent instantiation.

@@ -345,7 +345,78 @@ public class App {
             model.put(AppConstants.TEMPLATE, TemplateConstants.FD_PARTOF_FDJOINT);
             return new ModelAndView(model, TemplateConstants.LAYOUT);
         }, new VelocityTemplateEngine());
+        
+        get("/implies", (req, res) -> {
+            checkSession(req.session().id());
+            Map<String, DFJoint> fdJointList = req.session().attribute(SessionConstants.FDJOINT_LIST);
 
+            Map<String, Object> model = new HashMap<>();
+            model.put(SessionConstants.USERNAME, session.get(req.session().id()));
+            model.put(DataConstants.FDJOINTS, fdJointList);
+            model.put(AppConstants.FDJOINTS_LIST_RADIO_A, TemplateConstants.FDJOINTS_LIST_RADIO_A);
+            model.put(AppConstants.FDJOINTS_LIST_RADIO_B, TemplateConstants.FDJOINTS_LIST_RADIO_B);
+            model.put(AppConstants.TEMPLATE, TemplateConstants.FDJOINT_IMPLIES);
+            return new ModelAndView(model, TemplateConstants.LAYOUT);
+        }, new VelocityTemplateEngine());
+        
+        post("/implies", (req, res) -> {
+            checkSession(req.session().id());
+            Map<String, DFJoint> fdJointList = req.session().attribute(SessionConstants.FDJOINT_LIST);
+
+            DFJoint fdJointA = fdJointList.get(req.queryParams(FormConstants.FDJOINT_A));
+            DFJoint fdJointB = fdJointList.get(req.queryParams(FormConstants.FDJOINT_B));
+            Boolean result = fdJointB.isImplied(fdJointA);
+                        
+            Map<String, Object> model = new HashMap<>();
+            model.put(DataConstants.BOOLEAN, result);
+            model.put(DataConstants.FDJOINT_A, fdJointA);
+            model.put(DataConstants.FDJOINT_B, fdJointB);
+            model.put(AppConstants.FDJOINT_IMPLIES_RESULT, TemplateConstants.FDJOINT_IMPLIES_RESULT);
+
+            model.put(SessionConstants.USERNAME, session.get(req.session().id()));
+            model.put(DataConstants.FDJOINTS, fdJointList);
+            model.put(AppConstants.FDJOINTS_LIST_RADIO_A, TemplateConstants.FDJOINTS_LIST_RADIO_A);
+            model.put(AppConstants.FDJOINTS_LIST_RADIO_B, TemplateConstants.FDJOINTS_LIST_RADIO_B);
+            model.put(AppConstants.TEMPLATE, TemplateConstants.FDJOINT_IMPLIES);
+            return new ModelAndView(model, TemplateConstants.LAYOUT);
+        }, new VelocityTemplateEngine());
+        
+        get("/equivalence", (req, res) -> {
+            checkSession(req.session().id());
+            Map<String, DFJoint> fdJointList = req.session().attribute(SessionConstants.FDJOINT_LIST);
+
+            Map<String, Object> model = new HashMap<>();
+            model.put(SessionConstants.USERNAME, session.get(req.session().id()));
+            model.put(DataConstants.FDJOINTS, fdJointList);
+            model.put(AppConstants.FDJOINTS_LIST_RADIO_A, TemplateConstants.FDJOINTS_LIST_RADIO_A);
+            model.put(AppConstants.FDJOINTS_LIST_RADIO_B, TemplateConstants.FDJOINTS_LIST_RADIO_B);
+            model.put(AppConstants.TEMPLATE, TemplateConstants.FDJOINT_EQUIVALENCE);
+            return new ModelAndView(model, TemplateConstants.LAYOUT);
+        }, new VelocityTemplateEngine());
+
+        post("/equivalence", (req, res) -> {
+            checkSession(req.session().id());
+            Map<String, DFJoint> fdJointList = req.session().attribute(SessionConstants.FDJOINT_LIST);
+
+            DFJoint fdJointA = fdJointList.get(req.queryParams(FormConstants.FDJOINT_A));
+            DFJoint fdJointB = fdJointList.get(req.queryParams(FormConstants.FDJOINT_B));
+            Boolean result = fdJointA.isEquivalent(fdJointB);
+
+            Map<String, Object> model = new HashMap<>();
+            model.put(DataConstants.BOOLEAN, result);
+            model.put(DataConstants.FDJOINT_A, fdJointA);
+            model.put(DataConstants.FDJOINT_B, fdJointB);
+            model.put(AppConstants.FDJOINT_EQUIVALENCE_RESULT, TemplateConstants.FDJOINT_EQUIVALENCE_RESULT);
+
+            model.put(SessionConstants.USERNAME, session.get(req.session().id()));
+            model.put(DataConstants.FDJOINTS, fdJointList);
+            model.put(AppConstants.FDJOINTS_LIST_RADIO_A, TemplateConstants.FDJOINTS_LIST_RADIO_A);
+            model.put(AppConstants.FDJOINTS_LIST_RADIO_B, TemplateConstants.FDJOINTS_LIST_RADIO_B);
+            model.put(AppConstants.TEMPLATE, TemplateConstants.FDJOINT_EQUIVALENCE);
+            return new ModelAndView(model, TemplateConstants.LAYOUT);
+        }, new VelocityTemplateEngine());
+
+        
         get("/find-normal-form", (req, res) -> {
             checkSession(req.session().id());
             Map<String, Object> model = new HashMap<>();

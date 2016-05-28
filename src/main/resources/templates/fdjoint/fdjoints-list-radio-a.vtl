@@ -1,0 +1,21 @@
+#if( !$fdjoints.isEmpty() )
+<ul class="list-group">
+#foreach( $fdj in $fdjoints )
+  <li class="list-group-item">
+    <label class="radio-inline">
+      <input name="__fdjoint-a__" type="radio" value="$fdj.name">
+        <p>$fdj.getName()</p>
+        <p>
+        #foreach( $fd in $fdj.getDFJoint() )
+          #if ( $velocityCount == $fdj.getDFJoint().size())
+          $fd
+          #else
+          $fd,
+          #end
+        #end
+        </p>
+      </label>
+    </li>
+#end
+</ul>
+#end

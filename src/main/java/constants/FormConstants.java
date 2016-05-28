@@ -16,6 +16,8 @@ public class FormConstants {
     public static final String FDJOINT = "__fdjoint-name__";
     public static final String RELATION = "__relation-name__";
     public static final String USERNAME = "__username__";
+    public static final String FDJOINT_A = "__fdjoint-a__";
+    public static final String FDJOINT_B = "__fdjoint-b__";
 
     private FormConstants() {
         // Private constructor to prevent instantiation.
