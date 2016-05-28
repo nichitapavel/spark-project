@@ -49,6 +49,10 @@ public class AppConstants {
     public static final String FDJOINT_EQUIVALENCE_RESULT = "fdjoint-equivalence-fdjoint-result";
 
     public static final String TESTS_KEYS_RESULT = "test-keys-result";
+    
+    public static final String TESTS_MINIMAL_COVER_RESULT = "test-minimal-cover-result";
+    
+    public static final String TESTS_NORMAL_FORM_RESULT = "test-normal-form-result";
 
     private AppConstants() {
         // Private constructor to prevent instantiation.

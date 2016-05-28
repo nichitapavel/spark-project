@@ -3,6 +3,7 @@
  */
 package app;
 
+import java.text.Normalizer.Form;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -418,7 +419,47 @@ public class App {
         
         get("/test-normal-form", (req, res) -> {
             checkSession(req.session().id());
+            Map<String, Object> relationList = req.session().attribute(SessionConstants.RELATION_LIST);
+
             Map<String, Object> model = new HashMap<>();
+            model.put(SessionConstants.USERNAME, session.get(req.session().id()));
+            model.put(DataConstants.RELATIONS, relationList);
+            model.put(AppConstants.RELATIONS_LIST_RADIO, TemplateConstants.RELATIONS_LIST_RADIO);
+            model.put(AppConstants.TEMPLATE, TemplateConstants.TESTS_NORMAL_FORM);
+            return new ModelAndView(model, TemplateConstants.LAYOUT);
+        }, new VelocityTemplateEngine());
+        
+        post("/test-normal-form", (req, res) -> {
+            checkSession(req.session().id());
+            Map<String, Relation> relationList = req.session().attribute(SessionConstants.RELATION_LIST);
+
+            Relation relation = relationList.get(req.queryParams(FormConstants.RELATION));
+            String normalForm = req.queryParams(FormConstants.NORMAL_FORM);
+            String resultAll = "";
+            Boolean result = false;
+            
+            if (normalForm.equals(FormConstants.NORMAL_FORM_VALUE_2ND)){
+                result = relation.is2NF();
+            } else if (normalForm.equals(FormConstants.NORMAL_FORM_VALUE_3RD)) {
+                result = relation.is3NF();
+            } else if (normalForm.equals(FormConstants.NORMAL_FORM_VALUE_BC)) {
+                result = relation.isBCNF();
+            } else {
+                resultAll = relation.getNormalForm();
+            }
+            
+            Map<String, Object> model = new HashMap<>();
+            model.put(DataConstants.BOOLEAN, result);
+            model.put(DataConstants.OPTION, normalForm);
+            model.put(DataConstants.RESULT, resultAll);
+            model.put(DataConstants.RELATION, relation);
+            model.put(AppConstants.TESTS_NORMAL_FORM_RESULT, TemplateConstants.TESTS_NORMAL_FORM_RESULT);
+            
+            
+            model.put(SessionConstants.USERNAME, session.get(req.session().id()));
+            model.put(DataConstants.RELATIONS, relationList);
+            model.put(AppConstants.RELATIONS_LIST_RADIO, TemplateConstants.RELATIONS_LIST_RADIO);
+            model.put(AppConstants.TEMPLATE, TemplateConstants.TESTS_NORMAL_FORM);
             return new ModelAndView(model, TemplateConstants.LAYOUT);
         }, new VelocityTemplateEngine());
 
@@ -463,7 +504,32 @@ public class App {
 
         get("/test-minimal-cover", (req, res) -> {
             checkSession(req.session().id());
+            Map<String, DFJoint> fdJointList = req.session().attribute(SessionConstants.FDJOINT_LIST);
+
             Map<String, Object> model = new HashMap<>();
+            model.put(SessionConstants.USERNAME, session.get(req.session().id()));
+            model.put(DataConstants.FDJOINTS, fdJointList);
+            model.put(AppConstants.FDJOINTS_LIST_RADIO, TemplateConstants.FDJOINTS_LIST_RADIO);
+            model.put(AppConstants.TEMPLATE, TemplateConstants.TESTS_MINIMAL_COVER);
+            return new ModelAndView(model, TemplateConstants.LAYOUT);
+        }, new VelocityTemplateEngine());
+
+        post("/test-minimal-cover", (req, res) -> {
+            checkSession(req.session().id());
+            Map<String, DFJoint> fdJointList = req.session().attribute(SessionConstants.FDJOINT_LIST);
+
+            DFJoint fdJoint = fdJointList.get(req.queryParams(FormConstants.FDJOINT));
+            Boolean result = fdJoint.isMinimal();
+
+            Map<String, Object> model = new HashMap<>();
+            model.put(DataConstants.FDJOINT, fdJoint);
+            model.put(DataConstants.RESULT, result);
+            model.put(AppConstants.TESTS_MINIMAL_COVER_RESULT, TemplateConstants.TESTS_MINIMAL_COVER_RESULT);
+
+            model.put(SessionConstants.USERNAME, session.get(req.session().id()));
+            model.put(DataConstants.FDJOINTS, fdJointList);
+            model.put(AppConstants.FDJOINTS_LIST_RADIO, TemplateConstants.FDJOINTS_LIST_RADIO);
+            model.put(AppConstants.TEMPLATE, TemplateConstants.TESTS_MINIMAL_COVER);
             return new ModelAndView(model, TemplateConstants.LAYOUT);
         }, new VelocityTemplateEngine());
     }

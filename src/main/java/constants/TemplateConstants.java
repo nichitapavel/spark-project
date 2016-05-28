@@ -56,6 +56,12 @@ public class TemplateConstants {
     public static final String TESTS_KEYS = "templates/tests/test-keys.vtl";
     public static final String TESTS_KEYS_RESULT = "templates/tests/test-keys-result.vtl";
 
+    public static final String TESTS_MINIMAL_COVER = "templates/tests/test-minimal-cover.vtl";
+    public static final String TESTS_MINIMAL_COVER_RESULT = "templates/tests/test-minimal-cover-result.vtl";
+    
+    public static final String TESTS_NORMAL_FORM = "templates/tests/test-normal-form.vtl";
+    public static final String TESTS_NORMAL_FORM_RESULT = "templates/tests/test-normal-form-result.vtl";
+
     private TemplateConstants() {
         // Private constructor to prevent instantiation.
     }
