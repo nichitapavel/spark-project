@@ -24,9 +24,9 @@ public class DataConstants {
     public static final String FDJOINT_B = "fdjoint-b";
     public static final String FD = "fd";
     public static final String BOOLEAN = "boolean";
-    
+
     public static final String RESULT = "result";
-    
+
     private DataConstants() {
         // Private constructor to prevent instantiation.
     }

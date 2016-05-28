@@ -8,7 +8,7 @@ package constants;
  *
  */
 public class FormConstants {
-    
+
     public static final String ATTRIBUTE = "__attr__";
     public static final String ANTECEDENT = "__ant__";
     public static final String CONSEQUENT = "__con__";
