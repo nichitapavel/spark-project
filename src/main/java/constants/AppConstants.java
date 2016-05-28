@@ -22,6 +22,7 @@ public class AppConstants {
     public static final String FD = "fd";
     public static final String FDS_LIST = "fds-list";
     public static final String FDS_LIST_CHECKBOX = "fds-list-checkbox";
+    public static final String FDS_LIST_RADIO = "fds-list-radio";
     
     public static final String FDJOINT = "fdjoint";
     public static final String FDJOINTS_LIST = "fdjoints-list";
@@ -36,6 +37,10 @@ public class AppConstants {
     public static final String CALCULATE_KEYS_RESULT = "calculate-keys-result";
     
     public static final String CALCULATE_MINIMAL_COVER_RESULT = "calculate-minimal-cover-result";
+    
+    public static final String PROJECTION_RESULT = "projection-result";
+    
+    public static final String FD_PARTOF_FDJOINT_RESULT = "fd-partof-fdjoint-result";
 
     private AppConstants() {
         // Private constructor to prevent instantiation.

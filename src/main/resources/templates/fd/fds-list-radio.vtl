@@ -1,0 +1,8 @@
+#if( !$fds.isEmpty() )
+<h4>Functional Dependencies</h4>
+<ul class="list-group">
+#foreach( $fd in $fds )
+  <li class="list-group-item"><label class="radio-inline"><input name="__fd__" type="radio" value="$fd">$fd</label></li>
+#end
+</ul>
+#end

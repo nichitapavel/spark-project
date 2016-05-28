@@ -271,6 +271,75 @@ public class App {
             model.put(AppConstants.TEMPLATE, TemplateConstants.CALCULATE_MINIMAL_COVER);
             return new ModelAndView(model, TemplateConstants.LAYOUT);
         }, new VelocityTemplateEngine());
+        
+        get("/projection", (req, res) -> {
+            checkSession(req.session().id());
+            Map<String, DFJoint> fdJointList = req.session().attribute(SessionConstants.FDJOINT_LIST);
+            Map<String, DFJoint> fdList = req.session().attribute(SessionConstants.FD_LIST);
+
+            Map<String, Object> model = new HashMap<>();
+            model.put(SessionConstants.USERNAME, session.get(req.session().id()));
+            model.put(DataConstants.FDJOINTS, fdJointList);
+            model.put(DataConstants.FDS, fdList);
+            model.put(AppConstants.FDJOINTS_LIST_RADIO, TemplateConstants.FDJOINTS_LIST_RADIO);
+            model.put(AppConstants.FDS_LIST_RADIO, TemplateConstants.FDS_LIST_RADIO);
+            model.put(AppConstants.TEMPLATE, TemplateConstants.PROJECTION);
+            return new ModelAndView(model, TemplateConstants.LAYOUT);
+        }, new VelocityTemplateEngine());
+        
+        post("/projection", (req, res) -> {
+            checkSession(req.session().id());
+            Map<String, DFJoint> fdJointList = req.session().attribute(SessionConstants.FDJOINT_LIST);
+            Map<String, DFJoint> fdList = req.session().attribute(SessionConstants.FD_LIST);
+
+            Map<String, Object> model = new HashMap<>();
+            model.put(SessionConstants.USERNAME, session.get(req.session().id()));
+            model.put(DataConstants.FDJOINTS, fdJointList);
+            model.put(DataConstants.FDS, fdList);
+            model.put(AppConstants.FDJOINTS_LIST_RADIO, TemplateConstants.FDJOINTS_LIST_RADIO);
+            model.put(AppConstants.FDS_LIST_RADIO, TemplateConstants.FDS_LIST_RADIO);
+            model.put(AppConstants.TEMPLATE, TemplateConstants.PROJECTION);
+            return new ModelAndView(model, TemplateConstants.LAYOUT);
+        }, new VelocityTemplateEngine());
+        
+        get("/fd-partof-fdjoint", (req, res) -> {
+            checkSession(req.session().id());
+            Map<String, DFJoint> fdJointList = req.session().attribute(SessionConstants.FDJOINT_LIST);
+            Map<String, DFJoint> fdList = req.session().attribute(SessionConstants.FD_LIST);
+
+            Map<String, Object> model = new HashMap<>();
+            model.put(SessionConstants.USERNAME, session.get(req.session().id()));
+            model.put(DataConstants.FDJOINTS, fdJointList);
+            model.put(DataConstants.FDS, fdList);
+            model.put(AppConstants.FDJOINTS_LIST_RADIO, TemplateConstants.FDJOINTS_LIST_RADIO);
+            model.put(AppConstants.FDS_LIST_RADIO, TemplateConstants.FDS_LIST_RADIO);
+            model.put(AppConstants.TEMPLATE, TemplateConstants.FD_PARTOF_FDJOINT);
+            return new ModelAndView(model, TemplateConstants.LAYOUT);
+        }, new VelocityTemplateEngine());
+        
+        post("/fd-partof-fdjoint", (req, res) -> {
+            checkSession(req.session().id());
+            Map<String, DFJoint> fdJointList = req.session().attribute(SessionConstants.FDJOINT_LIST);
+            Map<String, FunctionalDependency> fdList = req.session().attribute(SessionConstants.FD_LIST);
+            
+            FunctionalDependency fd = fdList.get(req.queryParams(FormConstants.FD));
+            DFJoint fdJoint = fdJointList.get(req.queryParams(FormConstants.FDJOINT));
+            
+            Boolean result = fd.belongsTo(fdJoint, null);
+
+            Map<String, Object> model = new HashMap<>();
+            model.put(SessionConstants.USERNAME, session.get(req.session().id()));
+            model.put(DataConstants.BOOLEAN, result);
+            model.put(DataConstants.FD, fd);
+            model.put(DataConstants.FDJOINT, fdJoint);
+            model.put(DataConstants.FDJOINTS, fdJointList);
+            model.put(DataConstants.FDS, fdList);
+            model.put(AppConstants.FDJOINTS_LIST_RADIO, TemplateConstants.FDJOINTS_LIST_RADIO);
+            model.put(AppConstants.FDS_LIST_RADIO, TemplateConstants.FDS_LIST_RADIO);
+            model.put(AppConstants.FD_PARTOF_FDJOINT_RESULT, TemplateConstants.FD_PARTOF_FDJOINT_RESULT);
+            model.put(AppConstants.TEMPLATE, TemplateConstants.FD_PARTOF_FDJOINT);
+            return new ModelAndView(model, TemplateConstants.LAYOUT);
+        }, new VelocityTemplateEngine());
 
         get("/find-normal-form", (req, res) -> {
             checkSession(req.session().id());

@@ -20,6 +20,7 @@ public class TemplateConstants {
     public static final String FD = "templates/fd/fd.vtl";
     public static final String FDS_LIST = "templates/fd/fds-list.vtl";
     public static final String FDS_LIST_CHECKBOX = "templates/fd/fds-list-checkbox.vtl";
+    public static final String FDS_LIST_RADIO = "templates/fd/fds-list-radio.vtl";
     
     public static final String FDJOINT = "templates/fdjoint/fdjoint.vtl";
     public static final String FDJOINTS_LIST = "templates/fdjoint/fdjoints-list.vtl";
@@ -37,6 +38,12 @@ public class TemplateConstants {
     
     public static final String CALCULATE_MINIMAL_COVER = "templates/analyze/calculate-minimal-cover.vtl";
     public static final String CALCULATE_MINIMAL_COVER_RESULT = "templates/analyze/calculate-minimal-cover-result.vtl";
+    
+    public static final String PROJECTION = "templates/analyze/projection.vtl";
+    public static final String PROJECTION_RESULT = "templates/analyze/projection-result.vtl";
+    
+    public static final String FD_PARTOF_FDJOINT = "templates/analyze/fd-partof-fdjoint.vtl";
+    public static final String FD_PARTOF_FDJOINT_RESULT = "templates/analyze/fd-partof-fdjoint-result.vtl";
 
     private TemplateConstants() {
         // Private constructor to prevent instantiation.
