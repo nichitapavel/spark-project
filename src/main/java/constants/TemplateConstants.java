@@ -8,7 +8,7 @@ package constants;
  * Routes of the templates, where to find them.
  */
 public class TemplateConstants {
-    public static final String LAYOUT = "templates/layout.vtl";
+    public static final String LAYOUT = "templates/other/layout.vtl";
     public static final String E401 = "templates/other/401.vtl";
     public static final String HOME = "templates/other/home.vtl";
 
