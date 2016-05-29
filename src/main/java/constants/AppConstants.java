@@ -18,22 +18,26 @@ public class AppConstants {
     public static final String ATTRIBUTES_LIST_CHECKBOX_ANT = "attributes-list-checkbox-ant";
     public static final String ATTRIBUTES_LIST_CHECKBOX_CON = "attributes-list-checkbox-con";
     public static final String ATTRIBUTES_LIST = "attributes-list";
+    public static final String ATTRIBUTES_LIST_DELETE = "attributes-list-delete";
 
     public static final String FD = "fd";
     public static final String FDS_LIST = "fds-list";
     public static final String FDS_LIST_CHECKBOX = "fds-list-checkbox";
     public static final String FDS_LIST_RADIO = "fds-list-radio";
+    public static final String FDS_LIST_DELETE = "fds-list-delete";
 
     public static final String FDJOINT = "fdjoint";
     public static final String FDJOINTS_LIST = "fdjoints-list";
     public static final String FDJOINTS_LIST_RADIO_A = "fdjoints-list-radio-a";
     public static final String FDJOINTS_LIST_RADIO_B = "fdjoints-list-radio-b";
     public static final String FDJOINTS_LIST_RADIO = "fdjoints-list-radio";
+    public static final String FDJOINTS_LIST_DELETE = "fdjoints-list-delete";
 
     public static final String RELATION = "relation";
     public static final String RELATIONS_LIST = "relations-list";
     public static final String RELATIONS_LIST_NF = "relations-list-nf";
     public static final String RELATIONS_LIST_RADIO = "relations-list-radio";
+    public static final String RELATIONS_LIST_DELETE = "relations-list-delete";
 
     public static final String ULLMAN_RESULT = "ullman-result";
 
