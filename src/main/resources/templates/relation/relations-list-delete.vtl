@@ -1,0 +1,25 @@
+#if( !$relations.isEmpty() )
+<h2 class="alert alert-warning">Relations</h2>
+<ul class="list-group">
+#foreach( $relation in $relations )
+  <li class="list-group-item clearfix">
+    <p>$relation.getName() - $relation.getAttrJoint()</p>
+    <p>
+    #foreach( $fd in $relation.getDFJoint() )
+      #if( $velocityCount != $relation.getDFJoint().getSize())
+      $fd || 
+      #else
+      $fd
+      #end
+    #end
+    </p>
+    <span class="pull-right">
+      <form action="/delete" method="POST">
+        <input type="hidden" name="__relation-name__" type="text" value="$relation.name">
+        <button type="submit" class="btn btn-xs btn-danger">Delete</button>
+      </form>
+    </span>
+  </li>
+#end
+</ul>
+#end

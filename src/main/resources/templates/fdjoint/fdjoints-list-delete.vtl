@@ -1,0 +1,25 @@
+#if( !$fdjoints.isEmpty() )
+<h2 class="alert alert-warning">FD Joints</h2>
+<ul class="list-group">
+#foreach( $fdj in $fdjoints )
+  <li class="list-group-item clearfix">
+    <p>$fdj.getName()</p>
+    <p>
+    #foreach( $fd in $fdj.getDFJoint() )
+      #if( $velocityCount != $fdj.getDFJoint().size())
+      $fd || 
+      #else
+      $fd
+      #end
+    #end
+    </p>
+    <span class="pull-right">
+      <form action="/delete-fdjoint" method="POST">
+        <input type="hidden" name="__fdjoint-name__" type="text" value="$fdj.name">
+        <button type="submit" class="btn btn-xs btn-danger">Delete</button>
+      </form>
+    </span>
+  </li>
+#end
+</ul>
+#end
