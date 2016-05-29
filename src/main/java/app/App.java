@@ -16,6 +16,7 @@ import datastructures.Relation;
 import dependency.FunctionalDependency;
 import spark.ModelAndView;
 import spark.Request;
+import spark.Response;
 import spark.template.velocity.VelocityTemplateEngine;
 
 import static spark.Spark.*;
@@ -36,7 +37,7 @@ public class App {
     public static void main(String[] args) {
         staticFileLocation("/public");
 
-        String helloVtl = "templates/hello.vtl";
+        String helloVtl = "templates/other/welcome.vtl";
 
         before((req, res) -> {
             Map<String, Object> model = new HashMap<>();
@@ -45,11 +46,30 @@ public class App {
 
         get("/", (req, res) -> {
             Map<String, Object> model = new HashMap<>();
-            model.put(AppConstants.TEMPLATE, helloVtl);
-            model.put(SessionConstants.USERNAME, session.get(req.session().id()));
-            return new ModelAndView(model, TemplateConstants.LAYOUT);
+            return new ModelAndView(model, helloVtl);
         }, new VelocityTemplateEngine());
 
+        get("/home", (req, res) -> {
+            checkSession(req, res);
+            Map<String, Attribute> attrList = req.session().attribute(SessionConstants.ATTRIBUTE_LIST);
+            Map<String, Attribute> fdList = req.session().attribute(SessionConstants.FD_LIST);
+            Map<String, Attribute> fdJointList = req.session().attribute(SessionConstants.FDJOINT_LIST);
+            Map<String, Attribute> relationList = req.session().attribute(SessionConstants.RELATION_LIST);
+            
+            Map<String, Object> model = new HashMap<>();
+            model.put(SessionConstants.USERNAME, session.get(req.session().id()));
+            model.put(DataConstants.ATTRIBUTES, attrList);
+            model.put(AppConstants.ATTRIBUTES_LIST_DELETE, TemplateConstants.ATTRIBUTES_LIST_DELETE);
+            model.put(DataConstants.FDS, fdList);
+            model.put(AppConstants.FDS_LIST_DELETE, TemplateConstants.FDS_LIST_DELETE);
+            model.put(DataConstants.FDJOINTS, fdJointList);
+            model.put(AppConstants.FDJOINTS_LIST_DELETE, TemplateConstants.FDJOINTS_LIST_DELETE);
+            model.put(DataConstants.RELATIONS, relationList);
+            model.put(AppConstants.RELATIONS_LIST_DELETE, TemplateConstants.RELATIONS_LIST_DELETE);
+            model.put(AppConstants.TEMPLATE, TemplateConstants.HOME);
+            return new ModelAndView(model, TemplateConstants.LAYOUT);
+        }, new VelocityTemplateEngine());
+        
         post("/session", (req, res) -> {
             req.session(true);
             req.session().maxInactiveInterval(43400); // 12 hours in seconds
@@ -70,7 +90,7 @@ public class App {
         }, new VelocityTemplateEngine());
 
         get("/attribute", (req, res) -> {
-            checkSession(req.session().id());
+            checkSession(req, res);
             Map<String, Attribute> attrList = req.session().attribute(SessionConstants.ATTRIBUTE_LIST);
 
             Map<String, Object> model = new HashMap<>();
@@ -83,7 +103,7 @@ public class App {
         }, new VelocityTemplateEngine());
 
         post("/attribute", (req, res) -> {
-            checkSession(req.session().id());
+            checkSession(req, res);
 
             addAttribute(req);
 
@@ -92,7 +112,7 @@ public class App {
         });
 
         get("/fd", (req, res) -> {
-            checkSession(req.session().id());
+            checkSession(req, res);
             Map<String, Attribute> attrList = req.session().attribute(SessionConstants.ATTRIBUTE_LIST);
             Map<String, FunctionalDependency> fdList = req.session().attribute(SessionConstants.FD_LIST);
 
@@ -110,7 +130,7 @@ public class App {
         }, new VelocityTemplateEngine());
 
         post("/fd", (req, res) -> {
-            checkSession(req.session().id());
+            checkSession(req, res);
 
             addFD(req);
 
@@ -119,7 +139,7 @@ public class App {
         });
 
         get("/fdjoint", (req, res) -> {
-            checkSession(req.session().id());
+            checkSession(req, res);
             Map<String, FunctionalDependency> fdList = req.session().attribute(SessionConstants.FD_LIST);
             Map<String, DFJoint> fdJointList = req.session().attribute(SessionConstants.FDJOINT_LIST);
 
@@ -134,7 +154,7 @@ public class App {
         }, new VelocityTemplateEngine());
 
         post("/fdjoint", (req, res) -> {
-            checkSession(req.session().id());
+            checkSession(req, res);
 
             addFDJoint(req);
 
@@ -143,7 +163,7 @@ public class App {
         });
 
         get("/relation", (req, res) -> {
-            checkSession(req.session().id());
+            checkSession(req, res);
             Map<String, Attribute> attrList = req.session().attribute(SessionConstants.ATTRIBUTE_LIST);
             Map<String, DFJoint> fdJointList = req.session().attribute(SessionConstants.FDJOINT_LIST);
             Map<String, Relation> relationList = req.session().attribute(SessionConstants.RELATION_LIST);
@@ -161,7 +181,7 @@ public class App {
         }, new VelocityTemplateEngine());
 
         post("/relation", (req, res) -> {
-            checkSession(req.session().id());
+            checkSession(req, res);
 
             addRelation(req);
 
@@ -170,7 +190,7 @@ public class App {
         });
 
         get("/ullman", (req, res) -> {
-            checkSession(req.session().id());
+            checkSession(req, res);
             Map<String, Attribute> attrList = req.session().attribute(SessionConstants.ATTRIBUTE_LIST);
             Map<String, Relation> relationList = req.session().attribute(SessionConstants.RELATION_LIST);
 
@@ -185,7 +205,7 @@ public class App {
         }, new VelocityTemplateEngine());
 
         post("/ullman", (req, res) -> {
-            checkSession(req.session().id());
+            checkSession(req, res);
             Map<String, Attribute> attrList = req.session().attribute(SessionConstants.ATTRIBUTE_LIST);
             Map<String, Relation> relationList = req.session().attribute(SessionConstants.RELATION_LIST);
 
@@ -209,7 +229,7 @@ public class App {
         }, new VelocityTemplateEngine());
 
         get("/calculate-keys", (req, res) -> {
-            checkSession(req.session().id());
+            checkSession(req, res);
             Map<String, Relation> relationList = req.session().attribute(SessionConstants.RELATION_LIST);
 
             Map<String, Object> model = new HashMap<>();
@@ -221,7 +241,7 @@ public class App {
         }, new VelocityTemplateEngine());
 
         post("/calculate-keys", (req, res) -> {
-            checkSession(req.session().id());
+            checkSession(req, res);
             Map<String, Relation> relationList = req.session().attribute(SessionConstants.RELATION_LIST);
 
             Relation relation = relationList.get(req.queryParams(FormConstants.RELATION));
@@ -240,7 +260,7 @@ public class App {
         }, new VelocityTemplateEngine());
 
         get("/calculate-minimal-cover", (req, res) -> {
-            checkSession(req.session().id());
+            checkSession(req, res);
             Map<String, DFJoint> fdJointList = req.session().attribute(SessionConstants.FDJOINT_LIST);
 
             Map<String, Object> model = new HashMap<>();
@@ -252,7 +272,7 @@ public class App {
         }, new VelocityTemplateEngine());
 
         post("/calculate-minimal-cover", (req, res) -> {
-            checkSession(req.session().id());
+            checkSession(req, res);
             Map<String, DFJoint> fdJointList = req.session().attribute(SessionConstants.FDJOINT_LIST);
 
             DFJoint fdJoint = fdJointList.get(req.queryParams(FormConstants.FDJOINT));
@@ -271,7 +291,7 @@ public class App {
         }, new VelocityTemplateEngine());
 
         get("/projection", (req, res) -> {
-            checkSession(req.session().id());
+            checkSession(req, res);
             Map<String, DFJoint> fdJointList = req.session().attribute(SessionConstants.FDJOINT_LIST);
             Map<String, Attribute> attrList = req.session().attribute(SessionConstants.ATTRIBUTE_LIST);
 
@@ -286,7 +306,7 @@ public class App {
         }, new VelocityTemplateEngine());
 
         post("/projection", (req, res) -> {
-            checkSession(req.session().id());
+            checkSession(req, res);
             Map<String, DFJoint> fdJointList = req.session().attribute(SessionConstants.FDJOINT_LIST);
             Map<String, Attribute> attrList = req.session().attribute(SessionConstants.ATTRIBUTE_LIST);
 
@@ -310,7 +330,7 @@ public class App {
         }, new VelocityTemplateEngine());
 
         get("/fd-partof-fdjoint", (req, res) -> {
-            checkSession(req.session().id());
+            checkSession(req, res);
             Map<String, DFJoint> fdJointList = req.session().attribute(SessionConstants.FDJOINT_LIST);
             Map<String, DFJoint> fdList = req.session().attribute(SessionConstants.FD_LIST);
 
@@ -325,7 +345,7 @@ public class App {
         }, new VelocityTemplateEngine());
 
         post("/fd-partof-fdjoint", (req, res) -> {
-            checkSession(req.session().id());
+            checkSession(req, res);
             Map<String, DFJoint> fdJointList = req.session().attribute(SessionConstants.FDJOINT_LIST);
             Map<String, FunctionalDependency> fdList = req.session().attribute(SessionConstants.FD_LIST);
 
@@ -349,7 +369,7 @@ public class App {
         }, new VelocityTemplateEngine());
 
         get("/implies", (req, res) -> {
-            checkSession(req.session().id());
+            checkSession(req, res);
             Map<String, DFJoint> fdJointList = req.session().attribute(SessionConstants.FDJOINT_LIST);
 
             Map<String, Object> model = new HashMap<>();
@@ -362,7 +382,7 @@ public class App {
         }, new VelocityTemplateEngine());
 
         post("/implies", (req, res) -> {
-            checkSession(req.session().id());
+            checkSession(req, res);
             Map<String, DFJoint> fdJointList = req.session().attribute(SessionConstants.FDJOINT_LIST);
 
             DFJoint fdJointA = fdJointList.get(req.queryParams(FormConstants.FDJOINT_A));
@@ -384,7 +404,7 @@ public class App {
         }, new VelocityTemplateEngine());
 
         get("/equivalence", (req, res) -> {
-            checkSession(req.session().id());
+            checkSession(req, res);
             Map<String, DFJoint> fdJointList = req.session().attribute(SessionConstants.FDJOINT_LIST);
 
             Map<String, Object> model = new HashMap<>();
@@ -397,7 +417,7 @@ public class App {
         }, new VelocityTemplateEngine());
 
         post("/equivalence", (req, res) -> {
-            checkSession(req.session().id());
+            checkSession(req, res);
             Map<String, DFJoint> fdJointList = req.session().attribute(SessionConstants.FDJOINT_LIST);
 
             DFJoint fdJointA = fdJointList.get(req.queryParams(FormConstants.FDJOINT_A));
@@ -419,7 +439,7 @@ public class App {
         }, new VelocityTemplateEngine());
         
         get("/test-normal-form", (req, res) -> {
-            checkSession(req.session().id());
+            checkSession(req, res);
             Map<String, Object> relationList = req.session().attribute(SessionConstants.RELATION_LIST);
 
             Map<String, Object> model = new HashMap<>();
@@ -431,7 +451,7 @@ public class App {
         }, new VelocityTemplateEngine());
         
         post("/test-normal-form", (req, res) -> {
-            checkSession(req.session().id());
+            checkSession(req, res);
             Map<String, Relation> relationList = req.session().attribute(SessionConstants.RELATION_LIST);
 
             Relation relation = relationList.get(req.queryParams(FormConstants.RELATION));
@@ -465,7 +485,7 @@ public class App {
         }, new VelocityTemplateEngine());
 
         get("/test-keys", (req, res) -> {
-            checkSession(req.session().id());
+            checkSession(req, res);
             Map<String, Attribute> attrList = req.session().attribute(SessionConstants.ATTRIBUTE_LIST);
             Map<String, Relation> relationList = req.session().attribute(SessionConstants.RELATION_LIST);
 
@@ -480,7 +500,7 @@ public class App {
         }, new VelocityTemplateEngine());
 
         post("/test-keys", (req, res) -> {
-            checkSession(req.session().id());
+            checkSession(req, res);
             Map<String, Attribute> attrList = req.session().attribute(SessionConstants.ATTRIBUTE_LIST);
             Map<String, Relation> relationList = req.session().attribute(SessionConstants.RELATION_LIST);
 
@@ -504,7 +524,7 @@ public class App {
         }, new VelocityTemplateEngine());
 
         get("/test-minimal-cover", (req, res) -> {
-            checkSession(req.session().id());
+            checkSession(req, res);
             Map<String, DFJoint> fdJointList = req.session().attribute(SessionConstants.FDJOINT_LIST);
 
             Map<String, Object> model = new HashMap<>();
@@ -516,7 +536,7 @@ public class App {
         }, new VelocityTemplateEngine());
 
         post("/test-minimal-cover", (req, res) -> {
-            checkSession(req.session().id());
+            checkSession(req, res);
             Map<String, DFJoint> fdJointList = req.session().attribute(SessionConstants.FDJOINT_LIST);
 
             DFJoint fdJoint = fdJointList.get(req.queryParams(FormConstants.FDJOINT));
@@ -535,7 +555,7 @@ public class App {
         }, new VelocityTemplateEngine());
 
         get("/normalize", (req, res) -> {
-            checkSession(req.session().id());
+            checkSession(req, res);
             Map<String, Relation> relationList = req.session().attribute(SessionConstants.RELATION_LIST);
 
             Map<String, Object> model = new HashMap<>();
@@ -547,7 +567,7 @@ public class App {
         }, new VelocityTemplateEngine());
         
         post("/normalize", (req, res) -> {
-            checkSession(req.session().id());
+            checkSession(req, res);
             Map<String, Relation> relationList = req.session().attribute(SessionConstants.RELATION_LIST);
 
             Relation relation = relationList.get(req.queryParams(FormConstants.RELATION));
@@ -573,12 +593,53 @@ public class App {
             model.put(AppConstants.TEMPLATE, TemplateConstants.NORMALIZE);
             return new ModelAndView(model, TemplateConstants.LAYOUT);
         }, new VelocityTemplateEngine());
+        
+        get("/401", (req, res) -> {
+            Map<String, Object> model = new HashMap<>();
+            return new ModelAndView(model, TemplateConstants.E401);
+        }, new VelocityTemplateEngine());
+        
+        post("/delete-attribute", (req, res) -> {
+            checkSession(req, res);
+            String attr = req.queryParams(FormConstants.ATTRIBUTE);
+            Map<String, Attribute> attrList = req.session().attribute(SessionConstants.ATTRIBUTE_LIST);
+            attrList.remove(attr);
+            res.redirect("/home");
+            return null;
+        });
+        
+        post("/delete-fd", (req, res) -> {
+            checkSession(req, res);
+            String fd = req.queryParams(FormConstants.FD);
+            Map<String, Attribute> fdList = req.session().attribute(SessionConstants.FD_LIST);
+            fdList.remove(fd);
+            res.redirect("/home");
+            return null;
+        });
+        
+        post("/delete-fdjoint", (req, res) -> {
+            checkSession(req, res);
+            String fdJoint = req.queryParams(FormConstants.FDJOINT);
+            Map<String, Attribute> fdJointList = req.session().attribute(SessionConstants.FDJOINT_LIST);
+            fdJointList.remove(fdJoint);
+            res.redirect("/home");
+            return null;
+        });
+        
+        post("/delete-relation", (req, res) -> {
+            checkSession(req, res);
+            String relation = req.queryParams(FormConstants.RELATION);
+            Map<String, Attribute> fdJointList = req.session().attribute(SessionConstants.RELATION_LIST);
+            fdJointList.remove(relation);
+            res.redirect("/home");
+            return null;
+        });
     }
 
-    private static void checkSession(String id) {
-        // if (!session.containsKey(id)){
-           // halt(401, "No known session");
-        //}
+    private static void checkSession(Request req, Response res) {
+        if (!session.containsKey(req.session().id())){
+            res.redirect("/401");
+        }
     }
 
     /**
