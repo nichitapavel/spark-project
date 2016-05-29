@@ -1,0 +1,16 @@
+<ul class="list-group">
+#foreach( $relation in $result )
+  <li class="list-group-item list-group-item-success">
+    <p>$relation.name - $relation.getAttrJoint()</p>
+    <p>
+    #foreach( $fd in $relation.getDFJoint() )
+      #if( $velocityCount != $relation.getDFJoint().getSize())
+      $fd || 
+      #else
+      $fd
+      #end
+    #end
+    </p>
+  </li>
+#end
+</ul>

@@ -30,6 +30,7 @@ public class TemplateConstants {
 
     public static final String RELATION = "templates/relation/relation.vtl";
     public static final String RELATIONS_LIST = "templates/relation/relations-list.vtl";
+    public static final String RELATIONS_LIST_NF = "templates/relation/relations-list-nf.vtl";
     public static final String RELATIONS_LIST_RADIO = "templates/relation/relations-list-radio.vtl";
 
     public static final String ULLMAN = "templates/analyze/ullman.vtl";
@@ -61,6 +62,9 @@ public class TemplateConstants {
     
     public static final String TESTS_NORMAL_FORM = "templates/tests/test-normal-form.vtl";
     public static final String TESTS_NORMAL_FORM_RESULT = "templates/tests/test-normal-form-result.vtl";
+    
+    public static final String NORMALIZE = "templates/tests/normalize.vtl";
+    public static final String NORMALIZE_RESULT = "templates/tests/normalize-result.vtl";
 
     private TemplateConstants() {
         // Private constructor to prevent instantiation.

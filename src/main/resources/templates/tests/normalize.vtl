@@ -1,20 +1,10 @@
-<h2 class="alert alert-info">Test in what Normal Form is a Relation!</h2>
+<h2 class="alert alert-info">Normalize a Relation!</h2>
 
-#parse( $test-normal-form-result )
+#parse( $normalize-result )
 
-<form action="/test-normal-form" method="POST" >
+<form action="/normalize" method="POST" >
   <h4>Normal Forms</h4>
   <ul class="list-group">
-    <li class="list-group-item">
-      <label class="radio-inline">
-        <input name="__nf__" value="all" type="radio">All
-      </label>
-    </li>
-    <li class="list-group-item">
-      <label class="radio-inline">
-        <input name="__nf__" value="2nd" type="radio">2nd Normal Form
-      </label>
-    </li>
     <li class="list-group-item">
       <label class="radio-inline">
         <input name="__nf__" value="3rd" type="radio">3rd Normal Form

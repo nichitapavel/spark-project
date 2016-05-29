@@ -32,6 +32,7 @@ public class AppConstants {
 
     public static final String RELATION = "relation";
     public static final String RELATIONS_LIST = "relations-list";
+    public static final String RELATIONS_LIST_NF = "relations-list-nf";
     public static final String RELATIONS_LIST_RADIO = "relations-list-radio";
 
     public static final String ULLMAN_RESULT = "ullman-result";
@@ -53,6 +54,8 @@ public class AppConstants {
     public static final String TESTS_MINIMAL_COVER_RESULT = "test-minimal-cover-result";
     
     public static final String TESTS_NORMAL_FORM_RESULT = "test-normal-form-result";
+    
+    public static final String NORMALIZE_RESULT = "normalize-result";
 
     private AppConstants() {
         // Private constructor to prevent instantiation.

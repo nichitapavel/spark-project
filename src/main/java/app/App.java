@@ -3,8 +3,9 @@
  */
 package app;
 
-import java.text.Normalizer.Form;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import datastructures.Attribute;
@@ -530,6 +531,46 @@ public class App {
             model.put(DataConstants.FDJOINTS, fdJointList);
             model.put(AppConstants.FDJOINTS_LIST_RADIO, TemplateConstants.FDJOINTS_LIST_RADIO);
             model.put(AppConstants.TEMPLATE, TemplateConstants.TESTS_MINIMAL_COVER);
+            return new ModelAndView(model, TemplateConstants.LAYOUT);
+        }, new VelocityTemplateEngine());
+
+        get("/normalize", (req, res) -> {
+            checkSession(req.session().id());
+            Map<String, Relation> relationList = req.session().attribute(SessionConstants.RELATION_LIST);
+
+            Map<String, Object> model = new HashMap<>();
+            model.put(SessionConstants.USERNAME, session.get(req.session().id()));
+            model.put(DataConstants.RELATIONS, relationList);
+            model.put(AppConstants.RELATIONS_LIST_RADIO, TemplateConstants.RELATIONS_LIST_RADIO);
+            model.put(AppConstants.TEMPLATE, TemplateConstants.NORMALIZE);
+            return new ModelAndView(model, TemplateConstants.LAYOUT);
+        }, new VelocityTemplateEngine());
+        
+        post("/normalize", (req, res) -> {
+            checkSession(req.session().id());
+            Map<String, Relation> relationList = req.session().attribute(SessionConstants.RELATION_LIST);
+
+            Relation relation = relationList.get(req.queryParams(FormConstants.RELATION));
+            String normalForm = req.queryParams(FormConstants.NORMAL_FORM);
+            List<Relation> result = new ArrayList<>();
+
+            if (normalForm.equals(FormConstants.NORMAL_FORM_VALUE_3RD)) {
+                result = normalization.Normalization.normalize3NF(relation, true);
+            } else {
+                result = normalization.Normalization.normalizeBCNF(relation, true);
+            }
+
+            Map<String, Object> model = new HashMap<>();
+            model.put(DataConstants.RELATION, relation);
+            model.put(DataConstants.RESULT, result);
+            model.put(DataConstants.OPTION, normalForm);
+            model.put(AppConstants.NORMALIZE_RESULT, TemplateConstants.NORMALIZE_RESULT);
+            model.put(AppConstants.RELATIONS_LIST_NF, TemplateConstants.RELATIONS_LIST_NF);
+            
+            model.put(SessionConstants.USERNAME, session.get(req.session().id()));
+            model.put(DataConstants.RELATIONS, relationList);
+            model.put(AppConstants.RELATIONS_LIST_RADIO, TemplateConstants.RELATIONS_LIST_RADIO);
+            model.put(AppConstants.TEMPLATE, TemplateConstants.NORMALIZE);
             return new ModelAndView(model, TemplateConstants.LAYOUT);
         }, new VelocityTemplateEngine());
     }
