@@ -37,8 +37,6 @@ public class App {
     public static void main(String[] args) {
         staticFileLocation("/public");
 
-        String helloVtl = "templates/other/welcome.vtl";
-
         before((req, res) -> {
             Map<String, Object> model = new HashMap<>();
             model.put(SessionConstants.USERNAME, session.get(req.session().id()));
@@ -46,7 +44,7 @@ public class App {
 
         get("/", (req, res) -> {
             Map<String, Object> model = new HashMap<>();
-            return new ModelAndView(model, helloVtl);
+            return new ModelAndView(model, TemplateConstants.WELCOME);
         }, new VelocityTemplateEngine());
 
         get("/home", (req, res) -> {
