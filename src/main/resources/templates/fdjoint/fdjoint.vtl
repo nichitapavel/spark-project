@@ -1,4 +1,7 @@
 <h2 class="alert alert-info">Add a FD Joint!</h2>
+
+#if( !$fds.isEmpty() )
+
 <form action="/fdjoint" method="POST" >
   <h4>FD Joint Name</h4>
   <div class="form-group">
@@ -9,5 +12,8 @@
 
   <button type="submit" class="btn">Go!</button>
 </form>
+#else
+  <h2 class="alert alert-danger">Add some Functional Dependencies!</h2>
+#end
 
 #parse( $fdjoints-list )

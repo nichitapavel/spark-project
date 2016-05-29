@@ -1,5 +1,7 @@
 <h2 class="alert alert-info">Test in what Normal Form is a Relation!</h2>
 
+#if( !$relations.isEmpty() )
+
 #parse( $test-normal-form-result )
 
 <form action="/test-normal-form" method="POST" >
@@ -31,3 +33,7 @@
 
   <button type="submit" class="btn">Go!</button>
 </form>
+
+#else
+  <h2 class="alert alert-danger">Add some Relations!</h2>
+#end

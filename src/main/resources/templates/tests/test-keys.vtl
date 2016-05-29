@@ -2,13 +2,21 @@
 
 #parse( $test-keys-result )
 
-    <form action="/test-keys" method="POST" >
+<form action="/test-keys" method="POST" >
 
-#parse( $attributes-list-checkbox)
+#if( !$attributes.isEmpty() )
+  #parse( $attributes-list-checkbox)
+#else
+  <h2 class="alert alert-danger">Add some Attributes!</h2>
+#end
 
-#parse( $relations-list-radio )
+#if( !$relations.isEmpty() )
+  #parse( $relations-list-radio )
+#else
+  <h2 class="alert alert-danger">Add some Relations!</h2>
+#end
 
-	  <button type="submit" class="btn">Go!</button>
-	</form>
-  </div>
-</div>
+#if( !$relations.isEmpty() && !$attributes.isEmpty() )
+  <button type="submit" class="btn">Go!</button>
+#end
+</form>

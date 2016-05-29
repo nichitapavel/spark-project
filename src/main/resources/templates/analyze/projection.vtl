@@ -2,13 +2,21 @@
 
 #parse( $projection-result )
 
-    <form action="/projection" method="POST" >
+<form action="/projection" method="POST" >
 
-#parse( $fdjoints-list-radio )
+#if( !$fdjoints.isEmpty() )
+  #parse( $fdjoints-list-radio )
+#else
+  <h2 class="alert alert-danger">Add some FD Joints!</h2>
+#end
 
-#parse( $attributes-list-checkbox)
+#if( !$attributes.isEmpty() )
+  #parse( $attributes-list-checkbox)
+#else
+  <h2 class="alert alert-danger">Add some Attributes!</h2>
+#end
 
-	  <button type="submit" class="btn">Go!</button>
-	</form>
-  </div>
-</div>
+#if( !$attributes.isEmpty() && !$fdjoints.isEmpty() )
+  <button type="submit" class="btn">Go!</button>
+#end
+</form>

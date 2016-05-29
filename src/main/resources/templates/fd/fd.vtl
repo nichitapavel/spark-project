@@ -1,4 +1,7 @@
 <h2 class="alert alert-info">Add a Functional Dependency!</h2>
+
+#if( !$attributes.isEmpty() )
+
 <form action="/fd" method="POST" >
   <!-- Antecedent Attributes -->
   <div class="col-sm-6 form-group">
@@ -20,5 +23,9 @@
       
   <button type="submit" class="btn">Go!</button>
 </form>
-    
+
+#else
+  <h2 class="alert alert-danger">Add some Attributes!</h2>
+#end
+
 #parse( $fds-list )

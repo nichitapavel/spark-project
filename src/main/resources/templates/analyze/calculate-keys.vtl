@@ -1,5 +1,7 @@
 <h2 class="alert alert-info">Calculate a Relations Keys!</h2>
 
+#if( !$relations.isEmpty() )
+
 #parse( $calculate-keys-result )
 
     <form action="/calculate-keys" method="POST" >
@@ -8,5 +10,7 @@
 
 	  <button type="submit" class="btn">Go!</button>
 	</form>
-  </div>
-</div>
+
+#else
+  <h2 class="alert alert-danger">Add some Relations!</h2>
+#end

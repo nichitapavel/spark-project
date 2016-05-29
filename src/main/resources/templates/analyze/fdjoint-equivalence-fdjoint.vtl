@@ -2,8 +2,11 @@
 
 #parse( $fdjoint-equivalence-fdjoint-result )
 
+#if( !$fdjoints.isEmpty() )
+
 <form action="/equivalence" method="POST" >
-  <!-- FD Joint A -->
+
+<!-- FD Joint A -->
   <div class="col-sm-6 form-group">
     <h4>FD Joint A</h4>
         
@@ -23,3 +26,7 @@
       
   <button type="submit" class="btn">Go!</button>
 </form>
+
+#else
+  <h2 class="alert alert-danger">Add some FD Joints!</h2>
+#end

@@ -1,4 +1,7 @@
 <h2 class="alert alert-info">Add a Relation!</h2>
+
+#if( !$fdjoints.isEmpty() && !$attributes.isEmpty() )
+
 <form action="/relation" method="POST" >
   <h4>Relation Name</h4>
   <div class="form-group">
@@ -11,5 +14,8 @@
 
   <button type="submit" class="btn">Go!</button>
 </form>
-    
+#else
+    <h2 class="alert alert-danger">Add some Attributes and FD Joints!</h2>
+#end
+
 #parse( $relations-list )

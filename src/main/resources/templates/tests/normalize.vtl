@@ -1,5 +1,7 @@
 <h2 class="alert alert-info">Normalize a Relation!</h2>
 
+#if( !$relations.isEmpty() )
+
 #parse( $normalize-result )
 
 <form action="/normalize" method="POST" >
@@ -21,3 +23,7 @@
 
   <button type="submit" class="btn">Go!</button>
 </form>
+
+#else
+  <h2 class="alert alert-danger">Add some Relations!</h2>
+#end
