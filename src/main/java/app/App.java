@@ -86,7 +86,7 @@ public class App {
         get("/session", (req, res) -> {
             req.session().invalidate();
             Map<String, Object> model = new HashMap<>();
-            return new ModelAndView(model, TemplateConstants.LAYOUT);
+            return new ModelAndView(model, TemplateConstants.GOOD_BYE);
         }, new VelocityTemplateEngine());
 
         get("/attribute", (req, res) -> {
