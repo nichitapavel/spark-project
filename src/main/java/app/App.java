@@ -36,6 +36,7 @@ public class App {
 
     public static void main(String[] args) {
         staticFileLocation("/public");
+        port(80);
 
         before((req, res) -> {
             Map<String, Object> model = new HashMap<>();
