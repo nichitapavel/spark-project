@@ -3,10 +3,36 @@
  */
 package app;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.imageio.metadata.IIOMetadataNode;
+import javax.servlet.MultipartConfigElement;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletResponse;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 import datastructures.Attribute;
 import datastructures.AttributeJoint;
@@ -36,7 +62,7 @@ public class App {
 
     public static void main(String[] args) {
         staticFileLocation("/public");
-        port(80);
+        //port(80);
 
         before((req, res) -> {
             Map<String, Object> model = new HashMap<>();
@@ -109,7 +135,31 @@ public class App {
             res.redirect("/attribute");
             return null;
         });
+        
+        get("/save", (req, res) -> {
+            checkSession(req, res);
+            
+            saveSession(req, res);
 
+            return null;
+        });
+
+        get("/load", (req, res) -> {
+            checkSession(req, res);
+            Map<String, Object> model = new HashMap<>();
+            model.put(SessionConstants.USERNAME, session.get(req.session().id()));
+            model.put(AppConstants.TEMPLATE, TemplateConstants.LOAD_SESSION);
+            return new ModelAndView(model, TemplateConstants.LAYOUT);
+        }, new VelocityTemplateEngine());
+        
+        post("/load", (req, res) -> {
+            checkSession(req, res);
+            
+            loadSession(req, res);
+            res.redirect("/home");
+            return null;
+        });
+        
         get("/fd", (req, res) -> {
             checkSession(req, res);
             Map<String, Attribute> attrList = req.session().attribute(SessionConstants.ATTRIBUTE_LIST);
@@ -725,5 +775,206 @@ public class App {
         }
 
         return attrJoint;
+    }
+    
+    private static Response saveSession(Request req, Response res) {
+        Map<String, Attribute> attrList = req.session().attribute(SessionConstants.ATTRIBUTE_LIST);
+        Map<String, FunctionalDependency> fdList = req.session().attribute(SessionConstants.FD_LIST);
+        Map<String, DFJoint> fdJointList = req.session().attribute(SessionConstants.FDJOINT_LIST);
+        Map<String, Relation> relationList = req.session().attribute(SessionConstants.RELATION_LIST);
+        HttpServletResponse raw;
+        try {
+            DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
+
+            Document doc = docBuilder.newDocument();
+            Element root = doc.createElement("Session");
+            doc.appendChild(root);
+            
+            Element attributes = doc.createElement("Attributes");
+            root.appendChild(attributes);
+            for (Attribute item : attrList.values()) {
+                Node element = doc.importNode(item.toXML(), true);
+                attributes.appendChild(element);
+            }
+            
+            Element fds = doc.createElement("FDs");
+            root.appendChild(fds);
+            for (FunctionalDependency item : fdList.values()) {
+                Node element = doc.importNode(item.toXML(), true);
+                fds.appendChild(element);
+            }
+            
+            Element fdJoints = doc.createElement("FDJoints");
+            root.appendChild(fdJoints);
+            for (DFJoint item : fdJointList.values()) {
+                Node element = doc.importNode(item.toXML(), true);
+                fdJoints.appendChild(element);
+            }
+            
+            Element relations = doc.createElement("Relations");
+            root.appendChild(relations);
+            for (Relation item : relationList.values()) {
+                Node element = doc.importNode(item.toXML(), true);
+                relations.appendChild(element);
+            }
+            
+            // write the content into xml file
+            TransformerFactory transformerFactory = TransformerFactory.newInstance();
+            Transformer transformer = transformerFactory.newTransformer();
+            transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
+            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+            transformer.setOutputProperty(OutputKeys.METHOD, "xml");
+            transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
+            DOMSource source = new DOMSource(doc);
+            File file = new File("C:/Users/Pavel/workspace/spark-project/file.xml");
+            StreamResult result = new StreamResult(file);
+            //StreamResult result = new StreamResult(System.out);
+            transformer.transform(source, result);
+            
+            byte[] bytes = Files.readAllBytes(Paths.get(file.getPath()));
+                raw = res.raw();
+                raw.getOutputStream().write(bytes);
+                raw.getOutputStream().flush();
+                raw.getOutputStream().close();
+  
+            } catch (ParserConfigurationException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            } catch (TransformerException tfe) {
+                tfe.printStackTrace();
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        res.type("xml");
+        res.raw();
+        return res;
+    }
+    
+    private static void loadSession(Request req, Response res) {
+        Map<String, Attribute> attrList = req.session().attribute(SessionConstants.ATTRIBUTE_LIST);
+        Map<String, FunctionalDependency> fdList = req.session().attribute(SessionConstants.FD_LIST);
+
+        InputStream input;
+
+        try {
+            req.attribute("org.eclipse.jetty.multipartConfig", new MultipartConfigElement("/temp"));
+            input = req.raw().getPart("uploaded_file").getInputStream();
+
+            DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
+
+            Document doc = docBuilder.parse(input);
+
+            TransformerFactory transformerFactory = TransformerFactory.newInstance();
+            Transformer transformer = transformerFactory.newTransformer();
+            transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
+            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+            transformer.setOutputProperty(OutputKeys.METHOD, "xml");
+            transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
+            DOMSource source = new DOMSource(doc);
+            StreamResult result = new StreamResult(System.out);
+            transformer.transform(source, result);
+            
+            // Load Attributes from XML
+            Node root = doc.getChildNodes().item(0);
+            Node attribute = getNode("Attributes", root.getChildNodes());
+            NodeList attributes = attribute.getChildNodes();
+            List<String> attrStringList = getNodeValue(attributes, "Attribute");
+            addAttributes(attrList, attrStringList);
+            
+            // Load Functional Dependencies from XML
+            Node fdNode = getNode("FDs", root.getChildNodes());
+            NodeList fds = fdNode.getChildNodes();
+            List<Node> nodeList = getNodes("FD", fds);
+            
+            for (Node item : nodeList) {
+                Node antecedent = getNode("Antecedent", item.getChildNodes());
+                attributes = antecedent.getChildNodes();
+                List<String> antecedentAttr = getNodeValue(attributes, "Attribute");
+                AttributeJoint attrAntecedent = new AttributeJoint();
+                for (String item2 : antecedentAttr) {
+                    attrAntecedent.addAttributes(attrList.get(item2));
+                }
+                Node consequent = getNode("Consequent", item.getChildNodes());
+                attributes = consequent.getChildNodes();
+                List<String> consequentAttr = getNodeValue(attributes, "Attribute");
+                AttributeJoint attrConsequent = new AttributeJoint();
+                for (String item2 : consequentAttr) {
+                    attrConsequent.addAttributes(attrList.get(item2));
+                }
+                FunctionalDependency fd = new FunctionalDependency(attrAntecedent, attrConsequent);
+                fdList.put(fd.toString(), fd);
+            }
+            
+            
+           // List<String> attrStringList = getNodeValue(attributes, "Attribute");
+            addAttributes(attrList, attrStringList);
+            
+            
+
+        } catch (ParserConfigurationException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (ServletException e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+        } catch (SAXException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (TransformerConfigurationException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (TransformerException tfe) {
+            tfe.printStackTrace();
+        }
+
+    }
+    
+    private static Node getNode(String tagName, NodeList nodes) {
+        for ( int x = 0; x < nodes.getLength(); x++ ) {
+            Node node = nodes.item(x);
+            if (node.getNodeName().equalsIgnoreCase(tagName)) {
+                return node;
+            }
+        }
+        return null;
+    }
+    
+    private static List<Node> getNodes(String tagName, NodeList nodes) {
+        List<Node> nodeList = new ArrayList<>();
+        for ( int x = 0; x < nodes.getLength(); x++ ) {
+            Node node = nodes.item(x);
+            if (node.getNodeName().equalsIgnoreCase(tagName)) {
+                nodeList.add(node);
+            }
+        }
+        return nodeList;
+    }
+    
+    private static List<String> getNodeValue(NodeList nodes, String nodeName) {
+        List<String> values = new ArrayList<>(); 
+        for ( int x = 0; x < nodes.getLength(); x++ ) {
+            Node node = nodes.item(x);
+            if (node.getNodeName().equalsIgnoreCase(nodeName)) {
+                NodeList childNodes = node.getChildNodes();
+                for (int y = 0; y < childNodes.getLength(); y++ ) {
+                    Node data = childNodes.item(y);
+                    if ( data.getNodeType() == Node.TEXT_NODE )
+                        values.add(data.getNodeValue());
+                }
+            }
+        }
+        return values;
+    }
+
+    private static void addAttributes(Map<String, Attribute> attrMap, List<String> attrList) {
+        for (String item : attrList) {
+            attrMap.put(item, new Attribute(item));
+        }
     }
 }
