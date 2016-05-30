@@ -60,7 +60,14 @@
           #if($username)
           <!-- Nav-Header Right -->
           <ul class="nav navbar-nav navbar-right">
-            <li><a href="/session">Close Session $username</a></li>
+            <li class="dropdown">
+              <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">$username Session<span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                <li><a href="/save">Save Session</a></li>
+                <li><a href="/load">Load Session</a></li>
+                <li><a href="/session">Close Session</a></li>
+              </ul>
+            </li>
           </ul>
           <!-- Nav-Header Right -->
           #end
