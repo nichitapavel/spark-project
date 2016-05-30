@@ -13,6 +13,7 @@ public class TemplateConstants {
     public static final String HOME = "templates/other/home.vtl";
     public static final String WELCOME = "templates/other/welcome.vtl";
     public static final String GOOD_BYE = "templates/other/good-bye.vtl";
+    public static final String LOAD_SESSION = "templates/other/load-session.vtl";
 
     public static final String ATTRIBUTE = "templates/attribute/attribute.vtl";
     public static final String ATTRIBUTES_ADD_FORM = "templates/attribute/attributes-add-form.vtl";
