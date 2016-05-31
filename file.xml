@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<session>
+    <Attributes>
+        <Attribute>A</Attribute>
+        <Attribute>B</Attribute>
+        <Attribute>C</Attribute>
+        <Attribute>D</Attribute>
+        <Attribute>E</Attribute>
+    </Attributes>
+    <FDs>
+        <FD>
+            <Antecedent>
+                <Attribute>B</Attribute>
+                <Attribute>D</Attribute>
+            </Antecedent>
+            <Consequent>
+                <Attribute>A</Attribute>
+                <Attribute>E</Attribute>
+            </Consequent>
+        </FD>
+        <FD>
+            <Antecedent>
+                <Attribute>A</Attribute>
+                <Attribute>B</Attribute>
+                <Attribute>C</Attribute>
+            </Antecedent>
+            <Consequent>
+                <Attribute>D</Attribute>
+                <Attribute>E</Attribute>
+            </Consequent>
+        </FD>
+        <FD>
+            <Antecedent>
+                <Attribute>A</Attribute>
+                <Attribute>D</Attribute>
+                <Attribute>E</Attribute>
+            </Antecedent>
+            <Consequent>
+                <Attribute>B</Attribute>
+            </Consequent>
+        </FD>
+    </FDs>
+    <FDJoints>
+        <FDJoint>
+            <Name>Joint-1</Name>
+            <FDs>
+                <FD>{B, D} -&gt; {A, E}</FD>
+                <FD>{A, D, E} -&gt; {B}</FD>
+                <FD>{A, B, C} -&gt; {D, E}</FD>
+            </FDs>
+        </FDJoint>
+        <FDJoint>
+            <Name>Joint-2</Name>
+            <FDs>
+                <FD>{B, D} -&gt; {A, E}</FD>
+                <FD>{A, D, E} -&gt; {B}</FD>
+            </FDs>
+        </FDJoint>
+    </FDJoints>
+    <Relations>
+        <Relation>
+            <Name>R1</Name>
+            <FDJoint>Joint-1</FDJoint>
+            <Attributes>
+                <Attribute>A</Attribute>
+                <Attribute>B</Attribute>
+                <Attribute>C</Attribute>
+                <Attribute>D</Attribute>
+                <Attribute>E</Attribute>
+            </Attributes>
+        </Relation>
+    </Relations>
+</session>
