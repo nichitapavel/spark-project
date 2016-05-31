@@ -3,17 +3,14 @@
  */
 package app;
 
-import java.io.File;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.imageio.metadata.IIOMetadataNode;
 import javax.servlet.MultipartConfigElement;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletResponse;
@@ -22,7 +19,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
@@ -48,10 +44,12 @@ import spark.template.velocity.VelocityTemplateEngine;
 import static spark.Spark.*;
 
 import constants.TemplateConstants;
+import constants.XMLConstants;
 import constants.AppConstants;
 import constants.DataConstants;
 import constants.SessionConstants;
 import constants.FormConstants;
+import constants.RoutesConstants;
 
 /**
  * @author Pavel Nichita
@@ -61,20 +59,20 @@ public class App {
     private static Map<String, String> session = new HashMap<String, String>();
 
     public static void main(String[] args) {
-        staticFileLocation("/public");
-        //port(80);
+        staticFileLocation(RoutesConstants.FILE_LOCATION);
+        port(80);
 
         before((req, res) -> {
             Map<String, Object> model = new HashMap<>();
             model.put(SessionConstants.USERNAME, session.get(req.session().id()));
         });      
 
-        get("/", (req, res) -> {
+        get(RoutesConstants.ROOT, (req, res) -> {
             Map<String, Object> model = new HashMap<>();
             return new ModelAndView(model, TemplateConstants.WELCOME);
         }, new VelocityTemplateEngine());
 
-        get("/home", (req, res) -> {
+        get(RoutesConstants.HOME, (req, res) -> {
             checkSession(req, res);
             Map<String, Attribute> attrList = req.session().attribute(SessionConstants.ATTRIBUTE_LIST);
             Map<String, Attribute> fdList = req.session().attribute(SessionConstants.FD_LIST);
@@ -95,7 +93,7 @@ public class App {
             return new ModelAndView(model, TemplateConstants.LAYOUT);
         }, new VelocityTemplateEngine());
         
-        post("/session", (req, res) -> {
+        post(RoutesConstants.SESSION, (req, res) -> {
             req.session(true);
             req.session().maxInactiveInterval(43400); // 12 hours in seconds
             req.session().attribute(SessionConstants.ATTRIBUTE_LIST, new HashMap<String, Attribute>());
@@ -104,17 +102,17 @@ public class App {
             req.session().attribute(SessionConstants.RELATION_LIST, new HashMap<String, Relation>());
             session.put(req.session().id(), req.queryParams(FormConstants.USERNAME));
 
-            res.redirect("/attribute");
+            res.redirect(RoutesConstants.ATTRIBUTE);
             return null;
         });
 
-        get("/session", (req, res) -> {
+        get(RoutesConstants.SESSION, (req, res) -> {
             req.session().invalidate();
             Map<String, Object> model = new HashMap<>();
             return new ModelAndView(model, TemplateConstants.GOOD_BYE);
         }, new VelocityTemplateEngine());
 
-        get("/attribute", (req, res) -> {
+        get(RoutesConstants.ATTRIBUTE, (req, res) -> {
             checkSession(req, res);
             Map<String, Attribute> attrList = req.session().attribute(SessionConstants.ATTRIBUTE_LIST);
 
@@ -127,16 +125,16 @@ public class App {
             return new ModelAndView(model, TemplateConstants.LAYOUT);
         }, new VelocityTemplateEngine());
 
-        post("/attribute", (req, res) -> {
+        post(RoutesConstants.ATTRIBUTE, (req, res) -> {
             checkSession(req, res);
 
             addAttribute(req);
 
-            res.redirect("/attribute");
+            res.redirect(RoutesConstants.ATTRIBUTE);
             return null;
         });
         
-        get("/save", (req, res) -> {
+        get(RoutesConstants.SAVE, (req, res) -> {
             checkSession(req, res);
             
             saveSession(req, res);
@@ -144,7 +142,7 @@ public class App {
             return null;
         });
 
-        get("/load", (req, res) -> {
+        get(RoutesConstants.LOAD, (req, res) -> {
             checkSession(req, res);
             Map<String, Object> model = new HashMap<>();
             model.put(SessionConstants.USERNAME, session.get(req.session().id()));
@@ -152,15 +150,15 @@ public class App {
             return new ModelAndView(model, TemplateConstants.LAYOUT);
         }, new VelocityTemplateEngine());
         
-        post("/load", (req, res) -> {
+        post(RoutesConstants.LOAD, (req, res) -> {
             checkSession(req, res);
             
             loadSession(req, res);
-            res.redirect("/home");
+            res.redirect(RoutesConstants.HOME);
             return null;
         });
         
-        get("/fd", (req, res) -> {
+        get(RoutesConstants.FD, (req, res) -> {
             checkSession(req, res);
             Map<String, Attribute> attrList = req.session().attribute(SessionConstants.ATTRIBUTE_LIST);
             Map<String, FunctionalDependency> fdList = req.session().attribute(SessionConstants.FD_LIST);
@@ -178,16 +176,16 @@ public class App {
             return new ModelAndView(model, TemplateConstants.LAYOUT);
         }, new VelocityTemplateEngine());
 
-        post("/fd", (req, res) -> {
+        post(RoutesConstants.FD, (req, res) -> {
             checkSession(req, res);
 
             addFD(req);
 
-            res.redirect("/fd");
+            res.redirect(RoutesConstants.FD);
             return null;
         });
 
-        get("/fdjoint", (req, res) -> {
+        get(RoutesConstants.FDJOINT, (req, res) -> {
             checkSession(req, res);
             Map<String, FunctionalDependency> fdList = req.session().attribute(SessionConstants.FD_LIST);
             Map<String, DFJoint> fdJointList = req.session().attribute(SessionConstants.FDJOINT_LIST);
@@ -202,16 +200,16 @@ public class App {
             return new ModelAndView(model, TemplateConstants.LAYOUT);
         }, new VelocityTemplateEngine());
 
-        post("/fdjoint", (req, res) -> {
+        post(RoutesConstants.FDJOINT, (req, res) -> {
             checkSession(req, res);
 
             addFDJoint(req);
 
-            res.redirect("/fdjoint");
+            res.redirect(RoutesConstants.FDJOINT);
             return null;
         });
 
-        get("/relation", (req, res) -> {
+        get(RoutesConstants.RELATION, (req, res) -> {
             checkSession(req, res);
             Map<String, Attribute> attrList = req.session().attribute(SessionConstants.ATTRIBUTE_LIST);
             Map<String, DFJoint> fdJointList = req.session().attribute(SessionConstants.FDJOINT_LIST);
@@ -229,16 +227,16 @@ public class App {
             return new ModelAndView(model, TemplateConstants.LAYOUT);
         }, new VelocityTemplateEngine());
 
-        post("/relation", (req, res) -> {
+        post(RoutesConstants.RELATION, (req, res) -> {
             checkSession(req, res);
 
             addRelation(req);
 
-            res.redirect("/relation");
+            res.redirect(RoutesConstants.RELATION);
             return null;
         });
 
-        get("/ullman", (req, res) -> {
+        get(RoutesConstants.ULLMAN, (req, res) -> {
             checkSession(req, res);
             Map<String, Attribute> attrList = req.session().attribute(SessionConstants.ATTRIBUTE_LIST);
             Map<String, Relation> relationList = req.session().attribute(SessionConstants.RELATION_LIST);
@@ -253,7 +251,7 @@ public class App {
             return new ModelAndView(model, TemplateConstants.LAYOUT);
         }, new VelocityTemplateEngine());
 
-        post("/ullman", (req, res) -> {
+        post(RoutesConstants.ULLMAN, (req, res) -> {
             checkSession(req, res);
             Map<String, Attribute> attrList = req.session().attribute(SessionConstants.ATTRIBUTE_LIST);
             Map<String, Relation> relationList = req.session().attribute(SessionConstants.RELATION_LIST);
@@ -277,7 +275,7 @@ public class App {
             return new ModelAndView(model, TemplateConstants.LAYOUT);
         }, new VelocityTemplateEngine());
 
-        get("/calculate-keys", (req, res) -> {
+        get(RoutesConstants.CALCULATE_KEYS, (req, res) -> {
             checkSession(req, res);
             Map<String, Relation> relationList = req.session().attribute(SessionConstants.RELATION_LIST);
 
@@ -289,7 +287,7 @@ public class App {
             return new ModelAndView(model, TemplateConstants.LAYOUT);
         }, new VelocityTemplateEngine());
 
-        post("/calculate-keys", (req, res) -> {
+        post(RoutesConstants.CALCULATE_KEYS, (req, res) -> {
             checkSession(req, res);
             Map<String, Relation> relationList = req.session().attribute(SessionConstants.RELATION_LIST);
 
@@ -308,7 +306,7 @@ public class App {
             return new ModelAndView(model, TemplateConstants.LAYOUT);
         }, new VelocityTemplateEngine());
 
-        get("/calculate-minimal-cover", (req, res) -> {
+        get(RoutesConstants.CALCULATE_MINIMAL_COVER, (req, res) -> {
             checkSession(req, res);
             Map<String, DFJoint> fdJointList = req.session().attribute(SessionConstants.FDJOINT_LIST);
 
@@ -320,7 +318,7 @@ public class App {
             return new ModelAndView(model, TemplateConstants.LAYOUT);
         }, new VelocityTemplateEngine());
 
-        post("/calculate-minimal-cover", (req, res) -> {
+        post(RoutesConstants.CALCULATE_MINIMAL_COVER, (req, res) -> {
             checkSession(req, res);
             Map<String, DFJoint> fdJointList = req.session().attribute(SessionConstants.FDJOINT_LIST);
 
@@ -339,7 +337,7 @@ public class App {
             return new ModelAndView(model, TemplateConstants.LAYOUT);
         }, new VelocityTemplateEngine());
 
-        get("/projection", (req, res) -> {
+        get(RoutesConstants.PROJECTION, (req, res) -> {
             checkSession(req, res);
             Map<String, DFJoint> fdJointList = req.session().attribute(SessionConstants.FDJOINT_LIST);
             Map<String, Attribute> attrList = req.session().attribute(SessionConstants.ATTRIBUTE_LIST);
@@ -354,7 +352,7 @@ public class App {
             return new ModelAndView(model, TemplateConstants.LAYOUT);
         }, new VelocityTemplateEngine());
 
-        post("/projection", (req, res) -> {
+        post(RoutesConstants.PROJECTION, (req, res) -> {
             checkSession(req, res);
             Map<String, DFJoint> fdJointList = req.session().attribute(SessionConstants.FDJOINT_LIST);
             Map<String, Attribute> attrList = req.session().attribute(SessionConstants.ATTRIBUTE_LIST);
@@ -378,7 +376,7 @@ public class App {
             return new ModelAndView(model, TemplateConstants.LAYOUT);
         }, new VelocityTemplateEngine());
 
-        get("/fd-partof-fdjoint", (req, res) -> {
+        get(RoutesConstants.FD_PARTOF_FDJOINT, (req, res) -> {
             checkSession(req, res);
             Map<String, DFJoint> fdJointList = req.session().attribute(SessionConstants.FDJOINT_LIST);
             Map<String, DFJoint> fdList = req.session().attribute(SessionConstants.FD_LIST);
@@ -393,7 +391,7 @@ public class App {
             return new ModelAndView(model, TemplateConstants.LAYOUT);
         }, new VelocityTemplateEngine());
 
-        post("/fd-partof-fdjoint", (req, res) -> {
+        post(RoutesConstants.FD_PARTOF_FDJOINT, (req, res) -> {
             checkSession(req, res);
             Map<String, DFJoint> fdJointList = req.session().attribute(SessionConstants.FDJOINT_LIST);
             Map<String, FunctionalDependency> fdList = req.session().attribute(SessionConstants.FD_LIST);
@@ -417,7 +415,7 @@ public class App {
             return new ModelAndView(model, TemplateConstants.LAYOUT);
         }, new VelocityTemplateEngine());
 
-        get("/implies", (req, res) -> {
+        get(RoutesConstants.IMPLIES, (req, res) -> {
             checkSession(req, res);
             Map<String, DFJoint> fdJointList = req.session().attribute(SessionConstants.FDJOINT_LIST);
 
@@ -430,7 +428,7 @@ public class App {
             return new ModelAndView(model, TemplateConstants.LAYOUT);
         }, new VelocityTemplateEngine());
 
-        post("/implies", (req, res) -> {
+        post(RoutesConstants.IMPLIES, (req, res) -> {
             checkSession(req, res);
             Map<String, DFJoint> fdJointList = req.session().attribute(SessionConstants.FDJOINT_LIST);
 
@@ -452,7 +450,7 @@ public class App {
             return new ModelAndView(model, TemplateConstants.LAYOUT);
         }, new VelocityTemplateEngine());
 
-        get("/equivalence", (req, res) -> {
+        get(RoutesConstants.EQUIVALENCE, (req, res) -> {
             checkSession(req, res);
             Map<String, DFJoint> fdJointList = req.session().attribute(SessionConstants.FDJOINT_LIST);
 
@@ -465,7 +463,7 @@ public class App {
             return new ModelAndView(model, TemplateConstants.LAYOUT);
         }, new VelocityTemplateEngine());
 
-        post("/equivalence", (req, res) -> {
+        post(RoutesConstants.EQUIVALENCE, (req, res) -> {
             checkSession(req, res);
             Map<String, DFJoint> fdJointList = req.session().attribute(SessionConstants.FDJOINT_LIST);
 
@@ -487,7 +485,7 @@ public class App {
             return new ModelAndView(model, TemplateConstants.LAYOUT);
         }, new VelocityTemplateEngine());
         
-        get("/test-normal-form", (req, res) -> {
+        get(RoutesConstants.TEST_NORMAL_FORM, (req, res) -> {
             checkSession(req, res);
             Map<String, Object> relationList = req.session().attribute(SessionConstants.RELATION_LIST);
 
@@ -499,7 +497,7 @@ public class App {
             return new ModelAndView(model, TemplateConstants.LAYOUT);
         }, new VelocityTemplateEngine());
         
-        post("/test-normal-form", (req, res) -> {
+        post(RoutesConstants.TEST_NORMAL_FORM, (req, res) -> {
             checkSession(req, res);
             Map<String, Relation> relationList = req.session().attribute(SessionConstants.RELATION_LIST);
 
@@ -533,7 +531,7 @@ public class App {
             return new ModelAndView(model, TemplateConstants.LAYOUT);
         }, new VelocityTemplateEngine());
 
-        get("/test-keys", (req, res) -> {
+        get(RoutesConstants.TEST_KEYS, (req, res) -> {
             checkSession(req, res);
             Map<String, Attribute> attrList = req.session().attribute(SessionConstants.ATTRIBUTE_LIST);
             Map<String, Relation> relationList = req.session().attribute(SessionConstants.RELATION_LIST);
@@ -548,7 +546,7 @@ public class App {
             return new ModelAndView(model, TemplateConstants.LAYOUT);
         }, new VelocityTemplateEngine());
 
-        post("/test-keys", (req, res) -> {
+        post(RoutesConstants.TEST_KEYS, (req, res) -> {
             checkSession(req, res);
             Map<String, Attribute> attrList = req.session().attribute(SessionConstants.ATTRIBUTE_LIST);
             Map<String, Relation> relationList = req.session().attribute(SessionConstants.RELATION_LIST);
@@ -572,7 +570,7 @@ public class App {
             return new ModelAndView(model, TemplateConstants.LAYOUT);
         }, new VelocityTemplateEngine());
 
-        get("/test-minimal-cover", (req, res) -> {
+        get(RoutesConstants.TEST_MINIMAL_COVER, (req, res) -> {
             checkSession(req, res);
             Map<String, DFJoint> fdJointList = req.session().attribute(SessionConstants.FDJOINT_LIST);
 
@@ -584,7 +582,7 @@ public class App {
             return new ModelAndView(model, TemplateConstants.LAYOUT);
         }, new VelocityTemplateEngine());
 
-        post("/test-minimal-cover", (req, res) -> {
+        post(RoutesConstants.TEST_MINIMAL_COVER, (req, res) -> {
             checkSession(req, res);
             Map<String, DFJoint> fdJointList = req.session().attribute(SessionConstants.FDJOINT_LIST);
 
@@ -603,7 +601,7 @@ public class App {
             return new ModelAndView(model, TemplateConstants.LAYOUT);
         }, new VelocityTemplateEngine());
 
-        get("/normalize", (req, res) -> {
+        get(RoutesConstants.NORMALIZE, (req, res) -> {
             checkSession(req, res);
             Map<String, Relation> relationList = req.session().attribute(SessionConstants.RELATION_LIST);
 
@@ -615,7 +613,7 @@ public class App {
             return new ModelAndView(model, TemplateConstants.LAYOUT);
         }, new VelocityTemplateEngine());
         
-        post("/normalize", (req, res) -> {
+        post(RoutesConstants.NORMALIZE, (req, res) -> {
             checkSession(req, res);
             Map<String, Relation> relationList = req.session().attribute(SessionConstants.RELATION_LIST);
 
@@ -643,51 +641,51 @@ public class App {
             return new ModelAndView(model, TemplateConstants.LAYOUT);
         }, new VelocityTemplateEngine());
         
-        get("/401", (req, res) -> {
+        get(RoutesConstants.E401, (req, res) -> {
             Map<String, Object> model = new HashMap<>();
             return new ModelAndView(model, TemplateConstants.E401);
         }, new VelocityTemplateEngine());
         
-        post("/delete-attribute", (req, res) -> {
+        post(RoutesConstants.DELETE_ATTRIBUTE, (req, res) -> {
             checkSession(req, res);
             String attr = req.queryParams(FormConstants.ATTRIBUTE);
             Map<String, Attribute> attrList = req.session().attribute(SessionConstants.ATTRIBUTE_LIST);
             attrList.remove(attr);
-            res.redirect("/home");
+            res.redirect(RoutesConstants.HOME);
             return null;
         });
         
-        post("/delete-fd", (req, res) -> {
+        post(RoutesConstants.DELETE_FD, (req, res) -> {
             checkSession(req, res);
             String fd = req.queryParams(FormConstants.FD);
             Map<String, Attribute> fdList = req.session().attribute(SessionConstants.FD_LIST);
             fdList.remove(fd);
-            res.redirect("/home");
+            res.redirect(RoutesConstants.HOME);
             return null;
         });
         
-        post("/delete-fdjoint", (req, res) -> {
+        post(RoutesConstants.DELETE_FDJOINT, (req, res) -> {
             checkSession(req, res);
             String fdJoint = req.queryParams(FormConstants.FDJOINT);
             Map<String, Attribute> fdJointList = req.session().attribute(SessionConstants.FDJOINT_LIST);
             fdJointList.remove(fdJoint);
-            res.redirect("/home");
+            res.redirect(RoutesConstants.HOME);
             return null;
         });
         
-        post("/delete-relation", (req, res) -> {
+        post(RoutesConstants.DELETE_RELATION, (req, res) -> {
             checkSession(req, res);
             String relation = req.queryParams(FormConstants.RELATION);
             Map<String, Attribute> fdJointList = req.session().attribute(SessionConstants.RELATION_LIST);
             fdJointList.remove(relation);
-            res.redirect("/home");
+            res.redirect(RoutesConstants.HOME);
             return null;
         });
     }
 
     private static void checkSession(Request req, Response res) {
         if (!session.containsKey(req.session().id())){
-            res.redirect("/401");
+            res.redirect(RoutesConstants.E401);
         }
     }
 
@@ -776,130 +774,122 @@ public class App {
 
         return attrJoint;
     }
-    
+
     private static Response saveSession(Request req, Response res) {
         Map<String, Attribute> attrList = req.session().attribute(SessionConstants.ATTRIBUTE_LIST);
         Map<String, FunctionalDependency> fdList = req.session().attribute(SessionConstants.FD_LIST);
         Map<String, DFJoint> fdJointList = req.session().attribute(SessionConstants.FDJOINT_LIST);
         Map<String, Relation> relationList = req.session().attribute(SessionConstants.RELATION_LIST);
         HttpServletResponse raw;
+        
         try {
             DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
 
             Document doc = docBuilder.newDocument();
-            Element root = doc.createElement("Session");
+            Element root = doc.createElement(XMLConstants.SESSION);
             doc.appendChild(root);
-            
-            Element attributes = doc.createElement("Attributes");
+
+            Element attributes = doc.createElement(XMLConstants.ATTRIBUTES);
             root.appendChild(attributes);
             for (Attribute item : attrList.values()) {
                 Node element = doc.importNode(item.toXML(), true);
                 attributes.appendChild(element);
             }
-            
-            Element fds = doc.createElement("FDs");
+
+            Element fds = doc.createElement(XMLConstants.FDS);
             root.appendChild(fds);
             for (FunctionalDependency item : fdList.values()) {
                 Node element = doc.importNode(item.toXML(), true);
                 fds.appendChild(element);
             }
-            
-            Element fdJoints = doc.createElement("FDJoints");
+
+            Element fdJoints = doc.createElement(XMLConstants.FDJOINTS);
             root.appendChild(fdJoints);
             for (DFJoint item : fdJointList.values()) {
                 Node element = doc.importNode(item.toXML(), true);
                 fdJoints.appendChild(element);
             }
-            
-            Element relations = doc.createElement("Relations");
+
+            Element relations = doc.createElement(XMLConstants.RELATIONS);
             root.appendChild(relations);
             for (Relation item : relationList.values()) {
                 Node element = doc.importNode(item.toXML(), true);
                 relations.appendChild(element);
             }
-            
+
             // write the content into xml file
             TransformerFactory transformerFactory = TransformerFactory.newInstance();
             Transformer transformer = transformerFactory.newTransformer();
-            transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
-            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-            transformer.setOutputProperty(OutputKeys.METHOD, "xml");
-            transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
+            transformer.setOutputProperty(OutputKeys.ENCODING, XMLConstants.UTF_8);
+            transformer.setOutputProperty(OutputKeys.INDENT, XMLConstants.YES);
+            transformer.setOutputProperty(OutputKeys.METHOD, XMLConstants.XML);
+            transformer.setOutputProperty(XMLConstants.INDENT_AMOUNT, XMLConstants.FOUR);
             DOMSource source = new DOMSource(doc);
-            File file = new File("C:/Users/Pavel/workspace/spark-project/file.xml");
-            StreamResult result = new StreamResult(file);
-            //StreamResult result = new StreamResult(System.out);
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            StreamResult result = new StreamResult(bos);
             transformer.transform(source, result);
-            
-            byte[] bytes = Files.readAllBytes(Paths.get(file.getPath()));
-                raw = res.raw();
-                raw.getOutputStream().write(bytes);
-                raw.getOutputStream().flush();
-                raw.getOutputStream().close();
-  
-            } catch (ParserConfigurationException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            } catch (TransformerException tfe) {
-                tfe.printStackTrace();
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-        res.type("xml");
+            //StreamResult result = new StreamResult(System.out);            
+
+            byte[] bytes = bos.toByteArray();
+            raw = res.raw();
+            raw.getOutputStream().write(bytes);
+            raw.getOutputStream().flush();
+            raw.getOutputStream().close();
+
+        } catch (ParserConfigurationException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (TransformerException tfe) {
+            tfe.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        res.type( XMLConstants.XML);
         res.raw();
         return res;
     }
-    
+
     private static void loadSession(Request req, Response res) {
         Map<String, Attribute> attrList = req.session().attribute(SessionConstants.ATTRIBUTE_LIST);
         Map<String, FunctionalDependency> fdList = req.session().attribute(SessionConstants.FD_LIST);
+        Map<String, DFJoint> fdJointList = req.session().attribute(SessionConstants.FDJOINT_LIST);
+        Map<String, Relation> relationList = req.session().attribute(SessionConstants.RELATION_LIST);
 
         InputStream input;
 
         try {
-            req.attribute("org.eclipse.jetty.multipartConfig", new MultipartConfigElement("/temp"));
-            input = req.raw().getPart("uploaded_file").getInputStream();
+            req.attribute(XMLConstants.ORG_ECLIPSE_JETTY_MULTIPART_CONFIG, new MultipartConfigElement(XMLConstants.TEMP));
+            input = req.raw().getPart(FormConstants.UPLOAD).getInputStream();
 
             DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
-
             Document doc = docBuilder.parse(input);
 
-            TransformerFactory transformerFactory = TransformerFactory.newInstance();
-            Transformer transformer = transformerFactory.newTransformer();
-            transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
-            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-            transformer.setOutputProperty(OutputKeys.METHOD, "xml");
-            transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
-            DOMSource source = new DOMSource(doc);
-            StreamResult result = new StreamResult(System.out);
-            transformer.transform(source, result);
-            
             // Load Attributes from XML
             Node root = doc.getChildNodes().item(0);
-            Node attribute = getNode("Attributes", root.getChildNodes());
+            Node attribute = getNode(XMLConstants.ATTRIBUTES, root.getChildNodes());
             NodeList attributes = attribute.getChildNodes();
-            List<String> attrStringList = getNodeValue(attributes, "Attribute");
+            List<String> attrStringList = getNodesValue(attributes, XMLConstants.ATTRIBUTE);
             addAttributes(attrList, attrStringList);
-            
+
             // Load Functional Dependencies from XML
-            Node fdNode = getNode("FDs", root.getChildNodes());
+            Node fdNode = getNode(XMLConstants.FDS, root.getChildNodes());
             NodeList fds = fdNode.getChildNodes();
-            List<Node> nodeList = getNodes("FD", fds);
-            
+            List<Node> nodeList = getNodes(XMLConstants.FD, fds);
+
             for (Node item : nodeList) {
-                Node antecedent = getNode("Antecedent", item.getChildNodes());
+                Node antecedent = getNode(XMLConstants.ANTECEDENT, item.getChildNodes());
                 attributes = antecedent.getChildNodes();
-                List<String> antecedentAttr = getNodeValue(attributes, "Attribute");
+                List<String> antecedentAttr = getNodesValue(attributes, XMLConstants.ATTRIBUTE);
                 AttributeJoint attrAntecedent = new AttributeJoint();
                 for (String item2 : antecedentAttr) {
                     attrAntecedent.addAttributes(attrList.get(item2));
                 }
-                Node consequent = getNode("Consequent", item.getChildNodes());
+                Node consequent = getNode(XMLConstants.CONSEQUENT, item.getChildNodes());
                 attributes = consequent.getChildNodes();
-                List<String> consequentAttr = getNodeValue(attributes, "Attribute");
+                List<String> consequentAttr = getNodesValue(attributes, XMLConstants.ATTRIBUTE);
                 AttributeJoint attrConsequent = new AttributeJoint();
                 for (String item2 : consequentAttr) {
                     attrConsequent.addAttributes(attrList.get(item2));
@@ -907,13 +897,41 @@ public class App {
                 FunctionalDependency fd = new FunctionalDependency(attrAntecedent, attrConsequent);
                 fdList.put(fd.toString(), fd);
             }
-            
-            
-           // List<String> attrStringList = getNodeValue(attributes, "Attribute");
-            addAttributes(attrList, attrStringList);
-            
-            
 
+            // Load FD Joints from XML
+            Node fdJointNode = getNode(XMLConstants.FDJOINTS, root.getChildNodes());
+            NodeList fdJoints = fdJointNode.getChildNodes();
+            nodeList = getNodes(XMLConstants.FDJOINT, fdJoints);
+
+            for (Node item : nodeList) {
+                DFJoint dfJoint = new DFJoint();
+                dfJoint.setName(getNodeValue(item.getChildNodes(), XMLConstants.NAME));
+                fdNode = getNode(XMLConstants.FDS, item.getChildNodes());
+                List<String> nodesValue = getNodesValue(fdNode.getChildNodes(), XMLConstants.FD);
+                for (String item2 : nodesValue) {
+                    dfJoint.addDependency(fdList.get(item2));
+                }
+                fdJointList.put(dfJoint.getName(), dfJoint);
+            }
+
+            // Load Relations from XML
+            Node relationNode = getNode(XMLConstants.RELATIONS, root.getChildNodes());
+            NodeList relations = relationNode.getChildNodes();
+            nodeList = getNodes(XMLConstants.RELATION, relations);
+
+            for (Node item : nodeList) {
+                Relation relation = new Relation();
+                relation.setName(getNodeValue(item.getChildNodes(), XMLConstants.NAME));
+                relation.setDFJoint(fdJointList.get(getNodeValue(item.getChildNodes(), XMLConstants.FDJOINT)));
+                attribute = getNode(XMLConstants.ATTRIBUTES, item.getChildNodes());
+                List<String> nodesValue = getNodesValue(attribute.getChildNodes(), XMLConstants.ATTRIBUTE);
+                AttributeJoint attrJoint = new AttributeJoint();
+                for (String item2 : nodesValue) {
+                    attrJoint.addAttributes(attrList.get(item2));
+                }
+                relation.settAttrJoint(attrJoint);
+                relationList.put(relation.getName(), relation);
+            }
         } catch (ParserConfigurationException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -926,13 +944,7 @@ public class App {
         } catch (SAXException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-        } catch (TransformerConfigurationException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (TransformerException tfe) {
-            tfe.printStackTrace();
         }
-
     }
     
     private static Node getNode(String tagName, NodeList nodes) {
@@ -956,7 +968,7 @@ public class App {
         return nodeList;
     }
     
-    private static List<String> getNodeValue(NodeList nodes, String nodeName) {
+    private static List<String> getNodesValue(NodeList nodes, String nodeName) {
         List<String> values = new ArrayList<>(); 
         for ( int x = 0; x < nodes.getLength(); x++ ) {
             Node node = nodes.item(x);
@@ -970,6 +982,21 @@ public class App {
             }
         }
         return values;
+    }
+    
+    private static String getNodeValue(NodeList nodes, String nodeName) {
+        for ( int x = 0; x < nodes.getLength(); x++ ) {
+            Node node = nodes.item(x);
+            if (node.getNodeName().equalsIgnoreCase(nodeName)) {
+                NodeList childNodes = node.getChildNodes();
+                for (int y = 0; y < childNodes.getLength(); y++ ) {
+                    Node data = childNodes.item(y);
+                    if ( data.getNodeType() == Node.TEXT_NODE )
+                        return data.getNodeValue();
+                }
+            }
+        }
+        return null;
     }
 
     private static void addAttributes(Map<String, Attribute> attrMap, List<String> attrList) {
