@@ -24,6 +24,7 @@ public class FormConstants {
     public static final String NORMAL_FORM_VALUE_2ND = "2nd";
     public static final String NORMAL_FORM_VALUE_3RD = "3rd";
     public static final String NORMAL_FORM_VALUE_BC = "bc";
+    public static final String UPLOAD = "uploaded_file";
     
     private FormConstants() {
         // Private constructor to prevent instantiation.
