@@ -415,7 +415,7 @@ public class App {
             return new ModelAndView(model, TemplateConstants.LAYOUT);
         }, new VelocityTemplateEngine());
 
-        get(RoutesConstants.IMPLIES, (req, res) -> {
+        get(RoutesConstants.TEST_IMPLIES, (req, res) -> {
             checkSession(req, res);
             Map<String, DFJoint> fdJointList = req.session().attribute(SessionConstants.FDJOINT_LIST);
 
@@ -428,7 +428,7 @@ public class App {
             return new ModelAndView(model, TemplateConstants.LAYOUT);
         }, new VelocityTemplateEngine());
 
-        post(RoutesConstants.IMPLIES, (req, res) -> {
+        post(RoutesConstants.TEST_IMPLIES, (req, res) -> {
             checkSession(req, res);
             Map<String, DFJoint> fdJointList = req.session().attribute(SessionConstants.FDJOINT_LIST);
 

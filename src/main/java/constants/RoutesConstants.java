@@ -23,7 +23,7 @@ public class RoutesConstants {
     public static final String CALCULATE_MINIMAL_COVER = "/calculate-minimal-cover";
     public static final String PROJECTION = "/projection";
     public static final String FD_PARTOF_FDJOINT = "/fd-partof-fdjoint";
-    public static final String IMPLIES = "/implies";
+    public static final String TEST_IMPLIES = "/test-implies";
     public static final String EQUIVALENCE = "/equivalence";
     public static final String TEST_NORMAL_FORM = "/test-normal-form";
     public static final String TEST_KEYS = "/test-keys";
