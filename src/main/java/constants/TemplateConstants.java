@@ -10,7 +10,7 @@ package constants;
 public class TemplateConstants {
     public static final String LAYOUT = "templates/other/layout.vtl";
     public static final String E401 = "templates/other/401.vtl";
-    public static final String HOME = "templates/other/home.vtl";
+    public static final String GLOBAL_VIEW = "templates/other/global-view.vtl";
     public static final String WELCOME = "templates/other/welcome.vtl";
     public static final String GOOD_BYE = "templates/other/good-bye.vtl";
     public static final String LOAD_SESSION = "templates/other/load-session.vtl";

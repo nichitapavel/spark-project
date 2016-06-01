@@ -60,7 +60,7 @@ public class App {
 
     public static void main(String[] args) {
         staticFileLocation(RoutesConstants.FILE_LOCATION);
-        port(80);
+        //port(80);
 
         before((req, res) -> {
             Map<String, Object> model = new HashMap<>();
@@ -72,7 +72,7 @@ public class App {
             return new ModelAndView(model, TemplateConstants.WELCOME);
         }, new VelocityTemplateEngine());
 
-        get(RoutesConstants.HOME, (req, res) -> {
+        get(RoutesConstants.GLOBAL_VIEW, (req, res) -> {
             checkSession(req, res);
             Map<String, Attribute> attrList = req.session().attribute(SessionConstants.ATTRIBUTE_LIST);
             Map<String, Attribute> fdList = req.session().attribute(SessionConstants.FD_LIST);
@@ -89,7 +89,7 @@ public class App {
             model.put(AppConstants.FDJOINTS_LIST_DELETE, TemplateConstants.FDJOINTS_LIST_DELETE);
             model.put(DataConstants.RELATIONS, relationList);
             model.put(AppConstants.RELATIONS_LIST_DELETE, TemplateConstants.RELATIONS_LIST_DELETE);
-            model.put(AppConstants.TEMPLATE, TemplateConstants.HOME);
+            model.put(AppConstants.TEMPLATE, TemplateConstants.GLOBAL_VIEW);
             return new ModelAndView(model, TemplateConstants.LAYOUT);
         }, new VelocityTemplateEngine());
         
@@ -154,7 +154,7 @@ public class App {
             checkSession(req, res);
             
             loadSession(req, res);
-            res.redirect(RoutesConstants.HOME);
+            res.redirect(RoutesConstants.GLOBAL_VIEW);
             return null;
         });
         
@@ -651,7 +651,7 @@ public class App {
             String attr = req.queryParams(FormConstants.ATTRIBUTE);
             Map<String, Attribute> attrList = req.session().attribute(SessionConstants.ATTRIBUTE_LIST);
             attrList.remove(attr);
-            res.redirect(RoutesConstants.HOME);
+            res.redirect(RoutesConstants.GLOBAL_VIEW);
             return null;
         });
         
@@ -660,7 +660,7 @@ public class App {
             String fd = req.queryParams(FormConstants.FD);
             Map<String, Attribute> fdList = req.session().attribute(SessionConstants.FD_LIST);
             fdList.remove(fd);
-            res.redirect(RoutesConstants.HOME);
+            res.redirect(RoutesConstants.GLOBAL_VIEW);
             return null;
         });
         
@@ -669,7 +669,7 @@ public class App {
             String fdJoint = req.queryParams(FormConstants.FDJOINT);
             Map<String, Attribute> fdJointList = req.session().attribute(SessionConstants.FDJOINT_LIST);
             fdJointList.remove(fdJoint);
-            res.redirect(RoutesConstants.HOME);
+            res.redirect(RoutesConstants.GLOBAL_VIEW);
             return null;
         });
         
@@ -678,7 +678,7 @@ public class App {
             String relation = req.queryParams(FormConstants.RELATION);
             Map<String, Attribute> fdJointList = req.session().attribute(SessionConstants.RELATION_LIST);
             fdJointList.remove(relation);
-            res.redirect(RoutesConstants.HOME);
+            res.redirect(RoutesConstants.GLOBAL_VIEW);
             return null;
         });
     }
