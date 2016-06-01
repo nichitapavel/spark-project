@@ -54,14 +54,14 @@ public class TemplateConstants {
     public static final String PROJECTION = "templates/analyze/projection.vtl";
     public static final String PROJECTION_RESULT = "templates/analyze/projection-result.vtl";
 
-    public static final String FD_PARTOF_FDJOINT = "templates/analyze/fd-partof-fdjoint.vtl";
-    public static final String FD_PARTOF_FDJOINT_RESULT = "templates/analyze/fd-partof-fdjoint-result.vtl";
+    public static final String FD_PARTOF_FDJOINT = "templates/tests/fd-partof-fdjoint.vtl";
+    public static final String FD_PARTOF_FDJOINT_RESULT = "templates/tests/fd-partof-fdjoint-result.vtl";
 
-    public static final String FDJOINT_IMPLIES = "templates/analyze/fdjoint-implies-fdjoint.vtl";
-    public static final String FDJOINT_IMPLIES_RESULT = "templates/analyze/fdjoint-implies-fdjoint-result.vtl";
+    public static final String FDJOINT_IMPLIES = "templates/tests/fdjoint-implies-fdjoint.vtl";
+    public static final String FDJOINT_IMPLIES_RESULT = "templates/tests/fdjoint-implies-fdjoint-result.vtl";
 
-    public static final String FDJOINT_EQUIVALENCE = "templates/analyze/fdjoint-equivalence-fdjoint.vtl";
-    public static final String FDJOINT_EQUIVALENCE_RESULT = "templates/analyze/fdjoint-equivalence-fdjoint-result.vtl";
+    public static final String FDJOINT_EQUIVALENCE = "templates/tests/fdjoint-equivalence-fdjoint.vtl";
+    public static final String FDJOINT_EQUIVALENCE_RESULT = "templates/tests/fdjoint-equivalence-fdjoint-result.vtl";
 
     public static final String TESTS_KEYS = "templates/tests/test-keys.vtl";
     public static final String TESTS_KEYS_RESULT = "templates/tests/test-keys-result.vtl";
@@ -72,8 +72,8 @@ public class TemplateConstants {
     public static final String TESTS_NORMAL_FORM = "templates/tests/test-normal-form.vtl";
     public static final String TESTS_NORMAL_FORM_RESULT = "templates/tests/test-normal-form-result.vtl";
     
-    public static final String NORMALIZE = "templates/tests/normalize.vtl";
-    public static final String NORMALIZE_RESULT = "templates/tests/normalize-result.vtl";
+    public static final String NORMALIZE = "templates/analyze/normalize.vtl";
+    public static final String NORMALIZE_RESULT = "templates/analyze/normalize-result.vtl";
 
     private TemplateConstants() {
         // Private constructor to prevent instantiation.
