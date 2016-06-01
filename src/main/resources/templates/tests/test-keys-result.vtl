@@ -5,10 +5,10 @@
 #elseif( $result == '0' )
 <div class="alert alert-warning">
   <h4>Result</h4>
-  <p>$attr-joint is a key, but not a minimal in $relation.name</p>
+  <p>$attr-joint is a superkey, but it is not minimal in $relation.name</p>
 #else
 <div class="alert alert-success">
   <h4>Result</h4>
-  <p>$attr-joint is a minimal key in $relation.name</p>
+  <p>$attr-joint is a key in $relation.name</p>
 #end
 </div>
