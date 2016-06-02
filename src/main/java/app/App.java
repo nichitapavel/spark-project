@@ -31,8 +31,8 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import datastructures.Attribute;
-import datastructures.AttributeJoint;
-import datastructures.DFJoint;
+import datastructures.AttributeSet;
+import datastructures.FDSet;
 import datastructures.KeyJoint;
 import datastructures.Relation;
 import dependency.FunctionalDependency;
@@ -98,7 +98,7 @@ public class App {
             req.session().maxInactiveInterval(43400); // 12 hours in seconds
             req.session().attribute(SessionConstants.ATTRIBUTE_LIST, new HashMap<String, Attribute>());
             req.session().attribute(SessionConstants.FD_LIST, new HashMap<String, FunctionalDependency>());
-            req.session().attribute(SessionConstants.FDJOINT_LIST, new HashMap<String, DFJoint>());
+            req.session().attribute(SessionConstants.FDJOINT_LIST, new HashMap<String, FDSet>());
             req.session().attribute(SessionConstants.RELATION_LIST, new HashMap<String, Relation>());
             session.put(req.session().id(), req.queryParams(FormConstants.USERNAME));
 
@@ -188,7 +188,7 @@ public class App {
         get(RoutesConstants.FDJOINT, (req, res) -> {
             checkSession(req, res);
             Map<String, FunctionalDependency> fdList = req.session().attribute(SessionConstants.FD_LIST);
-            Map<String, DFJoint> fdJointList = req.session().attribute(SessionConstants.FDJOINT_LIST);
+            Map<String, FDSet> fdJointList = req.session().attribute(SessionConstants.FDJOINT_LIST);
 
             Map<String, Object> model = new HashMap<>();
             model.put(SessionConstants.USERNAME, session.get(req.session().id()));
@@ -212,7 +212,7 @@ public class App {
         get(RoutesConstants.RELATION, (req, res) -> {
             checkSession(req, res);
             Map<String, Attribute> attrList = req.session().attribute(SessionConstants.ATTRIBUTE_LIST);
-            Map<String, DFJoint> fdJointList = req.session().attribute(SessionConstants.FDJOINT_LIST);
+            Map<String, FDSet> fdJointList = req.session().attribute(SessionConstants.FDJOINT_LIST);
             Map<String, Relation> relationList = req.session().attribute(SessionConstants.RELATION_LIST);
 
             Map<String, Object> model = new HashMap<>();
@@ -256,9 +256,9 @@ public class App {
             Map<String, Attribute> attrList = req.session().attribute(SessionConstants.ATTRIBUTE_LIST);
             Map<String, Relation> relationList = req.session().attribute(SessionConstants.RELATION_LIST);
 
-            AttributeJoint ullmanAttrJoint = getAttrJoint(req);
+            AttributeSet ullmanAttrJoint = getAttrJoint(req);
             Relation ullmanRelation = relationList.get(req.queryParams(FormConstants.RELATION));
-            AttributeJoint ullmanResult = normalization.Normalization.simpleUllman(ullmanAttrJoint, ullmanRelation.getDFJoint());
+            AttributeSet ullmanResult = normalization.Normalization.simpleUllman(ullmanAttrJoint, ullmanRelation.getDFJoint());
 
             Map<String, Object> model = new HashMap<>();
             model.put(DataConstants.RELATION, ullmanRelation);
@@ -308,7 +308,7 @@ public class App {
 
         get(RoutesConstants.CALCULATE_MINIMAL_COVER, (req, res) -> {
             checkSession(req, res);
-            Map<String, DFJoint> fdJointList = req.session().attribute(SessionConstants.FDJOINT_LIST);
+            Map<String, FDSet> fdJointList = req.session().attribute(SessionConstants.FDJOINT_LIST);
 
             Map<String, Object> model = new HashMap<>();
             model.put(SessionConstants.USERNAME, session.get(req.session().id()));
@@ -320,10 +320,10 @@ public class App {
 
         post(RoutesConstants.CALCULATE_MINIMAL_COVER, (req, res) -> {
             checkSession(req, res);
-            Map<String, DFJoint> fdJointList = req.session().attribute(SessionConstants.FDJOINT_LIST);
+            Map<String, FDSet> fdJointList = req.session().attribute(SessionConstants.FDJOINT_LIST);
 
-            DFJoint fdJoint = fdJointList.get(req.queryParams(FormConstants.FDJOINT));
-            DFJoint fdJointMinimal = new DFJoint(fdJoint);
+            FDSet fdJoint = fdJointList.get(req.queryParams(FormConstants.FDJOINT));
+            FDSet fdJointMinimal = new FDSet(fdJoint);
             fdJointMinimal.removeRareAttributes(true);
 
             Map<String, Object> model = new HashMap<>();
@@ -339,7 +339,7 @@ public class App {
 
         get(RoutesConstants.PROJECTION, (req, res) -> {
             checkSession(req, res);
-            Map<String, DFJoint> fdJointList = req.session().attribute(SessionConstants.FDJOINT_LIST);
+            Map<String, FDSet> fdJointList = req.session().attribute(SessionConstants.FDJOINT_LIST);
             Map<String, Attribute> attrList = req.session().attribute(SessionConstants.ATTRIBUTE_LIST);
 
             Map<String, Object> model = new HashMap<>();
@@ -354,12 +354,12 @@ public class App {
 
         post(RoutesConstants.PROJECTION, (req, res) -> {
             checkSession(req, res);
-            Map<String, DFJoint> fdJointList = req.session().attribute(SessionConstants.FDJOINT_LIST);
+            Map<String, FDSet> fdJointList = req.session().attribute(SessionConstants.FDJOINT_LIST);
             Map<String, Attribute> attrList = req.session().attribute(SessionConstants.ATTRIBUTE_LIST);
 
-            DFJoint fdJoint = fdJointList.get(req.queryParams(FormConstants.FDJOINT));
-            AttributeJoint attrJoint = getAttrJoint(req);
-            DFJoint result = fdJoint.projectionOnAttributeJoint(attrJoint);
+            FDSet fdJoint = fdJointList.get(req.queryParams(FormConstants.FDJOINT));
+            AttributeSet attrJoint = getAttrJoint(req);
+            FDSet result = fdJoint.projectionOnAttributeJoint(attrJoint);
 
             Map<String, Object> model = new HashMap<>();
             model.put(DataConstants.FDJOINT, fdJoint);
@@ -378,8 +378,8 @@ public class App {
 
         get(RoutesConstants.FD_PARTOF_FDJOINT, (req, res) -> {
             checkSession(req, res);
-            Map<String, DFJoint> fdJointList = req.session().attribute(SessionConstants.FDJOINT_LIST);
-            Map<String, DFJoint> fdList = req.session().attribute(SessionConstants.FD_LIST);
+            Map<String, FDSet> fdJointList = req.session().attribute(SessionConstants.FDJOINT_LIST);
+            Map<String, FDSet> fdList = req.session().attribute(SessionConstants.FD_LIST);
 
             Map<String, Object> model = new HashMap<>();
             model.put(SessionConstants.USERNAME, session.get(req.session().id()));
@@ -393,11 +393,11 @@ public class App {
 
         post(RoutesConstants.FD_PARTOF_FDJOINT, (req, res) -> {
             checkSession(req, res);
-            Map<String, DFJoint> fdJointList = req.session().attribute(SessionConstants.FDJOINT_LIST);
+            Map<String, FDSet> fdJointList = req.session().attribute(SessionConstants.FDJOINT_LIST);
             Map<String, FunctionalDependency> fdList = req.session().attribute(SessionConstants.FD_LIST);
 
             FunctionalDependency fd = fdList.get(req.queryParams(FormConstants.FD));
-            DFJoint fdJoint = fdJointList.get(req.queryParams(FormConstants.FDJOINT));
+            FDSet fdJoint = fdJointList.get(req.queryParams(FormConstants.FDJOINT));
             Boolean result = fd.belongsTo(fdJoint, null);
 
             Map<String, Object> model = new HashMap<>();
@@ -417,7 +417,7 @@ public class App {
 
         get(RoutesConstants.TEST_IMPLIES, (req, res) -> {
             checkSession(req, res);
-            Map<String, DFJoint> fdJointList = req.session().attribute(SessionConstants.FDJOINT_LIST);
+            Map<String, FDSet> fdJointList = req.session().attribute(SessionConstants.FDJOINT_LIST);
 
             Map<String, Object> model = new HashMap<>();
             model.put(SessionConstants.USERNAME, session.get(req.session().id()));
@@ -430,10 +430,10 @@ public class App {
 
         post(RoutesConstants.TEST_IMPLIES, (req, res) -> {
             checkSession(req, res);
-            Map<String, DFJoint> fdJointList = req.session().attribute(SessionConstants.FDJOINT_LIST);
+            Map<String, FDSet> fdJointList = req.session().attribute(SessionConstants.FDJOINT_LIST);
 
-            DFJoint fdJointA = fdJointList.get(req.queryParams(FormConstants.FDJOINT_A));
-            DFJoint fdJointB = fdJointList.get(req.queryParams(FormConstants.FDJOINT_B));
+            FDSet fdJointA = fdJointList.get(req.queryParams(FormConstants.FDJOINT_A));
+            FDSet fdJointB = fdJointList.get(req.queryParams(FormConstants.FDJOINT_B));
             Boolean result = fdJointB.isImplied(fdJointA);
 
             Map<String, Object> model = new HashMap<>();
@@ -452,7 +452,7 @@ public class App {
 
         get(RoutesConstants.EQUIVALENCE, (req, res) -> {
             checkSession(req, res);
-            Map<String, DFJoint> fdJointList = req.session().attribute(SessionConstants.FDJOINT_LIST);
+            Map<String, FDSet> fdJointList = req.session().attribute(SessionConstants.FDJOINT_LIST);
 
             Map<String, Object> model = new HashMap<>();
             model.put(SessionConstants.USERNAME, session.get(req.session().id()));
@@ -465,10 +465,10 @@ public class App {
 
         post(RoutesConstants.EQUIVALENCE, (req, res) -> {
             checkSession(req, res);
-            Map<String, DFJoint> fdJointList = req.session().attribute(SessionConstants.FDJOINT_LIST);
+            Map<String, FDSet> fdJointList = req.session().attribute(SessionConstants.FDJOINT_LIST);
 
-            DFJoint fdJointA = fdJointList.get(req.queryParams(FormConstants.FDJOINT_A));
-            DFJoint fdJointB = fdJointList.get(req.queryParams(FormConstants.FDJOINT_B));
+            FDSet fdJointA = fdJointList.get(req.queryParams(FormConstants.FDJOINT_A));
+            FDSet fdJointB = fdJointList.get(req.queryParams(FormConstants.FDJOINT_B));
             Boolean result = fdJointA.isEquivalent(fdJointB);
 
             Map<String, Object> model = new HashMap<>();
@@ -551,7 +551,7 @@ public class App {
             Map<String, Attribute> attrList = req.session().attribute(SessionConstants.ATTRIBUTE_LIST);
             Map<String, Relation> relationList = req.session().attribute(SessionConstants.RELATION_LIST);
 
-            AttributeJoint attrJoint = getAttrJoint(req);
+            AttributeSet attrJoint = getAttrJoint(req);
             Relation relation = relationList.get(req.queryParams(FormConstants.RELATION));
             int result = attrJoint.isKey(relation);
 
@@ -572,7 +572,7 @@ public class App {
 
         get(RoutesConstants.TEST_MINIMAL_COVER, (req, res) -> {
             checkSession(req, res);
-            Map<String, DFJoint> fdJointList = req.session().attribute(SessionConstants.FDJOINT_LIST);
+            Map<String, FDSet> fdJointList = req.session().attribute(SessionConstants.FDJOINT_LIST);
 
             Map<String, Object> model = new HashMap<>();
             model.put(SessionConstants.USERNAME, session.get(req.session().id()));
@@ -584,9 +584,9 @@ public class App {
 
         post(RoutesConstants.TEST_MINIMAL_COVER, (req, res) -> {
             checkSession(req, res);
-            Map<String, DFJoint> fdJointList = req.session().attribute(SessionConstants.FDJOINT_LIST);
+            Map<String, FDSet> fdJointList = req.session().attribute(SessionConstants.FDJOINT_LIST);
 
-            DFJoint fdJoint = fdJointList.get(req.queryParams(FormConstants.FDJOINT));
+            FDSet fdJoint = fdJointList.get(req.queryParams(FormConstants.FDJOINT));
             Boolean result = fdJoint.isMinimal();
 
             Map<String, Object> model = new HashMap<>();
@@ -704,8 +704,8 @@ public class App {
     private static void addFD(Request req) {
         Map<String, Attribute> attrList = req.session().attribute(SessionConstants.ATTRIBUTE_LIST);
         Map<String, FunctionalDependency> fdList = req.session().attribute(SessionConstants.FD_LIST);
-        AttributeJoint antecedent = new AttributeJoint();
-        AttributeJoint consequent = new AttributeJoint();
+        AttributeSet antecedent = new AttributeSet();
+        AttributeSet consequent = new AttributeSet();
         for (String attrr : req.queryParams()){
             if (attrr.contains(FormConstants.ANTECEDENT)){
                 antecedent.addAttributes(attrList.get(req.queryParams(attrr)));
@@ -723,8 +723,8 @@ public class App {
      */
     private static void addFDJoint(Request req) {
         Map<String, FunctionalDependency> fdList = req.session().attribute(SessionConstants.FD_LIST);
-        Map<String, DFJoint> fdJointList = req.session().attribute(SessionConstants.FDJOINT_LIST);
-        DFJoint fdJoint = new DFJoint();
+        Map<String, FDSet> fdJointList = req.session().attribute(SessionConstants.FDJOINT_LIST);
+        FDSet fdJoint = new FDSet();
         fdJoint.setName(req.queryParams(FormConstants.FDJOINT));
 
         for (String fd : req.queryParams()){
@@ -740,11 +740,11 @@ public class App {
      */
     private static void addRelation(Request req) {
         Map<String, Attribute> attrList = req.session().attribute(SessionConstants.ATTRIBUTE_LIST);
-        Map<String, DFJoint> fdJointList = req.session().attribute(SessionConstants.FDJOINT_LIST);
+        Map<String, FDSet> fdJointList = req.session().attribute(SessionConstants.FDJOINT_LIST);
         Map<String, Relation> relationList = req.session().attribute(SessionConstants.RELATION_LIST);
         Relation relation = new Relation();
         relation.setName(req.queryParams(FormConstants.RELATION));
-        AttributeJoint attrJoint = new AttributeJoint();
+        AttributeSet attrJoint = new AttributeSet();
 
         for (String item : req.queryParams()){
             if (item.contains(FormConstants.FDJOINT)){
@@ -762,9 +762,9 @@ public class App {
         relationList.put(req.queryParams(FormConstants.RELATION), relation);
     }
 
-    private static AttributeJoint getAttrJoint(Request req) {
+    private static AttributeSet getAttrJoint(Request req) {
         Map<String, Attribute> attrList = req.session().attribute(SessionConstants.ATTRIBUTE_LIST);
-        AttributeJoint attrJoint = new AttributeJoint();
+        AttributeSet attrJoint = new AttributeSet();
 
         for (String item : req.queryParams()){
             if (item.contains(FormConstants.ATTRIBUTE)){
@@ -778,7 +778,7 @@ public class App {
     private static Response saveSession(Request req, Response res) {
         Map<String, Attribute> attrList = req.session().attribute(SessionConstants.ATTRIBUTE_LIST);
         Map<String, FunctionalDependency> fdList = req.session().attribute(SessionConstants.FD_LIST);
-        Map<String, DFJoint> fdJointList = req.session().attribute(SessionConstants.FDJOINT_LIST);
+        Map<String, FDSet> fdJointList = req.session().attribute(SessionConstants.FDJOINT_LIST);
         Map<String, Relation> relationList = req.session().attribute(SessionConstants.RELATION_LIST);
         HttpServletResponse raw;
         
@@ -806,7 +806,7 @@ public class App {
 
             Element fdJoints = doc.createElement(XMLConstants.FDJOINTS);
             root.appendChild(fdJoints);
-            for (DFJoint item : fdJointList.values()) {
+            for (FDSet item : fdJointList.values()) {
                 Node element = doc.importNode(item.toXML(), true);
                 fdJoints.appendChild(element);
             }
@@ -854,7 +854,7 @@ public class App {
     private static void loadSession(Request req, Response res) {
         Map<String, Attribute> attrList = req.session().attribute(SessionConstants.ATTRIBUTE_LIST);
         Map<String, FunctionalDependency> fdList = req.session().attribute(SessionConstants.FD_LIST);
-        Map<String, DFJoint> fdJointList = req.session().attribute(SessionConstants.FDJOINT_LIST);
+        Map<String, FDSet> fdJointList = req.session().attribute(SessionConstants.FDJOINT_LIST);
         Map<String, Relation> relationList = req.session().attribute(SessionConstants.RELATION_LIST);
 
         InputStream input;
@@ -883,14 +883,14 @@ public class App {
                 Node antecedent = getNode(XMLConstants.ANTECEDENT, item.getChildNodes());
                 attributes = antecedent.getChildNodes();
                 List<String> antecedentAttr = getNodesValue(attributes, XMLConstants.ATTRIBUTE);
-                AttributeJoint attrAntecedent = new AttributeJoint();
+                AttributeSet attrAntecedent = new AttributeSet();
                 for (String item2 : antecedentAttr) {
                     attrAntecedent.addAttributes(attrList.get(item2));
                 }
                 Node consequent = getNode(XMLConstants.CONSEQUENT, item.getChildNodes());
                 attributes = consequent.getChildNodes();
                 List<String> consequentAttr = getNodesValue(attributes, XMLConstants.ATTRIBUTE);
-                AttributeJoint attrConsequent = new AttributeJoint();
+                AttributeSet attrConsequent = new AttributeSet();
                 for (String item2 : consequentAttr) {
                     attrConsequent.addAttributes(attrList.get(item2));
                 }
@@ -904,14 +904,14 @@ public class App {
             nodeList = getNodes(XMLConstants.FDJOINT, fdJoints);
 
             for (Node item : nodeList) {
-                DFJoint dfJoint = new DFJoint();
-                dfJoint.setName(getNodeValue(item.getChildNodes(), XMLConstants.NAME));
+                FDSet FDSet = new FDSet();
+                FDSet.setName(getNodeValue(item.getChildNodes(), XMLConstants.NAME));
                 fdNode = getNode(XMLConstants.FDS, item.getChildNodes());
                 List<String> nodesValue = getNodesValue(fdNode.getChildNodes(), XMLConstants.FD);
                 for (String item2 : nodesValue) {
-                    dfJoint.addDependency(fdList.get(item2));
+                    FDSet.addDependency(fdList.get(item2));
                 }
-                fdJointList.put(dfJoint.getName(), dfJoint);
+                fdJointList.put(FDSet.getName(), FDSet);
             }
 
             // Load Relations from XML
@@ -925,7 +925,7 @@ public class App {
                 relation.setDFJoint(fdJointList.get(getNodeValue(item.getChildNodes(), XMLConstants.FDJOINT)));
                 attribute = getNode(XMLConstants.ATTRIBUTES, item.getChildNodes());
                 List<String> nodesValue = getNodesValue(attribute.getChildNodes(), XMLConstants.ATTRIBUTE);
-                AttributeJoint attrJoint = new AttributeJoint();
+                AttributeSet attrJoint = new AttributeSet();
                 for (String item2 : nodesValue) {
                     attrJoint.addAttributes(attrList.get(item2));
                 }

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<session>
+<Session>
     <Attributes>
         <Attribute>A</Attribute>
         <Attribute>B</Attribute>
@@ -8,16 +8,6 @@
         <Attribute>E</Attribute>
     </Attributes>
     <FDs>
-        <FD>
-            <Antecedent>
-                <Attribute>B</Attribute>
-                <Attribute>D</Attribute>
-            </Antecedent>
-            <Consequent>
-                <Attribute>A</Attribute>
-                <Attribute>E</Attribute>
-            </Consequent>
-        </FD>
         <FD>
             <Antecedent>
                 <Attribute>A</Attribute>
@@ -39,21 +29,31 @@
                 <Attribute>B</Attribute>
             </Consequent>
         </FD>
+        <FD>
+            <Antecedent>
+                <Attribute>B</Attribute>
+                <Attribute>D</Attribute>
+            </Antecedent>
+            <Consequent>
+                <Attribute>A</Attribute>
+                <Attribute>E</Attribute>
+            </Consequent>
+        </FD>
     </FDs>
     <FDJoints>
         <FDJoint>
             <Name>Joint-1</Name>
             <FDs>
-                <FD>{B, D} -&gt; {A, E}</FD>
-                <FD>{A, D, E} -&gt; {B}</FD>
-                <FD>{A, B, C} -&gt; {D, E}</FD>
+                <FD>(A, D, E) -&gt; (B)</FD>
+                <FD>(A, B, C) -&gt; (D, E)</FD>
+                <FD>(B, D) -&gt; (A, E)</FD>
             </FDs>
         </FDJoint>
         <FDJoint>
             <Name>Joint-2</Name>
             <FDs>
-                <FD>{B, D} -&gt; {A, E}</FD>
-                <FD>{A, D, E} -&gt; {B}</FD>
+                <FD>(A, D, E) -&gt; (B)</FD>
+                <FD>(B, D) -&gt; (A, E)</FD>
             </FDs>
         </FDJoint>
     </FDJoints>
@@ -70,4 +70,4 @@
             </Attributes>
         </Relation>
     </Relations>
-</session>
+</Session>
