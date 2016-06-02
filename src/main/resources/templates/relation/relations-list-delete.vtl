@@ -3,7 +3,7 @@
 <ul class="list-group">
 #foreach( $relation in $relations )
   <li class="list-group-item clearfix">
-    <p>$relation.getName() - $relation.getAttrJoint()</p>
+    <p>$relation.getName()$relation.getAttrJoint()</p>
     <p>
     #foreach( $fd in $relation.getDFJoint() )
       #if( $velocityCount != $relation.getDFJoint().getSize())
