@@ -378,15 +378,18 @@ public class App {
 
         get(RoutesConstants.FD_PARTOF_FDJOINT, (req, res) -> {
             checkSession(req, res);
+            Map<String, Attribute> attrList = req.session().attribute(SessionConstants.ATTRIBUTE_LIST);
             Map<String, FDSet> fdJointList = req.session().attribute(SessionConstants.FDJOINT_LIST);
-            Map<String, FDSet> fdList = req.session().attribute(SessionConstants.FD_LIST);
 
             Map<String, Object> model = new HashMap<>();
             model.put(SessionConstants.USERNAME, session.get(req.session().id()));
             model.put(DataConstants.FDJOINTS, fdJointList);
-            model.put(DataConstants.FDS, fdList);
+            model.put(DataConstants.ATTRIBUTES, attrList);
+            model.put(DataConstants.ANTECEDENT, FormConstants.ANTECEDENT);
+            model.put(DataConstants.CONSEQUENT, FormConstants.CONSEQUENT);
+            model.put(AppConstants.ATTRIBUTES_LIST_CHECKBOX_ANT, TemplateConstants.ATTRIBUTES_LIST_CHECKBOX_ANT);
+            model.put(AppConstants.ATTRIBUTES_LIST_CHECKBOX_CON, TemplateConstants.ATTRIBUTES_LIST_CHECKBOX_CON);
             model.put(AppConstants.FDJOINTS_LIST_RADIO, TemplateConstants.FDJOINTS_LIST_RADIO);
-            model.put(AppConstants.FDS_LIST_RADIO, TemplateConstants.FDS_LIST_RADIO);
             model.put(AppConstants.TEMPLATE, TemplateConstants.FD_PARTOF_FDJOINT);
             return new ModelAndView(model, TemplateConstants.LAYOUT);
         }, new VelocityTemplateEngine());
@@ -395,8 +398,9 @@ public class App {
             checkSession(req, res);
             Map<String, FDSet> fdJointList = req.session().attribute(SessionConstants.FDJOINT_LIST);
             Map<String, FunctionalDependency> fdList = req.session().attribute(SessionConstants.FD_LIST);
+            Map<String, Attribute> attrList = req.session().attribute(SessionConstants.ATTRIBUTE_LIST);
 
-            FunctionalDependency fd = fdList.get(req.queryParams(FormConstants.FD));
+            FunctionalDependency fd = addFD(req);
             FDSet fdJoint = fdJointList.get(req.queryParams(FormConstants.FDJOINT));
             Boolean result = fd.belongsTo(fdJoint, null);
 
@@ -408,9 +412,12 @@ public class App {
 
             model.put(SessionConstants.USERNAME, session.get(req.session().id()));
             model.put(DataConstants.FDJOINTS, fdJointList);
-            model.put(DataConstants.FDS, fdList);
+            model.put(DataConstants.ANTECEDENT, FormConstants.ANTECEDENT);
+            model.put(DataConstants.CONSEQUENT, FormConstants.CONSEQUENT);
+            model.put(DataConstants.ATTRIBUTES, attrList);
+            model.put(AppConstants.ATTRIBUTES_LIST_CHECKBOX_ANT, TemplateConstants.ATTRIBUTES_LIST_CHECKBOX_ANT);
+            model.put(AppConstants.ATTRIBUTES_LIST_CHECKBOX_CON, TemplateConstants.ATTRIBUTES_LIST_CHECKBOX_CON);
             model.put(AppConstants.FDJOINTS_LIST_RADIO, TemplateConstants.FDJOINTS_LIST_RADIO);
-            model.put(AppConstants.FDS_LIST_RADIO, TemplateConstants.FDS_LIST_RADIO);
             model.put(AppConstants.TEMPLATE, TemplateConstants.FD_PARTOF_FDJOINT);
             return new ModelAndView(model, TemplateConstants.LAYOUT);
         }, new VelocityTemplateEngine());
@@ -701,7 +708,7 @@ public class App {
     /**
      * @param req
      */
-    private static void addFD(Request req) {
+    private static FunctionalDependency addFD(Request req) {
         Map<String, Attribute> attrList = req.session().attribute(SessionConstants.ATTRIBUTE_LIST);
         Map<String, FunctionalDependency> fdList = req.session().attribute(SessionConstants.FD_LIST);
         AttributeSet antecedent = new AttributeSet();
@@ -710,12 +717,14 @@ public class App {
             if (attrr.contains(FormConstants.ANTECEDENT)){
                 antecedent.addAttributes(attrList.get(req.queryParams(attrr)));
             }
-            else {
+            else if(attrr.contains(FormConstants.CONSEQUENT)) {
                 consequent.addAttributes(attrList.get(req.queryParams(attrr)));
             }
         }
         FunctionalDependency fd = new FunctionalDependency(antecedent, consequent);
         fdList.put(fd.toString(), fd);
+        
+        return fd;
     }
 
     /**

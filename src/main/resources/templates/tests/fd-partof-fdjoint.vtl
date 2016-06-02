@@ -1,12 +1,30 @@
-<h2 class="alert alert-info">Test if a Functional Dependency can be inferred from a FD Joint?</h2>
+<h2 class="alert alert-info">Test if a Functional Dependency can be inferred from a FD Set?</h2>
 
 #parse( $fd-partof-fdjoint-result )
 
 <form action="fd-partof-fdjoint" method="POST" >
-#if( !$fds.isEmpty() )
-  #parse( $fds-list-radio)
+
+#if( !$attributes.isEmpty() )
+<!-- Antecedent Attributes -->
+  <div class="col-sm-6 form-group">
+    <h4>Antecedent</h4>
+        
+  #parse( $attributes-list-checkbox-ant )
+
+  </div>
+  <!-- Antecedent Attributes -->
+        
+  <!-- Consequent Attributes -->
+  <div class="col-sm-6 form-group">
+    <h4>Consequent</h4>
+
+  #parse( $attributes-list-checkbox-con )
+
+  </div>
+  <!-- Consequent Attributes -->
+
 #else
-  <h2 class="alert alert-danger">Add some Functional Dependencies!</h2>
+    <h2 class="alert alert-danger">Add some Attributes!</h2>
 #end
 
 #if( !$fdjoints.isEmpty() )
