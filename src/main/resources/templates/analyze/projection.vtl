@@ -1,4 +1,4 @@
-<h2 class="alert alert-info">Project a FD Joint on an Attribute Joint!</h2>
+<h2 class="alert alert-info">Project a FD Set on an Attribute Set!</h2>
 
 #parse( $projection-result )
 
@@ -7,7 +7,7 @@
 #if( !$fdjoints.isEmpty() )
   #parse( $fdjoints-list-radio )
 #else
-  <h2 class="alert alert-danger">Add some FD Joints!</h2>
+  <h2 class="alert alert-danger">Add some FD Sets!</h2>
 #end
 
 #if( !$attributes.isEmpty() )
