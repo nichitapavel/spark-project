@@ -21,6 +21,11 @@
   #parse( $attributes-list-checkbox-con )
 
   </div>
+  
+  <div class="list-group">
+    <button type="button" onclick="checkAll()" class="btn">Check all</button>
+    <button type="button" onclick="uncheckAll()" class="btn">Uncheck all</button>
+  </div>
   <!-- Consequent Attributes -->
 
 #else
@@ -34,6 +39,6 @@
 #end
 
 #if( !$fdjoints.isEmpty() && !$fds.isEmpty() )
-  <button type="submit" class="btn">Go!</button>
+  <button type="button" onclick="checkInferred()" class="btn">Go!</button>
 #end
 </form>

@@ -12,11 +12,17 @@
 
 #if( !$attributes.isEmpty() )
   #parse( $attributes-list-checkbox)
+  
+  <div class="list-group">
+    <button type="button" onclick="checkAll()" class="btn">Check all</button>
+    <button type="button" onclick="uncheckAll()" class="btn">Uncheck all</button>
+  </div>
+  
 #else
   <h2 class="alert alert-danger">Add some Attributes!</h2>
 #end
 
 #if( !$attributes.isEmpty() && !$fdjoints.isEmpty() )
-  <button type="submit" class="btn">Go!</button>
+  <button type="button" onclick="checkProjection()" class="btn">Go!</button>
 #end
 </form>

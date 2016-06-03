@@ -758,6 +758,7 @@ public class App {
         for (String item : req.queryParams()){
             if (item.contains(FormConstants.FDJOINT)){
                 relation.setDFJoint(fdJointList.get(req.queryParams(item)));
+                attrJoint.addAttributes(relation.getDFJoint().getAttributesDFJoint());
             }
             else if (item.contains(FormConstants.RELATION)) {}
             else {
