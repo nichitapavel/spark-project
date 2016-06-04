@@ -35,6 +35,7 @@ public class TemplateConstants {
     public static final String FDJOINTS_LIST_RADIO_A = "templates/fdjoint/fdjoints-list-radio-a.vtl";
     public static final String FDJOINTS_LIST_RADIO_B = "templates/fdjoint/fdjoints-list-radio-b.vtl";
     public static final String FDJOINTS_LIST_DELETE = "templates/fdjoint/fdjoints-list-delete.vtl";
+    public static final String FDJOINTS_LIST_RADIO_NONE = "templates/fdjoint/fdjoints-list-radio-none.vtl";
 
     public static final String RELATION = "templates/relation/relation.vtl";
     public static final String RELATIONS_LIST = "templates/relation/relations-list.vtl";

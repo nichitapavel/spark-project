@@ -1,7 +1,11 @@
-#if( !$fdjoints.isEmpty() )
 <h4>FD Sets</h4>
 <ul class="list-group">
-#parse( $fdjoints-list-radio-none )
+  <li class="list-group-item">
+    <label class="radio-inline">
+      <input name="__fdjoint-name__" type="radio" value="none">
+      <p>None</p>
+    </label>
+  </li>
 #foreach( $fdj in $fdjoints )
   <li class="list-group-item">
     <label class="radio-inline">
@@ -20,4 +24,3 @@
   </li>
 #end
 </ul>
-#end

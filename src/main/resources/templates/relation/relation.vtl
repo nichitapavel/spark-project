@@ -1,6 +1,6 @@
 <h2 class="alert alert-info">Add a Relation!</h2>
 
-#if( !$fdjoints.isEmpty() && !$attributes.isEmpty() )
+#if( !$attributes.isEmpty() )
 
 <form action="/relation" method="POST" >
   <h4>Relation Name</h4>
@@ -8,7 +8,7 @@
     <input id="__relation-name__" name="__relation-name__" class="form-control" type="text">
   </div>
 
-#parse( $fdjoints-list-radio )
+#parse( $fdjoints-list-radio-none )
 
 #parse( $attributes-list-checkbox )
 
@@ -20,7 +20,7 @@
   <button type="button" onclick="checkRelation()" class="btn">Go!</button>
 </form>
 #else
-    <h2 class="alert alert-danger">Add some Attributes and FD Sets!</h2>
+    <h2 class="alert alert-danger">Add some Attributes!</h2>
 #end
 
 #parse( $relations-list )

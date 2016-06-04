@@ -223,7 +223,7 @@ public class App {
             model.put(DataConstants.ATTRIBUTES, attrList);
             model.put(AppConstants.TEMPLATE, TemplateConstants.RELATION);
             model.put(AppConstants.RELATIONS_LIST, TemplateConstants.RELATIONS_LIST);
-            model.put(AppConstants.FDJOINTS_LIST_RADIO, TemplateConstants.FDJOINTS_LIST_RADIO);
+            model.put(AppConstants.FDJOINTS_LIST_RADIO_NONE, TemplateConstants.FDJOINTS_LIST_RADIO_NONE);
             model.put(AppConstants.ATTRIBUTES_LIST_CHECKBOX, TemplateConstants.ATTRIBUTES_LIST_CHECKBOX);
             return new ModelAndView(model, TemplateConstants.LAYOUT);
         }, new VelocityTemplateEngine());
@@ -779,7 +779,12 @@ public class App {
 
         for (String item : req.queryParams()){
             if (item.contains(FormConstants.FDJOINT)){
-                relation.setDFJoint(fdJointList.get(req.queryParams(item)));
+                String fdJoint = req.queryParams(item);
+                if (!fdJoint.equals("none")) {
+                    relation.setDFJoint(fdJointList.get(fdJoint));
+                } else {
+                    relation.setDFJoint(new FDSet());
+                }
                 attrJoint.addAttributes(relation.getDFJoint().getAttributesDFJoint());
             }
             else if (item.contains(FormConstants.RELATION)) {}

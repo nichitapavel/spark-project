@@ -32,6 +32,7 @@ public class AppConstants {
     public static final String FDJOINTS_LIST_RADIO_B = "fdjoints-list-radio-b";
     public static final String FDJOINTS_LIST_RADIO = "fdjoints-list-radio";
     public static final String FDJOINTS_LIST_DELETE = "fdjoints-list-delete";
+    public static final String FDJOINTS_LIST_RADIO_NONE = "fdjoints-list-radio-none";
 
     public static final String RELATION = "relation";
     public static final String RELATIONS_LIST = "relations-list";
