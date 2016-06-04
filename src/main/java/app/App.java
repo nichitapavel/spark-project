@@ -76,9 +76,9 @@ public class App {
         get(RoutesConstants.GLOBAL_VIEW, (req, res) -> {
             checkSession(req, res);
             Map<String, Attribute> attrList = req.session().attribute(SessionConstants.ATTRIBUTE_LIST);
-            Map<String, Attribute> fdList = req.session().attribute(SessionConstants.FD_LIST);
-            Map<String, Attribute> fdJointList = req.session().attribute(SessionConstants.FDJOINT_LIST);
-            Map<String, Attribute> relationList = req.session().attribute(SessionConstants.RELATION_LIST);
+            Map<String, FunctionalDependency> fdList = req.session().attribute(SessionConstants.FD_LIST);
+            Map<String, FDSet> fdJointList = req.session().attribute(SessionConstants.FDJOINT_LIST);
+            Map<String, Relation> relationList = req.session().attribute(SessionConstants.RELATION_LIST);
             
             Map<String, Object> model = new HashMap<>();
             model.put(SessionConstants.USERNAME, session.get(req.session().id()));
@@ -494,7 +494,7 @@ public class App {
         
         get(RoutesConstants.TEST_NORMAL_FORM, (req, res) -> {
             checkSession(req, res);
-            Map<String, Object> relationList = req.session().attribute(SessionConstants.RELATION_LIST);
+            Map<String, Relation> relationList = req.session().attribute(SessionConstants.RELATION_LIST);
 
             Map<String, Object> model = new HashMap<>();
             model.put(SessionConstants.USERNAME, session.get(req.session().id()));
@@ -662,7 +662,10 @@ public class App {
             Map<String, Relation> relationList = req.session().attribute(SessionConstants.RELATION_LIST);
 
             attrList.remove(attr);
-            fdList = DeleteManager.deleteAttributeFromFD(attr, fdList);
+            //fdList = DeleteManager.deleteAttributeFromFD(attr, fdList);
+            fdList = DeleteManager.updateFDMap(new Attribute(attr), fdList);
+            fdSetList = DeleteManager.updateFDSetMap(fdList, fdSetList);
+            relationList = DeleteManager.updateRelationMap(relationList, fdSetList, attrList);
             
             res.redirect(RoutesConstants.GLOBAL_VIEW);
             return null;
@@ -671,8 +674,16 @@ public class App {
         post(RoutesConstants.DELETE_FD, (req, res) -> {
             checkSession(req, res);
             String fd = req.queryParams(FormConstants.FD);
-            Map<String, Attribute> fdList = req.session().attribute(SessionConstants.FD_LIST);
+            Map<String, Attribute> attrList = req.session().attribute(SessionConstants.ATTRIBUTE_LIST);
+            Map<String, FunctionalDependency> fdList = req.session().attribute(SessionConstants.FD_LIST);
+            Map<String, FDSet> fdSetList = req.session().attribute(SessionConstants.FDJOINT_LIST);
+            Map<String, Relation> relationList = req.session().attribute(SessionConstants.RELATION_LIST);
+
             fdList.remove(fd);
+            fdSetList = DeleteManager.updateFDSetMap(fdList, fdSetList);
+            relationList = DeleteManager.updateRelationMap(relationList, fdSetList, attrList);
+            
+
             res.redirect(RoutesConstants.GLOBAL_VIEW);
             return null;
         });
@@ -680,11 +691,12 @@ public class App {
         post(RoutesConstants.DELETE_FDJOINT, (req, res) -> {
             checkSession(req, res);
             String fdJoint = req.queryParams(FormConstants.FDJOINT);
-            Map<String, FDSet> fdJointList = req.session().attribute(SessionConstants.FDJOINT_LIST);
+            Map<String, Attribute> attrList = req.session().attribute(SessionConstants.ATTRIBUTE_LIST);
+            Map<String, FDSet> fdSetList = req.session().attribute(SessionConstants.FDJOINT_LIST);
             Map<String, Relation> relationList = req.session().attribute(SessionConstants.RELATION_LIST);
 
-            relationList = DeleteManager.deleteFDSetFromRelation(fdJointList.get(fdJoint), relationList);
-            fdJointList.remove(fdJoint);
+            fdSetList.remove(fdJoint);
+            relationList = DeleteManager.updateRelationMap(relationList, fdSetList, attrList);
             
             res.redirect(RoutesConstants.GLOBAL_VIEW);
             return null;
