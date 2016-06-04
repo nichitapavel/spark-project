@@ -36,6 +36,7 @@ import datastructures.FDSet;
 import datastructures.KeyJoint;
 import datastructures.Relation;
 import dependency.FunctionalDependency;
+import manager.DeleteManager;
 import spark.ModelAndView;
 import spark.Request;
 import spark.Response;
@@ -657,7 +658,13 @@ public class App {
             checkSession(req, res);
             String attr = req.queryParams(FormConstants.ATTRIBUTE);
             Map<String, Attribute> attrList = req.session().attribute(SessionConstants.ATTRIBUTE_LIST);
+            Map<String, FunctionalDependency> fdList = req.session().attribute(SessionConstants.FD_LIST);
+            Map<String, FDSet> fdSetList = req.session().attribute(SessionConstants.FDJOINT_LIST);
+            Map<String, Relation> relationList = req.session().attribute(SessionConstants.RELATION_LIST);
+
             attrList.remove(attr);
+            fdList = DeleteManager.deleteAttributeFromFD(attr, fdList);
+            
             res.redirect(RoutesConstants.GLOBAL_VIEW);
             return null;
         });
@@ -674,8 +681,12 @@ public class App {
         post(RoutesConstants.DELETE_FDJOINT, (req, res) -> {
             checkSession(req, res);
             String fdJoint = req.queryParams(FormConstants.FDJOINT);
-            Map<String, Attribute> fdJointList = req.session().attribute(SessionConstants.FDJOINT_LIST);
+            Map<String, FDSet> fdJointList = req.session().attribute(SessionConstants.FDJOINT_LIST);
+            Map<String, Relation> relationList = req.session().attribute(SessionConstants.RELATION_LIST);
+
+            relationList = DeleteManager.deleteFDSetFromRelation(fdJointList.get(fdJoint), relationList);
             fdJointList.remove(fdJoint);
+            
             res.redirect(RoutesConstants.GLOBAL_VIEW);
             return null;
         });
@@ -683,8 +694,8 @@ public class App {
         post(RoutesConstants.DELETE_RELATION, (req, res) -> {
             checkSession(req, res);
             String relation = req.queryParams(FormConstants.RELATION);
-            Map<String, Attribute> fdJointList = req.session().attribute(SessionConstants.RELATION_LIST);
-            fdJointList.remove(relation);
+            Map<String, Relation> relationList = req.session().attribute(SessionConstants.RELATION_LIST);
+            relationList.remove(relation);
             res.redirect(RoutesConstants.GLOBAL_VIEW);
             return null;
         });
