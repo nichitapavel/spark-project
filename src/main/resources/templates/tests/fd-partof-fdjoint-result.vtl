@@ -1,12 +1,15 @@
 #if( $boolean )
-<div class="alert alert-success">
+  <div class="alert alert-success">
 #else
-<div class="alert alert-danger">
+  <div class="alert alert-danger">
 #end
-<h4>Result</h4>
-<p>$fd can 
-#if( !$boolean )
-not 
-#end
-be inferred from  $fdjoint.name</p>
-</div>
+
+    <h4>Result</h4>
+    <p>
+      $fd can 
+      #if( !$boolean )
+        not 
+      #end
+      be inferred from  $fdjoint.name
+    </p>
+  </div>

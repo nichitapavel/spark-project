@@ -1,12 +1,15 @@
 #if( $boolean )
-<div class="alert alert-success">
+  <div class="alert alert-success">
 #else
-<div class="alert alert-danger">
+  <div class="alert alert-danger">
 #end
-<h4>Result</h4>
-<p>$fdjoint-a.name does 
-#if( !$boolean ) 
-not 
-#end
-logically implies $fdjoint-b.name</p>
-</div>
+
+    <h4>Result</h4>
+    <p>
+      $fdjoint-a.name does 
+      #if( !$boolean ) 
+        not 
+      #end
+      logically implies $fdjoint-b.name
+    </p>
+  </div>

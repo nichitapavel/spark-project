@@ -63,16 +63,11 @@ public class App {
         staticFileLocation(RoutesConstants.FILE_LOCATION);
         //port(80);
 
-        before((req, res) -> {
-            Map<String, Object> model = new HashMap<>();
-            model.put(SessionConstants.USERNAME, session.get(req.session().id()));
-        });      
-
         get(RoutesConstants.ROOT, (req, res) -> {
             Map<String, Object> model = new HashMap<>();
             return new ModelAndView(model, TemplateConstants.WELCOME);
         }, new VelocityTemplateEngine());
-        
+
         get(RoutesConstants.ABOUT, (req, res) -> {
             checkSession(req, res);
             Map<String, Object> model = new HashMap<>();

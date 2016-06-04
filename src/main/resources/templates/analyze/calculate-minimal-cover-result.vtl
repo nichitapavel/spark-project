@@ -1,13 +1,13 @@
 <div class="alert alert-warning">
-<h4>Result</h4>
-<p>Minimal Cover for $fdjoint.name:</p>
-<p>
-#foreach( $fd in $fdjoint.getDFJoint() )
-  #if( $velocityCount != $fdjoint.getDFJoint().size())
-  $fd || 
-  #else
-  $fd
+  <h4>Result</h4>
+  <p>Minimal Cover for $fdjoint.name:</p>
+  <p>
+  #foreach( $fd in $fdjoint.getDFJoint() )
+    #if( $velocityCount != $fdjoint.getDFJoint().size())
+      $fd || 
+    #else
+      $fd
+    #end
   #end
-#end
-</p>
+  </p>
 </div>

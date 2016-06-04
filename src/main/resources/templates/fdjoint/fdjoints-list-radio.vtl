@@ -1,23 +1,23 @@
 #if( !$fdjoints.isEmpty() )
-<h4>FD Sets</h4>
-<ul class="list-group">
-#parse( $fdjoints-list-radio-none )
-#foreach( $fdj in $fdjoints )
-  <li class="list-group-item">
-    <label class="radio-inline">
-      <input name="__fdjoint-name__" type="radio" value="$fdj.name">
-      <p>$fdj.getName()</p>
-      <p>
-      #foreach( $fd in $fdj.getDFJoint() )
-        #if ( $velocityCount == $fdj.getDFJoint().size())
-        $fd
-        #else
-        $fd ||
+  <h4>FD Sets</h4>
+  <ul class="list-group">
+  #parse( $fdjoints-list-radio-none )
+  #foreach( $fdj in $fdjoints )
+    <li class="list-group-item">
+      <label class="radio-inline">
+        <input name="__fdjoint-name__" type="radio" value="$fdj.name">
+        <p>$fdj.getName()</p>
+        <p>
+        #foreach( $fd in $fdj.getDFJoint() )
+          #if ( $velocityCount == $fdj.getDFJoint().size())
+            $fd
+          #else
+            $fd ||
+          #end
         #end
-      #end
-      </p>
-    </label>
-  </li>
-#end
-</ul>
+        </p>
+      </label>
+    </li>
+  #end
+  </ul>
 #end

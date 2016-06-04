@@ -2,32 +2,32 @@
 
 #if( !$attributes.isEmpty() )
 
-<form action="/fd" method="POST" >
-  <!-- Antecedent Attributes -->
-  <div class="col-sm-6 form-group">
-    <h3 class="alert alert-info">Antecedent</h3>
-        
-#parse( $attributes-list-checkbox-ant )
+  <form action="/fd" method="POST">
+    <!-- Antecedent Attributes -->
+    <div class="col-sm-6 form-group">
+      <h3 class="alert alert-info">Antecedent</h3>
 
-  </div>
-  <!-- Antecedent Attributes -->
-        
-  <!-- Consequent Attributes -->
-  <div class="col-sm-6 form-group">
-    <h3 class="alert alert-info">Consequent</h3>
+      #parse( $attributes-list-checkbox-ant )
 
-#parse( $attributes-list-checkbox-con )
+    </div>
+    <!-- Antecedent Attributes -->
 
-  </div>
-  <!-- Consequent Attributes -->
+    <!-- Consequent Attributes -->
+    <div class="col-sm-6 form-group">
+      <h3 class="alert alert-info">Consequent</h3>
 
-  <div class="list-group">
-    <button type="button" onclick="checkAll()" class="btn">Check all</button>
-    <button type="button" onclick="uncheckAll()" class="btn">Uncheck all</button>
-  </div>
+      #parse( $attributes-list-checkbox-con )
 
-  <button type="button" onclick="checkFD()" class="btn">Go!</button>
-</form>
+    </div>
+    <!-- Consequent Attributes -->
+
+    <div class="list-group">
+      <button type="button" onclick="checkAll()" class="btn">Check all</button>
+      <button type="button" onclick="uncheckAll()" class="btn">Uncheck all</button>
+    </div>
+
+    <button type="button" onclick="checkFD()" class="btn">Go!</button>
+  </form>
 
 #else
   <h2 class="alert alert-danger">Add some Attributes!</h2>

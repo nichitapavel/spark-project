@@ -1,14 +1,16 @@
 #if( $result == '-1' )
-<div class="alert alert-danger">
-  <h4>Result</h4>
-  <p>$attr-joint is not a candidate or super key in $relation.name</p>
+  <div class="alert alert-danger">
+    <h4>Result</h4>
+    <p>$attr-joint is not a candidate or super key in $relation.name</p>
+  </div>
 #elseif( $result == '0' )
-<div class="alert alert-warning">
-  <h4>Result</h4>
-  <p>$attr-joint is a super key, but it is not a candidate key in $relation.name</p>
+  <div class="alert alert-warning">
+    <h4>Result</h4>
+    <p>$attr-joint is a super key, but it is not a candidate key in $relation.name</p>
+  </div>
 #else
-<div class="alert alert-success">
-  <h4>Result</h4>
-  <p>$attr-joint is a candidate key in $relation.name</p>
+  <div class="alert alert-success">
+    <h4>Result</h4>
+    <p>$attr-joint is a candidate key in $relation.name</p>
+  </div>
 #end
-</div>

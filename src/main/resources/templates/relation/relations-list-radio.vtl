@@ -1,22 +1,22 @@
 #if( !$relations.isEmpty() )
 <h4>Relations</h4>
 <ul class="list-group">
-#foreach( $relation in $relations )
-  <li class="list-group-item">
-    <label class="radio-inline">
-      <input name="__relation-name__" type="radio" value="$relation.name">
-      <p>$relation.getName()$relation.getAttrJoint()</p>
-      <p>
-      #foreach( $fd in $relation.getDFJoint() )
-        #if( $velocityCount != $relation.getDFJoint().getSize())
-        $fd || 
-        #else
-        $fd
+  #foreach( $relation in $relations )
+    <li class="list-group-item">
+      <label class="radio-inline">
+        <input name="__relation-name__" type="radio" value="$relation.name">
+        <p>$relation.getName()$relation.getAttrJoint()</p>
+        <p>
+        #foreach( $fd in $relation.getDFJoint() )
+          #if( $velocityCount != $relation.getDFJoint().getSize() )
+            $fd || 
+          #else
+            $fd
+          #end
         #end
-      #end
-      </p>
-    </label>
-  </li>
-#end
-</ul>
+        </p>
+      </label>
+    </li>
+  #end
+  </ul>
 #end

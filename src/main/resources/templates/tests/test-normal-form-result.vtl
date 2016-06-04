@@ -1,26 +1,28 @@
 #if( $option == "all" )
-<div class="alert alert-warning">
-  <h4>Result</h4>
-  <p>$relation.name is in $result</p>
+  <div class="alert alert-warning">
+    <h4>Result</h4>
+    <p>$relation.name is in $result</p>
+  </div>
 #elseif( $boolean )
   <div class="alert alert-success">
     <h4>Result</h4>
     #if( $option == "2nd" )
-  	<p>$relation.name is in 2nd Normal Form</p>
+  	  <p>$relation.name is in 2nd Normal Form</p>
   	#elseif( $option == "3rd" )
-  	<p>$relation.name is in 3nd Normal Form</p>
+  	  <p>$relation.name is in 3nd Normal Form</p>
   	#else
-  	<p>$relation.name is in Boyce-Codd Normal Form</p>
+  	  <p>$relation.name is in Boyce-Codd Normal Form</p>
   	#end
+  </div>
 #else
   <div class="alert alert-danger">
-  <h4>Result</h4>
+    <h4>Result</h4>
     #if( $option == "2nd" )
-  	<p>$relation.name is not in 2nd Normal Form</p>
+  	  <p>$relation.name is not in 2nd Normal Form</p>
   	#elseif( $option == "3rd" )
-  	<p>$relation.name is not in 3nd Normal Form</p>
+  	  <p>$relation.name is not in 3nd Normal Form</p>
   	#else
-  	<p>$relation.name is not in Boyce-Codd Normal Form</p>
+  	  <p>$relation.name is not in Boyce-Codd Normal Form</p>
   	#end
+  </div>
 #end
-</div>

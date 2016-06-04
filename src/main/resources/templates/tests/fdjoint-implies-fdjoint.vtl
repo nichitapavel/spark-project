@@ -4,27 +4,27 @@
 
 #if( !$fdjoints.isEmpty() )
 
-<form action="/test-implies" method="POST" >
-  <!-- FD Set A -->
-  <div class="col-sm-6 form-group">
-    <h4>FD Set A</h4>
-        
-#parse( $fdjoints-list-radio-a )
+  <form action="/test-implies" method="POST">
+    <!-- FD Set A -->
+    <div class="col-sm-6 form-group">
+      <h4>FD Set A</h4>
 
-  </div>
-  <!-- FD Set A -->
-        
-  <!-- FD Set B -->
-  <div class="col-sm-6 form-group">
-    <h4>FD Set B</h4>
+      #parse( $fdjoints-list-radio-a )
 
-#parse( $fdjoints-list-radio-b )
+    </div>
+    <!-- FD Set A -->
 
-  </div>
-  <!-- FD Set B -->
-      
-  <button type="button" onclick="checkDoubleFDSet()" class="btn">Go!</button>
-</form>
+    <!-- FD Set B -->
+    <div class="col-sm-6 form-group">
+      <h4>FD Set B</h4>
+
+      #parse( $fdjoints-list-radio-b )
+
+    </div>
+    <!-- FD Set B -->
+
+    <button type="button" onclick="checkDoubleFDSet()" class="btn">Go!</button>
+  </form>
 
 #else
   <h2 class="alert alert-danger">Add some FD Sets!</h2>

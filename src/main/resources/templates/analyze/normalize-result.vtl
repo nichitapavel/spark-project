@@ -2,12 +2,12 @@
 <div class="alert alert-warning">
   <h4>Result</h4>
   #if( $option == "3rd" )
-  <h5>$relation.name normalized till 3rd Normal Form</h5>
+    <h5>$relation.name normalized till 3rd Normal Form</h5>
   #else
-  <h5>$relation.name normalized till Boyce-Codd Normal Form</h5>
+    <h5>$relation.name normalized till Boyce-Codd Normal Form</h5>
   #end
-  
-#parse( $relations-list-nf )
-  
+
+  #parse( $relations-list-nf )
+
 #end
 </div>

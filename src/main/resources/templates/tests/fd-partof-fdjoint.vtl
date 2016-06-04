@@ -2,43 +2,43 @@
 
 #parse( $fd-partof-fdjoint-result )
 
-<form action="fd-partof-fdjoint" method="POST" >
+<form action="fd-partof-fdjoint" method="POST">
 
-#if( !$attributes.isEmpty() )
-<!-- Antecedent Attributes -->
-  <div class="col-sm-6 form-group">
-    <h4>Antecedent</h4>
+  #if( !$attributes.isEmpty() )
+    <!-- Antecedent Attributes -->
+    <div class="col-sm-6 form-group">
+      <h4>Antecedent</h4>
+
+      #parse( $attributes-list-checkbox-ant )
+
+    </div>
+    <!-- Antecedent Attributes -->
         
-  #parse( $attributes-list-checkbox-ant )
+    <!-- Consequent Attributes -->
+    <div class="col-sm-6 form-group">
+      <h4>Consequent</h4>
 
-  </div>
-  <!-- Antecedent Attributes -->
-        
-  <!-- Consequent Attributes -->
-  <div class="col-sm-6 form-group">
-    <h4>Consequent</h4>
+      #parse( $attributes-list-checkbox-con )
 
-  #parse( $attributes-list-checkbox-con )
+    </div>
 
-  </div>
-  
-  <div class="list-group">
-    <button type="button" onclick="checkAll()" class="btn">Check all</button>
-    <button type="button" onclick="uncheckAll()" class="btn">Uncheck all</button>
-  </div>
-  <!-- Consequent Attributes -->
+    <div class="list-group">
+      <button type="button" onclick="checkAll()" class="btn">Check all</button>
+      <button type="button" onclick="uncheckAll()" class="btn">Uncheck all</button>
+    </div>
+    <!-- Consequent Attributes -->
 
-#else
+  #else
     <h2 class="alert alert-danger">Add some Attributes!</h2>
-#end
+  #end
 
-#if( !$fdjoints.isEmpty() )
-  #parse( $fdjoints-list-radio )
-#else
-  <h2 class="alert alert-danger">Add some Relations!</h2>
-#end
+  #if( !$fdjoints.isEmpty() )
+    #parse( $fdjoints-list-radio )
+  #else
+    <h2 class="alert alert-danger">Add some Relations!</h2>
+  #end
 
-#if( !$fdjoints.isEmpty() && !$fds.isEmpty() )
-  <button type="button" onclick="checkInferred()" class="btn">Go!</button>
-#end
+  #if( !$fdjoints.isEmpty() && !$fds.isEmpty() )
+    <button type="button" onclick="checkInferred()" class="btn">Go!</button>
+  #end
 </form>

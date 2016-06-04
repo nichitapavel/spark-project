@@ -2,27 +2,27 @@
 
 #parse( $ullman-result )
 
-<form action="/ullman" method="POST" >
+<form action="/ullman" method="POST">
 
-#if( !$attributes.isEmpty() )
-  #parse( $attributes-list-checkbox)
-  
-  <div class="list-group">
-    <button type="button" onclick="checkAll()" class="btn">Check all</button>
-    <button type="button" onclick="uncheckAll()" class="btn">Uncheck all</button>
-  </div>
-  
-#else
-  <h2 class="alert alert-danger">Add some Attributes!</h2>
-#end
+  #if( !$attributes.isEmpty() )
+    #parse( $attributes-list-checkbox )
 
-#if( !$relations.isEmpty() )
-  #parse( $relations-list-radio )
-#else
-  <h2 class="alert alert-danger">Add some Relations!</h2>
-#end
+    <div class="list-group">
+      <button type="button" onclick="checkAll()" class="btn">Check all</button>
+      <button type="button" onclick="uncheckAll()" class="btn">Uncheck all</button>
+    </div>
 
-#if( !$relations.isEmpty() && !$attributes.isEmpty() )
-  <button type="button" onclick="checkKeys()" class="btn">Go!</button>
-#end
+  #else
+    <h2 class="alert alert-danger">Add some Attributes!</h2>
+  #end
+
+  #if( !$relations.isEmpty() )
+    #parse( $relations-list-radio )
+  #else
+    <h2 class="alert alert-danger">Add some Relations!</h2>
+  #end
+
+  #if( !$relations.isEmpty() && !$attributes.isEmpty() )
+    <button type="button" onclick="checkKeys()" class="btn">Go!</button>
+  #end
 </form>

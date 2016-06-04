@@ -2,14 +2,14 @@
 
 #if( !$fdjoints.isEmpty() )
 
-#parse( $test-minimal-cover-result )
+  #parse( $test-minimal-cover-result )
 
-<form action="/test-minimal-cover" method="POST" >
+  <form action="/test-minimal-cover" method="POST">
 
-#parse( $fdjoints-list-radio )
+    #parse( $fdjoints-list-radio )
 
-  <button type="button" onclick="checkFDSetMinimal()" class="btn">Go!</button>
-</form>
+    <button type="button" onclick="checkFDSetMinimal()" class="btn">Go!</button>
+  </form>
 
 #else
   <h2 class="alert alert-danger">Add some FD Sets!</h2>

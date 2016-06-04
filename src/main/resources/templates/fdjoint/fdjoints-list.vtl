@@ -1,19 +1,19 @@
 #if( !$fdjoints.isEmpty() )
-<h2 class="alert alert-warning">FD Sets</h2>
-<ul class="list-group">
-#foreach( $fdj in $fdjoints )
-  <li class="list-group-item">
-    <p>$fdj.getName()</p>
-    <p>
-    #foreach( $fd in $fdj.getDFJoint() )
-      #if( $velocityCount != $fdj.getDFJoint().size())
-      $fd || 
-      #else
-      $fd
+  <h2 class="alert alert-warning">FD Sets</h2>
+  <ul class="list-group">
+  #foreach( $fdj in $fdjoints )
+    <li class="list-group-item">
+      <p>$fdj.getName()</p>
+      <p>
+      #foreach( $fd in $fdj.getDFJoint() )
+        #if( $velocityCount != $fdj.getDFJoint().size() )
+          $fd || 
+        #else
+          $fd
+        #end
       #end
-    #end
-    </p>
-  </li>
-#end
-</ul>
+      </p>
+    </li>
+  #end
+  </ul>
 #end

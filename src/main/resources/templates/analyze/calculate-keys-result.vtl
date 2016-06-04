@@ -1,12 +1,12 @@
 <div class="alert alert-warning">
-<h4>Result</h4>
-<p>Candidate Keys in $relation.name:
-#foreach( $key in $keys )
-  #if ( $velocityCount == $keys.getSize() )
-  $key
-  #else
-  $key,
+  <h4>Result</h4>
+  <p>Candidate Keys in $relation.name:
+  #foreach( $key in $keys )
+    #if ( $velocityCount == $keys.getSize() )
+      $key
+    #else
+      $key,
+    #end
   #end
-#end
-</p>
+  </p>
 </div>
