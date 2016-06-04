@@ -398,7 +398,6 @@ public class App {
         post(RoutesConstants.FD_PARTOF_FDJOINT, (req, res) -> {
             checkSession(req, res);
             Map<String, FDSet> fdJointList = req.session().attribute(SessionConstants.FDJOINT_LIST);
-            Map<String, FunctionalDependency> fdList = req.session().attribute(SessionConstants.FD_LIST);
             Map<String, Attribute> attrList = req.session().attribute(SessionConstants.ATTRIBUTE_LIST);
 
             FunctionalDependency fd = addFD(req);
