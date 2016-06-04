@@ -72,6 +72,14 @@ public class App {
             Map<String, Object> model = new HashMap<>();
             return new ModelAndView(model, TemplateConstants.WELCOME);
         }, new VelocityTemplateEngine());
+        
+        get(RoutesConstants.ABOUT, (req, res) -> {
+            checkSession(req, res);
+            Map<String, Object> model = new HashMap<>();
+            model.put(SessionConstants.USERNAME, session.get(req.session().id()));
+            model.put(AppConstants.TEMPLATE, TemplateConstants.ABOUT);
+            return new ModelAndView(model, TemplateConstants.LAYOUT);
+        }, new VelocityTemplateEngine());
 
         get(RoutesConstants.GLOBAL_VIEW, (req, res) -> {
             checkSession(req, res);

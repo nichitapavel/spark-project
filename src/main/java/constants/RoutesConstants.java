@@ -10,6 +10,7 @@ package constants;
 public class RoutesConstants {
     public static final String FILE_LOCATION = "/public";
     public static final String ROOT = "/";
+    public static final String ABOUT = "/about";
     public static final String GLOBAL_VIEW = "/global-view";
     public static final String SESSION = "/session";
     public static final String ATTRIBUTE = "/attribute";
