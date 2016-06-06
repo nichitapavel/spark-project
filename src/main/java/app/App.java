@@ -62,6 +62,7 @@ public class App {
     public static void main(String[] args) {
         staticFileLocation(RoutesConstants.FILE_LOCATION);
         port(80);
+        //staticFiles.expireTime(600);
 
         get(RoutesConstants.ROOT, (req, res) -> {
             Map<String, Object> model = new HashMap<>();
