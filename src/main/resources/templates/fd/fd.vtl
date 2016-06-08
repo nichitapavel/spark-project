@@ -9,6 +9,10 @@
 
       #parse( $attributes-list-checkbox-ant )
 
+      <div class="list-group">
+        <button type="button" onclick="checkAllAnt()" class="btn">Check all</button>
+        <button type="button" onclick="uncheckAllAnt()" class="btn">Uncheck all</button>
+      </div>
     </div>
     <!-- Antecedent Attributes -->
 
@@ -18,13 +22,13 @@
 
       #parse( $attributes-list-checkbox-con )
 
+      <div class="list-group">
+        <button type="button" onclick="checkAllCon()" class="btn">Check all</button>
+        <button type="button" onclick="uncheckAllCon()" class="btn">Uncheck all</button>
+      </div>
+
     </div>
     <!-- Consequent Attributes -->
-
-    <div class="list-group">
-      <button type="button" onclick="checkAll()" class="btn">Check all</button>
-      <button type="button" onclick="uncheckAll()" class="btn">Uncheck all</button>
-    </div>
 
     <button type="button" onclick="checkFD()" class="btn">Go!</button>
   </form>
