@@ -4,7 +4,7 @@
   #foreach( $fd in $fds )
     <li class="list-group-item">$fd
       <span class="pull-right">
-        <form action="/delete-fd" method="POST">
+        <form action="/odn/delete-fd" method="POST">
           <input type="hidden" name="__fd__" type="text" value="$fd">
           <button type="submit" class="btn btn-xs btn-danger">Delete</button>
         </form>
