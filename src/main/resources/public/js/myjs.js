@@ -1,9 +1,17 @@
-var checkAll = function() {
-    $(':checkbox').prop('checked', true);
+var checkAllAnt = function() {
+    $("input[name^='__ant__']:checkbox").prop('checked', true);
 };
 
-var uncheckAll = function() {
-    $(':checkbox').prop('checked', false);
+var uncheckAllAnt = function() {
+    $("input[name^='__ant__']:checkbox").prop('checked', false);
+};
+
+var checkAllCon = function() {
+    $("input[name^='__con__']:checkbox").prop('checked', true);
+};
+
+var uncheckAllCon = function() {
+    $("input[name^='__con__']:checkbox").prop('checked', false);
 };
 
 var checkAttribute = function() {
@@ -120,6 +128,16 @@ var checkProjection = function() {
     
     if ( attrLen == 0 || fdSetLen == 0 ) {
         alert("Please fill in all necessary data");
+    } else {
+        $('form').submit();
+    }
+};
+
+var checkUsername = function() {
+    var nameLen = $("__username__").val().length;
+    
+    if ( nameLen === 0) {
+        alert("Please enter a session name");
     } else {
         $('form').submit();
     }
