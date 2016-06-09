@@ -134,7 +134,7 @@ var checkProjection = function() {
 };
 
 var checkUsername = function() {
-    var nameLen = $("__username__").val().length;
+    var nameLen = $("#__username__").val().length;
     
     if ( nameLen === 0) {
         alert("Please enter a session name");
