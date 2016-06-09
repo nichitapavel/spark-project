@@ -25,7 +25,8 @@ public class DataConstants {
     public static final String FD = "fd";
     public static final String BOOLEAN = "boolean";
     public static final String RESULT = "result";
-    public static final String OPTION = "option"; 
+    public static final String OPTION = "option";
+    public static final String HAS_LOST_FD = "has-lost-fd"; 
     
     private DataConstants() {
         // Private constructor to prevent instantiation.
