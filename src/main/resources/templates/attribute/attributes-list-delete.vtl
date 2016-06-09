@@ -4,7 +4,7 @@
   #foreach( $attr in $attributes )
     <li class="list-group-item">$attr
       <span class="pull-right">
-        <form action="/esit/dbdstudio/delete-attribute" method="POST">
+        <form action="/odn/delete-attribute" method="POST">
           <input type="hidden" name="__attr__" type="text" value="$attr">
           <button type="submit" class="btn btn-xs btn-danger">Delete</button>
         </form>
