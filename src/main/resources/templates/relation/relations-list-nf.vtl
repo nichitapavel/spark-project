@@ -16,9 +16,9 @@
 </ul>
 
 #if( $has-lost-fd )
-  <h5>Functional dependencies have been lost during normalization</h5>
+  <h5 class="alert alert-danger">Functional dependencies have been lost during normalization</h5>
 #end
 
 #if( !$has-lost-fd )
-  <h5>Functional dependencies have been not lost during normalization</h5>
+  <h5 class="alert alert-success">Functional dependencies have been not lost during normalization</h5>
 #end
