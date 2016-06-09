@@ -14,3 +14,11 @@
     </li>
   #end
 </ul>
+
+#if( $has-lost-fd )
+  <h5>Functional dependencies have been lost during normalization</h5>
+#end
+
+#if( !$has-lost-fd )
+  <h5>Functional dependencies have been not lost during normalization</h5>
+#end

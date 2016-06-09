@@ -61,8 +61,7 @@ public class App {
 
     public static void main(String[] args) {
         staticFileLocation(RoutesConstants.FILE_LOCATION);
-        port(80);
-        //staticFiles.expireTime(600);
+        //port(80);
 
         get(RoutesConstants.ROOT, (req, res) -> {
             Map<String, Object> model = new HashMap<>();
@@ -637,11 +636,13 @@ public class App {
             } else {
                 result = normalization.Normalization.normalizeBCNF(relation, true);
             }
-
+            boolean hasLostFD = hasLostFD(relation.getDFJoint(), result);
+            
             Map<String, Object> model = new HashMap<>();
             model.put(DataConstants.RELATION, relation);
             model.put(DataConstants.RESULT, result);
             model.put(DataConstants.OPTION, normalForm);
+            model.put(DataConstants.HAS_LOST_FD, hasLostFD);
             model.put(AppConstants.NORMALIZE_RESULT, TemplateConstants.NORMALIZE_RESULT);
             model.put(AppConstants.RELATIONS_LIST_NF, TemplateConstants.RELATIONS_LIST_NF);
             
@@ -1044,5 +1045,21 @@ public class App {
         for (String item : attrList) {
             attrMap.put(item, new Attribute(item));
         }
+    }
+    
+    private static boolean hasLostFD(FDSet original, List<Relation> newRelations) {
+        boolean hasLost = false;
+        
+        FDSet union = new FDSet();
+        
+        newRelations.forEach(item -> {
+            item.getDFJoint().forEach(fd -> {
+                union.addDependency(fd);
+            });
+        });
+        
+        hasLost = !original.isEquivalent(union);
+        
+        return hasLost;
     }
 }
