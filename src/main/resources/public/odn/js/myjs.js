@@ -143,21 +143,19 @@ var checkUsername = function() {
     }
 };
 
-$(document).ready(function() {
-    $(".relation:button").click(function(event) {
-        var relation = $(this).val();
-        
-        $.post(
-			"/odn/add-relation",
-			{ "__relation-name__" : relation },
-			function( data ) {
-				$(this).prop("disabled", true);
-				$(this).text("Added");
-			}
-		)
-		
-		$(this).prop("disabled", true);
-		$(this).text("Added");
-    });
 
+$(".relation:button").click(function(event) {
+    var relation = $(this).val();
+    
+    $.post(
+		"/odn/add-relation",
+		{ "__relation-name__" : relation },
+		function( data ) {
+			$(this).prop("disabled", true);
+			$(this).text("Added");
+		}
+	)
+	
+	$(this).prop("disabled", true);
+	$(this).text("Added");
 });
