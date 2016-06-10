@@ -1,3 +1,13 @@
+//
+var checkAll = function() {
+    $("input:checkbox").prop('checked', true);
+};
+
+var uncheckAll = function() {
+    $("input:checkbox").prop('checked', false);
+};
+
+// Template para añadir dependencia funcionales y inferrir una dependencia funcional
 var checkAllAnt = function() {
     $("input[name^='__ant__']:checkbox").prop('checked', true);
 };
@@ -14,6 +24,7 @@ var uncheckAllCon = function() {
     $("input[name^='__con__']:checkbox").prop('checked', false);
 };
 
+// Template de añadir un attributp
 var checkAttribute = function() {
     var nameLen = $("#attribute").val().length;
     
