@@ -19,6 +19,7 @@ public class RoutesConstants {
     public static final String FD = "/fd";
     public static final String FDJOINT = "/fdjoint";
     public static final String RELATION = "/relation";
+    public static final String ADD_RELATION = "/add-relation";
     public static final String ULLMAN = "/ullman";
     public static final String CALCULATE_KEYS = "/calculate-keys";
     public static final String CALCULATE_MINIMAL_COVER = "/calculate-minimal-cover";

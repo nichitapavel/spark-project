@@ -1,6 +1,6 @@
 <ul class="list-group">
   #foreach( $relation in $result )
-    <li class="list-group-item list-group-item-warning">
+    <li class="list-group-item list-group-item-warning clearfix">
       <p>$relation.getName()$relation.getAttrJoint()</p>
       <p>
       #foreach( $fd in $relation.getDFJoint() )
@@ -11,6 +11,12 @@
         #end
       #end
       </p>
+      <span class="pull-right">
+        <form action="/add-relation" method="POST">
+          <input type="hidden" name="__relation-name__" value="$relation.name">
+          <button type="button" value="$relation.name" class="btn btn-xs btn-success relation">Add to Relational Model</button>
+        </form>
+      </span>
     </li>
   #end
 </ul>

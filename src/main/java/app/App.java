@@ -104,6 +104,7 @@ public class App {
             req.session().attribute(SessionConstants.FD_LIST, new HashMap<String, FunctionalDependency>());
             req.session().attribute(SessionConstants.FDJOINT_LIST, new HashMap<String, FDSet>());
             req.session().attribute(SessionConstants.RELATION_LIST, new HashMap<String, Relation>());
+            req.session().attribute(SessionConstants.RELATION_NORMALIZED, new HashMap<String, Relation>());
             session.put(req.session().id(), req.queryParams(FormConstants.USERNAME));
 
             res.redirect(RoutesConstants.ATTRIBUTE);
@@ -626,6 +627,7 @@ public class App {
         post(RoutesConstants.NORMALIZE, (req, res) -> {
             checkSession(req, res);
             Map<String, Relation> relationList = req.session().attribute(SessionConstants.RELATION_LIST);
+            Map<String, Relation> relationNormList = req.session().attribute(SessionConstants.RELATION_NORMALIZED);
 
             Relation relation = relationList.get(req.queryParams(FormConstants.RELATION));
             String normalForm = req.queryParams(FormConstants.NORMAL_FORM);
@@ -637,6 +639,10 @@ public class App {
                 result = normalization.Normalization.normalizeBCNF(relation, true);
             }
             boolean hasLostFD = hasLostFD(relation.getDFJoint(), result);
+            
+            result.forEach(item -> {
+                relationNormList.put(item.getName(), item);
+            });
             
             Map<String, Object> model = new HashMap<>();
             model.put(DataConstants.RELATION, relation);
@@ -714,6 +720,17 @@ public class App {
             relationList.remove(relation);
             res.redirect(RoutesConstants.GLOBAL_VIEW);
             return null;
+        });
+        
+        post(RoutesConstants.ADD_RELATION, (req, res) -> {
+            checkSession(req, res);
+            Map<String, Relation> relationNormList = req.session().attribute(SessionConstants.RELATION_NORMALIZED);
+            Map<String, Relation> relationList = req.session().attribute(SessionConstants.RELATION_LIST);
+        
+            Relation relation = relationNormList.get(req.queryParams(FormConstants.RELATION));
+            relationList.put(relation.getName(), relation);
+        
+            return "{ status: 'OK' }";
         });
     }
 

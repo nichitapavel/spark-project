@@ -13,6 +13,7 @@ public class SessionConstants {
     public static final String FDJOINT_LIST = "fdJointList";
     public static final String RELATION_LIST = "relationList";
     public static final String USERNAME = "username";
+    public static final String RELATION_NORMALIZED = "normalized";
 
     private SessionConstants() {
         // Private constructor to prevent instantiation.

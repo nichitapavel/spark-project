@@ -142,3 +142,22 @@ var checkUsername = function() {
         $('form').submit();
     }
 };
+
+$(document).ready(function() {
+    $(".relation:button").click(function(event) {
+        var relation = $(this).val();
+        
+        $.post(
+			"add-relation",
+			{ "__relation-name__" : relation },
+			function( data ) {
+				$(this).prop("disabled", true);
+				$(this).text("Added");
+			}
+		)
+		
+		$(this).prop("disabled", true);
+		$(this).text("Added");
+    });
+
+});
