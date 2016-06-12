@@ -170,3 +170,19 @@ $(".relation:button").click(function(event) {
 	$(this).prop("disabled", true);
 	$(this).text("Added");
 });
+
+$(".fdset:button").click(function(event) {
+    var fdset = $(this).val();
+    
+    $.post(
+		"/odn/add-fdjoint",
+		{ "__fdjoint-name__" : fdset },
+		function( data ) {
+			$(this).prop("disabled", true);
+			$(this).text("Added");
+		}
+	)
+	
+	$(this).prop("disabled", true);
+	$(this).text("Added");
+});
