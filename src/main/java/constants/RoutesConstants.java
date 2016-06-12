@@ -36,6 +36,7 @@ public class RoutesConstants {
     public static final String DELETE_FD = "/odn/delete-fd";
     public static final String DELETE_FDJOINT = "/odn/delete-fdjoint";
     public static final String DELETE_RELATION = "/odn/delete-relation";
+    public static final String ADD_FDSET = "/odn/add-fdjoint";
     
     private RoutesConstants() {
         // Private constructor to prevent instantiation.
