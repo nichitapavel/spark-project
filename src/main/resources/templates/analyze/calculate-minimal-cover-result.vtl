@@ -1,4 +1,4 @@
-<div class="alert alert-warning">
+<div class="alert alert-warning clearfix">
   <h4>Result</h4>
   <p>Minimal Cover for $fdjoint.name:</p>
   <p>
@@ -10,4 +10,10 @@
     #end
   #end
   </p>
+  <span class="pull-right">
+    <form action="/add-fdset" method="POST">
+      <input type="hidden" name="__fdjoint-name__" value="$fdjoint.name">
+      <button type="button" value="$fdjoint.name" class="btn btn-xs btn-success fdset">Add to Relational Model</button>
+    </form>
+  </span>
 </div>
