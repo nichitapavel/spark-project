@@ -8,8 +8,8 @@ package constants;
  *
  */
 public class RoutesConstants {
-    public static final String FILE_LOCATION = "/public";
-    public static final String ROOT = "/odn";
+    public static final String FILE_LOCATION = "public/";
+    public static final String ROOT = "odn/";
     public static final String ABOUT = "/odn/about";
     public static final String GLOBAL_VIEW = "/odn/global-view";
     public static final String SESSION = "/odn/session";
