@@ -68,6 +68,12 @@ public class App {
             Map<String, Object> model = new HashMap<>();
             return new ModelAndView(model, TemplateConstants.WELCOME);
         }, new VelocityTemplateEngine());
+        
+        get(RoutesConstants.HOME, (req, res) -> {
+            res.redirect(RoutesConstants.RED_ROOT);
+            return null;
+        });
+
 
         get(RoutesConstants.ABOUT, (req, res) -> {
             checkSession(req, res);

@@ -159,7 +159,7 @@ $(".relation:button").click(function(event) {
     var relation = $(this).val();
     
     $.post(
-		"/odn/add-relation",
+		"add-relation",
 		{ "__relation-name__" : relation },
 		function( data ) {
 			$(this).prop("disabled", true);
@@ -175,7 +175,7 @@ $(".fdset:button").click(function(event) {
     var fdset = $(this).val();
     
     $.post(
-		"/odn/add-fdjoint",
+		"add-fdjoint",
 		{ "__fdjoint-name__" : fdset },
 		function( data ) {
 			$(this).prop("disabled", true);
