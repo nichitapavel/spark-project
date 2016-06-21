@@ -12,18 +12,23 @@
 <tr><td rowspan="1" colspan="3">spark-project-Analysis-CalculateKeys</td></tr>
 </thead><tbody>
 <tr>
+	<td>open</td>
+	<td>/odn/calculate-keys</td>
+	<td></td>
+</tr>
+<tr>
 	<td>click</td>
 	<td>link=Analysis</td>
 	<td></td>
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>link=Calculate Minimal Cover</td>
+	<td>link=Calculate Candidate Keys</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>name=__fdjoint-name__</td>
+	<td>name=__relation-name__</td>
 	<td></td>
 </tr>
 <tr>
@@ -33,7 +38,7 @@
 </tr>
 <tr>
 	<td>click</td>
-	<td>xpath=(//input[@name='__fdjoint-name__'])[2]</td>
+	<td>xpath=(//input[@name='__relation-name__'])[2]</td>
 	<td></td>
 </tr>
 <tr>
@@ -41,7 +46,6 @@
 	<td>css=button.btn</td>
 	<td></td>
 </tr>
-
 </tbody></table>
 </body>
 </html>
